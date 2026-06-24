@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TED Mission Funding Platform — Prototype</title>
+<style>
+  :root{
+    --blue:#1b4f72; --blue2:#2e6da4; --blue-l:#eaf1f8; --accent:#138d75;
+    --bg:#f4f6f9; --card:#ffffff; --line:#dde3ea; --txt:#1f2a36;
+    --muted:#6b7785; --warn:#b9770e; --ok:#1e8449; --red:#c0392b; --gold:#d4ac0d;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--txt);font-size:15px}
+  header.top{background:var(--blue);color:#fff;display:flex;align-items:center;gap:16px;padding:10px 18px;position:sticky;top:0;z-index:30}
+  header.top .brand{font-weight:700;font-size:16px;letter-spacing:.2px}
+  header.top .brand small{display:block;font-weight:400;font-size:11px;opacity:.8}
+  header.top .spacer{flex:1}
+  .badge-demo{background:var(--gold);color:#3a2e00;font-weight:700;border-radius:4px;padding:2px 8px;font-size:11px}
+  header.top select{background:#fff;border:0;border-radius:6px;padding:6px 8px;font-size:13px;color:var(--txt)}
+  header.top label{font-size:12px;opacity:.9}
+  .app{display:flex;min-height:calc(100vh - 52px)}
+  nav.side{width:240px;background:#13384f;color:#cfdbe6;padding:10px 0;flex-shrink:0}
+  nav.side a{display:flex;align-items:center;gap:10px;padding:11px 18px;color:#cfdbe6;text-decoration:none;cursor:pointer;font-size:14px;border-left:3px solid transparent}
+  nav.side a:hover{background:#17435e;color:#fff}
+  nav.side a.active{background:#0f2e42;color:#fff;border-left-color:var(--gold);font-weight:600}
+  nav.side a .ic{width:18px;text-align:center}
+  nav.side .grp{padding:14px 18px 6px;font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:#7d97ab}
+  nav.side .who{padding:8px 18px;font-size:12px;color:#9fb6c8;border-top:1px solid #20455c;margin-top:8px}
+  main{flex:1;padding:24px 30px;overflow:auto}
+  h1{font-size:22px;margin:0 0 4px} h2{font-size:17px;margin:22px 0 10px;color:var(--blue)}
+  .sub{color:var(--muted);margin:0 0 18px;font-size:13px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px;margin-bottom:18px;box-shadow:0 1px 2px rgba(20,40,60,.04)}
+  .row{display:flex;gap:18px;flex-wrap:wrap}
+  .col{flex:1;min-width:230px}
+  label.f{display:block;font-size:12.5px;font-weight:600;color:#3a4756;margin:0 0 4px}
+  label.f .req{color:var(--red)}
+  input[type=text],input[type=email],input[type=number],select,textarea{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:7px;font-size:14px;font-family:inherit;background:#fff}
+  textarea{min-height:80px;resize:vertical}
+  .hint{font-size:11.5px;color:var(--muted);margin-top:3px}
+  .field{margin-bottom:14px}
+  button{cursor:pointer;font-family:inherit}
+  .btn{background:var(--blue);color:#fff;border:0;border-radius:7px;padding:10px 16px;font-size:14px;font-weight:600}
+  .btn:hover{background:var(--blue2)}
+  .btn.sec{background:#fff;color:var(--blue);border:1px solid var(--blue)}
+  .btn.sec:hover{background:var(--blue-l)}
+  .btn.ok{background:var(--ok)} .btn.ok:hover{filter:brightness(1.08)}
+  .btn.warn{background:var(--warn)} .btn.red{background:var(--red)}
+  .btn.sm{padding:6px 10px;font-size:12.5px}
+  .btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{text-align:left;padding:10px 10px;border-bottom:1px solid var(--line)}
+  th{font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;color:#5b6b7b;background:#f7f9fb}
+  tr.clk:hover{background:#f3f8fd;cursor:pointer}
+  .pill{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11.5px;font-weight:600;white-space:nowrap}
+  /* status colour = WHO ACTS NEXT: national=yellow→orange, TED=green, GC=blue, funds=teal, report=red, black=completed, grey=cancelled */
+  .s0{background:#ffe680;color:#5c4a00} /* Draft — applicant (national) */
+  .s1{background:#f39c12;color:#3d2600} /* Submitted — union approves (national) */
+  .s2{background:#e67e22;color:#fff}    /* Union approved — union must send (national, orange) */
+  .s3{background:#82e0aa;color:#0b5345} /* Union sent — TED next (light green) */
+  .s4{background:#27ae60;color:#fff}    /* TED approved — TED next (medium green) */
+  .s5{background:#2e6da4;color:#fff}    /* Sent to GC — GC next (blue) */
+  .s6{background:#8e44ad;color:#fff}    /* Money transfers — purple */
+  .s7{background:#e74c3c;color:#fff}    /* Reporting — report to send (red) */
+  .s8{background:#1a1a1a;color:#fff}    /* Completed — black */
+  .sP{background:#f0f0f3;color:#9aa3ad;border:1px dashed #c7ced6}
+  .sR{background:#8a939c;color:#fff}    /* Rejected/Cancelled — grey */
+  .sG{background:#145a32;color:#fff}    /* Report submitted — awaiting TED review (dark green) */
+  .fund-tag{display:inline-block;font-size:11px;padding:2px 7px;border-radius:4px;background:var(--blue-l);color:var(--blue);font-weight:600}
+  .un-tag{display:inline-block;font-size:11px;padding:2px 7px;border-radius:4px;background:#efe7f7;color:#6b3fa0;font-weight:700}
+  .stepper{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}
+  .stepper .st{flex:1;min-width:84px;text-align:center;font-size:11px;padding:8px 4px;border-radius:6px;background:#eef2f5;color:#7a8a99}
+  .stepper .st.done{background:#d4efdf;color:#1e8449}
+  .stepper .st.cur{background:var(--blue);color:#fff;font-weight:700}
+  .ytabs{display:flex;gap:8px;margin:0 0 14px;flex-wrap:wrap}
+  .ytab{padding:9px 16px;border:1px solid var(--line);border-radius:8px 8px 0 0;background:#f1f5f8;cursor:pointer;font-size:13px;font-weight:600;color:#5b6b7b}
+  .ytab.sel{background:#fff;border-bottom-color:#fff;color:var(--blue);box-shadow:0 -2px 0 var(--blue) inset}
+  .ytab small{display:block;font-weight:400;font-size:10.5px;color:var(--muted)}
+  .fcards{display:flex;gap:14px;flex-wrap:wrap}
+  .fcard{flex:1;min-width:210px;border:2px solid var(--line);border-radius:10px;padding:16px;cursor:pointer;background:#fff}
+  .fcard:hover{border-color:var(--blue2);background:var(--blue-l)}
+  .fcard.sel{border-color:var(--blue);background:var(--blue-l);box-shadow:0 0 0 3px rgba(46,109,164,.15)}
+  .fcard h3{margin:0 0 6px;font-size:14px;color:var(--blue)}
+  .fcard p{margin:2px 0;font-size:12.5px;color:var(--muted)}
+  .wz{display:flex;gap:8px;margin:0 0 18px;flex-wrap:wrap}
+  .wz div{flex:1;min-width:100px;font-size:12px;padding:8px;border-radius:6px;background:#eef2f5;color:#7a8a99;text-align:center}
+  .wz div.cur{background:var(--blue);color:#fff;font-weight:700}
+  .wz div.done{background:#d4efdf;color:#1e8449}
+  .total-row{display:flex;justify-content:space-between;font-weight:700;padding:10px;background:var(--blue-l);border-radius:7px;margin-top:8px}
+  .match-ok{color:var(--ok);font-weight:700} .match-no{color:var(--red);font-weight:700}
+  .toast{position:fixed;bottom:22px;right:22px;background:#13384f;color:#fff;padding:12px 18px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.25);z-index:60;font-size:14px;opacity:0;transform:translateY(10px);transition:.25s}
+  .toast.show{opacity:1;transform:none}
+  .kv{display:grid;grid-template-columns:200px 1fr;gap:6px 14px;font-size:14px}
+  .kv .k{color:var(--muted)}
+  .note{background:#fffbe6;border:1px solid #f1d77a;border-radius:8px;padding:10px 12px;font-size:12.5px;color:#6b5800;margin-bottom:16px}
+  .note.info{background:#eef6fc;border-color:#bcdcf3;color:#1f5577}
+  .ov{position:fixed;inset:0;background:rgba(15,30,45,.55);display:flex;align-items:center;justify-content:center;z-index:80;padding:20px}
+  .ov .box{background:#fff;border-radius:12px;max-width:600px;padding:26px;box-shadow:0 12px 40px rgba(0,0,0,.3)}
+  .ov h2{margin-top:0}
+  .hidden{display:none!important}
+  #printArea{display:none}
+  @media print{
+    body *{visibility:hidden}
+    #printArea,#printArea *{visibility:visible}
+    #printArea{display:block;position:absolute;left:0;top:0;width:100%;padding:24px}
+    .noprint{display:none!important}
+  }
+  .ted-form{font-size:13px;color:#000;max-width:780px}
+  .ted-form h2{color:var(--blue);border-bottom:2px solid var(--blue);padding-bottom:4px}
+  .ted-form .hd{color:var(--blue);font-weight:700;font-size:11px;text-transform:uppercase;margin-top:16px}
+</style>
+</head>
+<body>
+
+<div class="ov" id="intro">
+  <div class="box">
+    <h2>TED Mission Funding Platform — Prototype</h2>
+    <p style="font-size:14px;line-height:1.5">A <b>clickable mock-up</b> (not a live system) showing how unions and missions across the
+    Trans-European Division could submit, review, fund and report mission projects in one place.</p>
+    <ul style="font-size:13.5px;line-height:1.6;color:#445">
+      <li>Runs <b>locally in the browser</b> — nothing is sent online or stored on a server.</li>
+      <li>Demo data is reset on page refresh.</li>
+      <li>Use the <b>“Signed in as"</b> switch (top right) — each role sees <b>only its own</b> applications.</li>
+    </ul>
+    <p style="font-size:12.5px;color:#556"><b>Unions / fields (abbreviations only):</b> NUC = Norwegian UC · PUC = Polish UC · GM = Greek Mission · AUC = Adriatic UC</p>
+    <div style="text-align:right;margin-top:14px"><button class="btn" onclick="document.getElementById('intro').classList.add('hidden')">Enter demo</button></div>
+  </div>
+</div>
+
+<div class="ov hidden" id="modal"><div class="box" id="modalBox"></div></div>
+
+<header class="top">
+  <div class="brand">TED Mission Funding Platform <small>Trans-European Division — unions &amp; missions</small></div>
+  <span class="badge-demo">PROTOTYPE / DEMO</span>
+  <div class="spacer"></div>
+  <label>Signed in as:&nbsp;</label>
+  <select id="userSel" onchange="setUser(this.value)"></select>
+</header>
+
+<div class="app">
+  <nav class="side" id="nav"></nav>
+  <main id="view"></main>
+</div>
+
+<div class="toast" id="toast"></div>
+<div id="printArea"></div>
+
+<script>
+/* ---------------- DICTIONARIES ---------------- */
+const STATUSES = ["Draft","Submitted","Union approved","Union sent","TED approved","Sent to GC","Money transfers","Reporting","Completed"];
+const SCLS = ["s0","s1","s2","s3","s4","s5","s6","s7","s8"];
+const FUNDS = {
+  gm:  {code:"GM",         num:1, gc:true,  name:"Global Mission Church Planting",  limit:"GC 20–70% + TED 10–25%", dur:"3–5 years"},
+  uci: {code:"UCI",        num:2, gc:true,  name:"Urban Centres of Influence",      limit:"GC $25–150k + TED $10k",  dur:"5 years"},
+  ted: {code:"TED_MBP",    num:3, gc:false, name:"TED Mission Board Project",       limit:"£500 – £20,000",          dur:"1–3 years"},
+  ciof:{code:"CIOF",       num:4, gc:false, name:"Creative & Innovative Outreach",  limit:"up to ~£6,000 / project", dur:"1 year"},
+  mif: {code:"MIF",        num:5, gc:true,  name:"GC Mission Impact Fund",          limit:"$30,000 – $100,000",      dur:"1–2 years"},
+  ov27:{code:"OneVoice27",        gc:false, name:"OneVoice27",                      limit:"as agreed",               dur:"1 year"}
+};
+const UNION_OPTS = ["NUC","PUC","GM","AUC"];
+function sIdx(s){return STATUSES.indexOf(s)}
+function money(n,c){return (Number(n)||0).toLocaleString('en-US')+(c?(' '+c):'')}
+function fundLabel(f){const x=FUNDS[f];return x.code+(x.num?' ('+x.num+')':'');}
+function hasGC(f){return !!FUNDS[f].gc;}
+function projectGC(a){return a.fund==='ov27'?!!a.toGC:!!FUNDS[a.fund].gc;}
+function fundLevels(a){return projectGC(a)?['conf','union','ted','gc']:['conf','union','ted'];}
+function sendOrder(a){return projectGC(a)?['gc','ted','union','conf']:['ted','union','conf'];}
+const LVLC={conf:'#f1c40f',union:'#e67e22',ted:'#2e8b57',gc:'#2e6da4'};
+function lvlLabel(a,k){return k==='conf'?'conference':k==='union'?a.un:k==='ted'?'TED':'GC';}
+function recipLabel(a,k){return k==='gc'?'TED':k==='ted'?a.un:k==='union'?'conference':'applicant';}
+function fundsSquares(a,y,big){const so=sendOrder(a);const past=y&&(y.status==='Reporting'||y.status==='Completed');const xi=past?so.length:((y&&y.xfer)||0);const rec=past?true:(y&&y.received);const sz=big?18:13;
+  return fundLevels(a).map(k=>{const sent=so.indexOf(k)<xi;const base=`display:inline-block;width:${sz}px;height:${sz}px;border-radius:3px;margin-right:3px;vertical-align:middle;`;
+    const sty=!sent?base+'background:#fff;border:1.5px solid #cfd6dd;':rec?base+`background:${LVLC[k]};border:2px solid #fff;box-shadow:0 0 0 1px #8a939c;`:base+`background:${LVLC[k]};border:1.5px solid ${LVLC[k]};`;
+    return `<span title="${lvlLabel(a,k)}${sent?(rec?' — received':' — sent'):' — pending'}" style="${sty}"></span>`;}).join('');}
+function wzGC(){return WZ.fund==='ov27'?!!WZ.toGC:(WZ.fund?!!FUNDS[WZ.fund].gc:false);}
+function shortStatus(s,un){if(s==='Union approved')return 'Appr. '+un;if(s==='Union sent')return un+' sent';if(s==='TED approved')return 'Appr. TED';if(s==='Reporting')return 'Report';return s;}
+function badge(s,un,rep){if(s==='Planned')return `<span class="pill sP">Planned</span>`;if(s==='Rejected')return `<span class="pill sR">Rejected</span>`;if(s==='Reporting')return `<span class="pill ${rep==='Submitted'?'sG':'s7'}">${shortStatus(s,un)}</span>`;return `<span class="pill ${SCLS[sIdx(s)]}">${shortStatus(s,un)}</span>`;}
+function sdate(a,y){return y.sdate||a.upd;}
+function ownerRole(a){const u=USERS.find(x=>x.id===a.owner);return u?u.role:'applicant';}
+function submitterCode(a){return ownerRole(a)==='ted'?'TED':a.un;}
+function nextActor(a,y){switch(y.status){
+  case 'Draft':return 'Applicant';
+  case 'Submitted':return a.un;
+  case 'Union approved':return a.un;
+  case 'Union sent':return 'TED';
+  case 'TED approved':return projectGC(a)?'TED to GC':'Money transfers';
+  case 'Sent to GC':return 'GC';
+  case 'Money transfers':return 'Money transfers';
+  case 'Reporting':return y.rep==='Submitted'?'TED review':submitterCode(a)+' - report';
+  case 'Completed':return '';
+  case 'Rejected':return '— (rejected)';
+  case 'Planned':return 'After year '+(y.y-1);
+  default:return '—';}}
+
+/* ---------------- USERS (demo personas) ---------------- */
+const USERS = [
+  {id:'ted_dir',  name:'TED — Mission Director',     role:'ted',       un:null},
+  {id:'ted_treas',name:'TED — Executive Treasurer',  role:'ted',       un:null},
+  {id:'puc_app',  name:'PUC — Applicant',            role:'applicant', un:'PUC'},
+  {id:'nuc_app',  name:'NUC — Applicant',            role:'applicant', un:'NUC'},
+  {id:'puc_un',   name:'PUC — Union approver',       role:'union',     un:'PUC'},
+  {id:'nuc_un',   name:'NUC — Union approver',       role:'union',     un:'NUC'},
+  {id:'gm_un',   name:'GM — Mission approver',     role:'union',     un:'GM'},
+  {id:'auc_un',   name:'AUC — Union approver',       role:'union',     un:'AUC'}
+];
+
+/* ---------------- SAMPLE DATA ---------------- */
+const AUDIO={year:"2026",country:"Poland",city:"Nationwide",title:"Audiobooks with Hope",director:"M. Kowalski",email:"applicant@puc.adventist",org:"PUC Mission Department",peopleGroup:"Youth / Young adults",population:"10,000,000",sdaPresence:"6000",
+  prep:"PositiveAudio is a digital evangelistic platform offering free Christian audiobooks; 25 titles, already running and promoted by members.",
+  conduct:"Build a dedicated website and mobile app for personalized listening, note-taking and two-way communication; designed for easy translation to other TED countries.",
+  followup:"Billboards along major holiday routes; ongoing contact and care via two-way communication.",
+  budget:[{desc:"Dedicated mobile app",amount:8000},{desc:"Website upgrade & integration",amount:3000},{desc:"UI design & testing",amount:2000},{desc:"Server hosting (1y)",amount:2000},{desc:"Promotional materials",amount:4000},{desc:"Billboard promotion",amount:6000},{desc:"Reserve",amount:1000}],
+  currency:"PLN",f_local:0,f_field:0,f_union:6000,f_ted:20000};
+const OSLO={year:"2026",country:"Norway",city:"Oslo",title:"Oslo Church Plant",director:"E. Hansen",email:"applicant@nuc.adventist",org:"NUC",peopleGroup:"Secular urban young adults",population:"700,000",sdaPresence:"400",
+  prep:"New church plant in eastern Oslo focusing on secular young adults with little church background.",
+  conduct:"Small groups, community service and felt-need seminars leading to a worshipping community.",
+  followup:"Discipleship path and local leadership development for long-term sustainability.",
+  budget:[{desc:"Pioneer salary",amount:300000},{desc:"Meeting place rent",amount:120000},{desc:"Outreach & materials",amount:80000},{desc:"Equipment",amount:50000}],
+  currency:"NOK",f_local:50000,f_field:0,f_union:100000,f_ted:400000};
+function gen(title,director,un,country,city,currency,ted){return{year:"2026",country:country,city:city,title:title,director:director,email:"applicant@"+un.toLowerCase()+".adventist",org:un,peopleGroup:"Local community",population:"50,000",sdaPresence:"150",prep:"Project preparation summary (sample).",conduct:"Conducting the initiative (sample).",followup:"Follow-up and discipleship plan (sample).",budget:[{desc:"Main activity",amount:Math.round(ted*0.7)},{desc:"Materials",amount:Math.round(ted*0.2)},{desc:"Reserve",amount:Math.round(ted*0.1)}],currency:currency,f_local:0,f_field:0,f_union:Math.round(ted*0.1),f_ted:ted};}
+
+let APPS = [
+  /* PUC — Poland (current projects, English names) */
+  {nr:"PUC-26-01", un:"PUC", owner:"puc_app", fund:"ted",  dur:3, wer:1, upd:"2026-06-18", data:AUDIO,
+    years:[{y:1,status:"Submitted",sdate:"2026-06-18",ted:20000,rep:"—"},{y:2,status:"Planned",ted:18000,rep:"—"},{y:3,status:"Planned",ted:15000,rep:"—"}]},
+  {nr:"PUC-26-02", un:"PUC", owner:"puc_un", fund:"ciof", dur:1, wer:1, upd:"2026-06-12", data:gen("Sauna with Pastor","M. Kowalski","PUC","Poland","Łódź","PLN",19000),
+    years:[{y:1,status:"TED approved",sdate:"2026-06-12",ted:19000,rep:"—"}]},
+  {nr:"PUC-26-03", un:"PUC", owner:"puc_app", fund:"mif", dur:2, wer:1, upd:"2026-06-05", data:gen("Center of Positive Change","A. Lewandowska","PUC","Poland","Łódź","PLN",150000),
+    years:[{y:1,status:"Money transfers",sdate:"2026-06-05",ted:150000,rep:"—",xfer:1},{y:2,status:"Planned",ted:130000,rep:"—"}]},
+  {nr:"PUC-26-04", un:"PUC", owner:"puc_app", fund:"ted",  dur:1, wer:1, upd:"2026-05-28", data:gen("Helping Hand","P. Wisniewski","PUC","Poland","Wroclaw","PLN",15000),
+    years:[{y:1,status:"Union approved",sdate:"2026-05-28",ted:15000,rep:"—"}]},
+  {nr:"PUC-26-05", un:"PUC", owner:"puc_app", fund:"ted",  dur:1, wer:1, upd:"2026-04-30", data:gen("Hope for Warsaw","P. Wisniewski","PUC","Poland","Warsaw","PLN",18000),
+    years:[{y:1,status:"Reporting",sdate:"2026-04-30",ted:18000,rep:"Draft"}]},
+  /* NUC — Norway */
+  {nr:"NUC-26-01", un:"NUC", owner:"nuc_app", fund:"gm", dur:3, wer:1, upd:"2026-06-20", data:OSLO,
+    years:[{y:1,status:"Submitted",sdate:"2026-06-20",ted:400000,rep:"—"},{y:2,status:"Planned",ted:380000,rep:"—"},{y:3,status:"Planned",ted:360000,rep:"—"}]},
+  {nr:"NUC-26-02", un:"NUC", owner:"nuc_app", fund:"ciof", dur:1, wer:1, upd:"2026-06-09", data:gen("Bergen Youth Café","E. Hansen","NUC","Norway","Bergen","NOK",60000),
+    years:[{y:1,status:"Union approved",sdate:"2026-06-09",ted:60000,rep:"—"}]},
+  {nr:"NUC-26-03", un:"NUC", owner:"nuc_un", fund:"ted",  dur:2, wer:1, upd:"2026-05-15", data:gen("Light to the North (media)","K. Olsen","NUC","Norway","Trondheim","NOK",150000),
+    years:[{y:1,status:"TED approved",sdate:"2026-05-15",ted:150000,rep:"—"},{y:2,status:"Planned",ted:140000,rep:"—"}]},
+  /* GM — Greek Mission */
+  {nr:"GM-26-01", un:"GM", owner:"gm_un", fund:"mif", dur:2, wer:1, upd:"2026-04-10", data:gen("Athens Centre of Influence","N. Papadopoulos","GM","Greece","Athens","EUR",70000),
+    years:[{y:1,status:"Reporting",sdate:"2026-04-10",ted:70000,rep:"Submitted"},{y:2,status:"Planned",ted:60000,rep:"—"}]},
+  {nr:"GM-26-02", un:"GM", owner:"gm_un", fund:"ciof", dur:1, wer:1, upd:"2026-06-16", data:gen("Thessaloniki Outreach","N. Papadopoulos","GM","Greece","Thessaloniki","EUR",8000),
+    years:[{y:1,status:"Submitted",sdate:"2026-06-16",ted:8000,rep:"—"}]},
+  /* AUC — Adriatic */
+  {nr:"AUC-26-01", un:"AUC", owner:"auc_un", fund:"gm", dur:3, wer:1, upd:"2026-05-22", data:gen("Zagreb Church Plant","I. Horvat","AUC","Croatia","Zagreb","EUR",30000),
+    years:[{y:1,status:"TED approved",sdate:"2026-05-22",ted:30000,rep:"—"},{y:2,status:"Planned",ted:28000,rep:"—"},{y:3,status:"Planned",ted:26000,rep:"—"}]},
+  {nr:"AUC-26-02", un:"AUC", owner:"auc_un", fund:"ted",  dur:1, wer:1, upd:"2026-06-14", data:gen("Belgrade Media Hub","M. Jovanovic","AUC","Serbia","Belgrade","EUR",18000),
+    years:[{y:1,status:"Union sent",sdate:"2026-06-14",ted:18000,rep:"—"}]},
+  {nr:"AUC-26-03", un:"AUC", owner:"auc_un", fund:"ciof", dur:1, wer:1, upd:"2026-02-28", data:gen("Ljubljana Health Expo","M. Novak","AUC","Slovenia","Ljubljana","EUR",6000),
+    years:[{y:1,status:"Completed",sdate:"2026-02-28",ted:6000,rep:"Approved"}]},
+  /* OneVoice27 & UCI */
+  {nr:"PUC-26-06", un:"PUC", owner:"puc_app", fund:"ov27", toGC:true, dur:1, wer:1, upd:"2026-06-19", data:gen("OneVoice27 Media Campaign","M. Kowalski","PUC","Poland","Nationwide","PLN",40000),
+    years:[{y:1,status:"TED approved",sdate:"2026-06-19",ted:40000,rep:"—"}]},
+  {nr:"NUC-26-04", un:"NUC", owner:"nuc_app", fund:"ov27", toGC:false, dur:1, wer:1, upd:"2026-06-21", data:gen("OneVoice27 Nordic Reach","E. Hansen","NUC","Norway","Oslo","NOK",50000),
+    years:[{y:1,status:"Submitted",sdate:"2026-06-21",ted:50000,rep:"—"}]},
+  {nr:"AUC-26-04", un:"AUC", owner:"auc_un", fund:"uci", dur:3, wer:1, upd:"2026-05-30", data:gen("Sarajevo Urban Centre of Influence","I. Horvat","AUC","Bosnia","Sarajevo","EUR",40000),
+    years:[{y:1,status:"Union approved",sdate:"2026-05-30",ted:40000,rep:"—"},{y:2,status:"Planned",ted:38000,rep:"—"},{y:3,status:"Planned",ted:36000,rep:"—"}]},
+  /* archived, previous year (2025) — for the year filter / archive demo */
+  {nr:"PUC-25-01", un:"PUC", owner:"puc_app", fund:"ciof", toGC:false, dur:1, wer:1, upd:"2025-03-10", archived:true, data:Object.assign(gen("Lublin Spring Outreach","M. Kowalski","PUC","Poland","Lublin","PLN",6000),{year:"2025"}),
+    years:[{y:1,status:"Completed",sdate:"2025-03-10",ted:6000,rep:"Approved"}]}
+];
+
+/* ---------------- STATE ---------------- */
+let CUR=USERS.find(u=>u.id==='ted_dir')||USERS[0], ROLE=CUR.role, SCREEN="dash", WZSTEP=0, WZ=blankWizard(), CURRENT=null, SELYEAR=0, SHOWARCH=false, SORTKEY='nr', SORTDIR=1, SELSET={}, ATTED=false, YEARS=[], ARCHOPEN=false;
+function blankWizard(){return{fund:null,un:null,toGC:false,dur:1,year:"",country:"",city:"",title:"",director:"",email:"",org:"",peopleGroup:"",population:"",sdaPresence:"",prep:"",conduct:"",followup:"",budget:[{desc:"",amount:0}],currency:"EUR",f_local:0,f_field:0,f_union:0,f_ted:0};}
+
+/* ---------------- VISIBILITY / SORT ---------------- */
+function visibleApps(){let list;
+  if(CUR.role==='applicant')   list=APPS.filter(a=>a.owner===CUR.id);
+  else if(CUR.role==='union')  list=APPS.filter(a=>a.un===CUR.un);
+  else                         list=APPS.slice();
+  if(YEARS.length) list=list.filter(a=>isPast(a)&&YEARS.includes(String(a.data.year))); else list=list.filter(a=>!isPast(a));
+  return list;}
+function curYear(a){for(let i=0;i<a.years.length;i++){if(a.years[i].status!=='Completed'&&a.years[i].status!=='Rejected')return i;}return a.years.length-1;}
+function atTED(a){return sIdx(a.years[curYear(a)].status)>=sIdx('Union sent');}
+function isPast(a){return !!a.archived;}
+function archiveYears(){return [...new Set(APPS.filter(isPast).map(a=>String(a.data.year)))].sort().reverse();}
+function sortVal(a,key){const y=a.years[curYear(a)];switch(key){case 'nr':return a.nr;case 'title':return (a.data.title||'').toLowerCase();case 'fund':return a.fund;case 'appl':return submitterCode(a);case 'year':return a.dur*100+y.y;case 'status':return sIdx(y.status);case 'date':return sdate(a,y);case 'next':return nextActor(a,y);default:return a.nr;}}
+function sortApps(arr){return arr.slice().sort((x,z)=>{const vx=sortVal(x,SORTKEY),vz=sortVal(z,SORTKEY);if(vx<vz)return -SORTDIR;if(vx>vz)return SORTDIR;return 0;});}
+function setSort(k){if(SORTKEY===k)SORTDIR*=-1;else{SORTKEY=k;SORTDIR=1;}render();}
+function th(k,lbl){const ac=SORTKEY===k;const ar=ac?(SORTDIR>0?'▲':'▼'):'↕';return `<th onclick="setSort('${k}')" style="cursor:pointer;user-select:none">${lbl} <span style="font-size:10px;color:${ac?'#000':'#c2cad3'}">${ar}</span></th>`;}
+function setArch(nr,v){const a=APPS.find(x=>x.nr===nr);if(a){a.archived=v;a.upd='2026-06-23';}toast(v?'📦 Project archived (withdrawn)':'♻ Project restored');render();}
+function toggleSel(nr,e){if(e)e.stopPropagation();SELSET[nr]=!SELSET[nr];render();}
+function selectedNrs(){return visibleApps().filter(a=>SELSET[a.nr]).map(a=>a.nr);}
+function selectAll(chk){visibleApps().forEach(a=>SELSET[a.nr]=chk);render();}
+function clearSel(){SELSET={};render();}
+function toggleYear(y){const i=YEARS.indexOf(y);if(i<0)YEARS.push(y);else YEARS.splice(i,1);render();}
+function showModal(h){document.getElementById('modalBox').innerHTML=h;document.getElementById('modal').classList.remove('hidden');}
+function closeModal(){document.getElementById('modal').classList.add('hidden');}
+function askExport(){const n=selectedNrs().length;if(!n){toast('Select at least one project');return;}showModal(`<h2>Export ${n} selected project(s)</h2><p style="font-size:13.5px;color:#445">How should the TED forms be exported?</p><div style="display:flex;flex-direction:column;gap:10px;margin-top:12px"><button class="btn" onclick="doExport('combined')">📄 One combined PDF</button><button class="btn sec" onclick="doExport('separate')">🗂 Separate files (one per project)</button></div><div style="text-align:right;margin-top:14px"><button class="btn ghost sm" onclick="closeModal()">Cancel</button></div>`);}
+function doExport(mode){const nrs=selectedNrs();closeModal();buildPrint(nrs);if(mode==='separate')toast('(demo) Production would create '+nrs.length+' separate PDF files');setTimeout(()=>window.print(),400);}
+function emailSel(){const n=selectedNrs().length;if(!n){toast('Select at least one project');return;}toast('✉ (demo) '+n+' project(s) emailed to TED');}
+function archiveSel(){const nrs=selectedNrs();nrs.forEach(nr=>{const a=APPS.find(x=>x.nr===nr);if(a)a.archived=true;});SELSET={};toast('🗄 Archived '+nrs.length+' project(s)');render();}
+
+/* ---------------- NAV ---------------- */
+function fillUserSel(){document.getElementById('userSel').innerHTML=USERS.map(u=>`<option value="${u.id}">${u.name}</option>`).join('');document.getElementById('userSel').value=CUR.id;}
+function setUser(id){CUR=USERS.find(u=>u.id===id);ROLE=CUR.role;ATTED=false;YEARS=[];ARCHOPEN=false;if(SCREEN==='admin'&&ROLE!=='ted')SCREEN='dash';if(SCREEN==='queue'&&ROLE==='applicant')SCREEN='dash';render();}
+function nav(s){SCREEN=s;if(s==='wizard'){WZ=blankWizard();WZ.un=(CUR.role==='ted')?'':CUR.un;WZSTEP=0;}window.scrollTo(0,0);render();}
+function openApp(nr){CURRENT=nr;const a=APPS.find(x=>x.nr===nr);SELYEAR=a?curYear(a):0;SCREEN='detail';window.scrollTo(0,0);render();}
+function selYear(i){SELYEAR=i;render();}
+function renderNav(){
+  const items=[["dash","📋","Dashboard / Applications"]];
+  items.push(["wizard","➕","New application"]);
+  if(ROLE==='union'||ROLE==='ted'){items.push(["queue","✔️","Approvals"]);}
+  items.push(["report","📝","Reports"]);
+  if(ROLE==='ted'){items.push(["admin","⚙️","Admin"]);}
+  let h=`<div class="grp">Menu</div>`;
+  items.forEach(([k,ic,lbl])=>{h+=`<a class="${SCREEN===k||(SCREEN==='detail'&&k==='dash')?'active':''}" onclick="nav('${k}')"><span class="ic">${ic}</span>${lbl}</a>`});
+  h+=`<div class="grp">Help</div><a onclick="document.getElementById('intro').classList.remove('hidden')"><span class="ic">ℹ️</span>About this demo</a>`;
+  h+=`<div class="who">👤 ${CUR.name}<br>${CUR.un?('🏛 '+CUR.un):'🏛 TED (all unions)'}</div>`;
+  document.getElementById('nav').innerHTML=h;
+}
+
+/* ---------------- RENDER ---------------- */
+function render(){renderNav();const v=document.getElementById('view');
+  if(SCREEN==='dash')v.innerHTML=scrDash();
+  else if(SCREEN==='wizard')v.innerHTML=scrWizard();
+  else if(SCREEN==='detail')v.innerHTML=scrDetail();
+  else if(SCREEN==='queue')v.innerHTML=scrQueue();
+  else if(SCREEN==='report')v.innerHTML=scrReport();
+  else if(SCREEN==='admin')v.innerHTML=scrAdmin();}
+
+function scrDash(){
+  let apps=sortApps(visibleApps());if(ATTED&&ROLE==='ted')apps=apps.filter(atTED);const selN=selectedNrs().length;const selComplete=ROLE==='ted'&&selN>0&&selectedNrs().every(nr=>{const a=APPS.find(x=>x.nr===nr);return a&&a.years[curYear(a)].status==='Completed';});
+  let rows=apps.map(a=>{const y=a.years[curYear(a)];return `<tr class="clk" onclick="openApp('${a.nr}')">
+    <td onclick="event.stopPropagation()"><input type="checkbox" ${SELSET[a.nr]?'checked':''} onclick="toggleSel('${a.nr}',event)"></td>
+    <td><b>${a.nr}</b>${a.archived?' <span class="pill s6">archived</span>':''}</td><td>${a.data.title}</td>
+    <td><span class="fund-tag">${fundLabel(a.fund)}</span></td>
+    ${ROLE!=='applicant'?`<td><span class="un-tag">${submitterCode(a)}</span></td>`:''}
+    <td>${a.dur>1?'Year '+y.y+'/'+a.dur:''}</td>
+    <td>${badge(y.status,a.un,y.rep)}</td>
+    <td>${sdate(a,y)}</td>
+    <td>${nextActor(a,y)}</td>
+    <td>${fundsSquares(a,y)}</td></tr>`}).join('');
+  const title=ROLE==='applicant'?'My applications':ROLE==='union'?'Applications — '+CUR.un:'All applications (TED)';
+  const note=ROLE==='applicant'?'You see only applications you submitted.':ROLE==='union'?'You see only applications from your union/field.':'TED sees applications from all unions and missions.';
+  return `<h1>${title}</h1><p class="sub">${note}</p>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div><b>${apps.length}</b> applications</div>
+      <button class="btn" onclick="nav('wizard')">➕ New application</button>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap;font-size:13px;color:var(--muted)">
+      <span><b>${selN}</b> selected</span>
+      <button class="btn sm" onclick="askExport()">📄 Export to PDF</button>
+      <button class="btn sm sec" onclick="exportExcel()">⬇ Export to Excel</button>
+      <button class="btn sm sec" onclick="emailSel()">✉ Send by email</button>
+      ${selComplete?`<button class="btn sm warn" onclick="archiveSel()">🗄 Archive</button>`:''}
+      ${selN?`<button class="btn ghost sm" onclick="clearSel()">Clear</button>`:''}
+      ${ROLE==='ted'?`<button class="btn sm ${ATTED?'':'sec'}" onclick="ATTED=!ATTED;render()" title="Hide applications not yet at TED">${ATTED?'☑':'☐'} TED only</button>
+      <span style="position:relative;display:inline-block">
+        <button class="btn sm ${YEARS.length?'':'sec'}" onclick="ARCHOPEN=!ARCHOPEN;render()">${YEARS.length?'☑':'☐'} Show Archive ▾</button>
+        ${ARCHOPEN?`<div style="position:absolute;top:112%;left:0;background:#fff;border:1px solid var(--line);border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.18);padding:8px 12px;z-index:50;min-width:160px;color:var(--txt)">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:5px">Completed / archived — years:</div>
+          ${archiveYears().length?archiveYears().map(yy=>`<label style="display:block;font-size:13px;padding:3px 0;cursor:pointer"><input type="checkbox" ${YEARS.includes(yy)?'checked':''} onclick="toggleYear('${yy}')"> ${yy}</label>`).join(''):'<div style="font-size:12px;color:var(--muted)">No archived projects</div>'}
+        </div>`:''}
+      </span>`:''}
+    </div>
+    ${apps.length?`<table><thead><tr><th style="width:28px"><input type="checkbox" onclick="selectAll(this.checked)"></th>${th('nr','Ref')}${th('title','Title')}${th('fund','Fund')}${ROLE!=='applicant'?th('appl','Applicant'):''}${th('year','Year')}${th('status','Status')}${th('date','Date')}${th('next','Next')}<th>FUNDS</th></tr></thead><tbody>${rows}</tbody></table>`:'<p>No applications.</p>'}
+  </div>
+  <div class="note info">💡 Click a row to open the full project preview, switch between <b>years</b>, and (with the right role) approve or report. Click a column header to sort.<br>
+  <span style="display:inline-block;margin-top:6px">Status colour = who acts next: <span class="pill s2">national</span> <span class="pill s3">TED</span> <span class="pill s5">GC</span> <span class="pill s6">money</span> <span class="pill s7">report</span> <span class="pill s8">completed</span> <span class="pill sR">cancelled</span></span></div>`;
+}
+
+/* --- WIZARD --- */
+function scrWizard(){
+  const steps=["Fund","1. Basics","2. Description","3. Budget","4. Funding","Summary"];
+  let wz=steps.map((s,i)=>`<div class="${i===WZSTEP?'cur':i<WZSTEP?'done':''}">${s}</div>`).join('');
+  let body=[wzFund,wzStep1,wzStep2,wzStep3,wzStep4,wzSummary][WZSTEP]();
+  let left = WZSTEP>0 ? `<button class="btn sec" onclick="wzPrev()">← Back</button>` : `<button class="btn ghost" onclick="loadExample()">Load sample (Audiobooks)</button>`;
+  let right = WZSTEP<5 ? `<button class="btn" onclick="wzNext()">Next →</button>` : `<button class="btn sec" onclick="saveDraft()">Save draft</button> <button class="btn ok" onclick="submitApp()">✔ Submit application</button>`;
+  return `<h1>New application</h1><p class="sub">Mirrors the official TED form (steps 1–4).</p>
+  <div class="wz">${wz}</div><div class="card">${body}</div>
+  <div style="display:flex;justify-content:space-between;margin-top:18px"><div>${left}</div><div>${right}</div></div>`;
+}
+function wzFund(){if(WZ.fund==='ov27')WZ.dur=1;return `<h2 style="margin-top:0">Choose the fund</h2>
+  <div class="fcards">${Object.entries(FUNDS).map(([k,f])=>`
+    <div class="fcard ${WZ.fund===k?'sel':''}" onclick="WZ.fund='${k}';render()">
+      <h3>${f.num?`${f.code} (${f.num}) — ${f.name}`:f.name}</h3><p>💰 ${f.limit}</p><p>⏱ ${f.dur}</p>${WZ.fund===k?'<p style="color:var(--blue);font-weight:700;margin-top:8px">✔ selected</p>':''}
+    </div>`).join('')}</div>
+  <div class="field" style="max-width:260px;margin-top:16px"><label class="f">Duration (years)</label>
+    <select onchange="WZ.dur=+this.value" ${WZ.fund==='ov27'?'disabled':''}><option ${WZ.dur===1?'selected':''}>1</option><option ${WZ.dur===2?'selected':''}>2</option><option ${WZ.dur===3?'selected':''}>3</option></select>
+    <div class="hint">${WZ.fund==='ov27'?'OneVoice27 is a one-year (one-off) project.':'A multi-year project creates a separate cycle (funding + approval + report) for each year.'}</div></div>
+  ${WZ.fund==='ov27'?`<div class="field" style="max-width:460px;margin-top:12px"><label class="f"><input type="checkbox" ${WZ.toGC?'checked':''} onchange="WZ.toGC=this.checked;render()"> This OneVoice27 project also goes to GC</label><div class="hint">OneVoice27 can end at TED or be escalated to the General Conference.</div></div>`:''}`;
+}
+function wzStep1(){return `<h2 style="margin-top:0">Step 1 — Basic information</h2>
+  <div class="field"><label class="f">Union / Field <span class="req">*</span></label>
+  ${CUR.role==='ted'
+    ? `<select id="w_un" onchange="WZ.un=this.value"><option value="">— select —</option>${UNION_OPTS.map(u=>`<option ${WZ.un===u?'selected':''}>${u}</option>`).join('')}</select>`
+    : `<input type="text" value="${CUR.un}" disabled>`}
+  <div class="hint">Abbreviations only: NUC / PUC / GM / AUC. A union-submitted application starts already union-approved (awaiting TED); a TED-submitted one starts already TED-approved.</div></div>
+  <div class="row"><div class="col field"><label class="f">Year of outreach <span class="req">*</span></label><input type="text" id="w_year" value="${WZ.year}"></div>
+  <div class="col field"><label class="f">Country <span class="req">*</span></label><input type="text" id="w_country" value="${WZ.country}"></div>
+  <div class="col field"><label class="f">City / Town <span class="req">*</span></label><input type="text" id="w_city" value="${WZ.city}"></div></div>
+  <div class="field"><label class="f">Project title <span class="req">*</span></label><input type="text" id="w_title" value="${WZ.title}"></div>
+  <div class="row"><div class="col field"><label class="f">Project director <span class="req">*</span></label><input type="text" id="w_director" value="${WZ.director}"></div>
+  <div class="col field"><label class="f">Director email <span class="req">*</span></label><input type="email" id="w_email" value="${WZ.email}"></div></div>
+  <div class="field"><label class="f">Organisation responsible <span class="req">*</span></label><input type="text" id="w_org" value="${WZ.org}"></div>
+  <div class="row"><div class="col field"><label class="f">People group</label><input type="text" id="w_peopleGroup" value="${WZ.peopleGroup}"></div>
+  <div class="col field"><label class="f">Est. population</label><input type="text" id="w_population" value="${WZ.population}"></div>
+  <div class="col field"><label class="f">Est. SDA presence</label><input type="text" id="w_sdaPresence" value="${WZ.sdaPresence}"></div></div>`;
+}
+function wzStep2(){return `<h2 style="margin-top:0">Step 2 — Project description</h2>
+  <div class="field"><label class="f">Preparation</label><textarea id="w_prep">${WZ.prep}</textarea></div>
+  <div class="field"><label class="f">Conducting the initiative</label><textarea id="w_conduct">${WZ.conduct}</textarea></div>
+  <div class="field"><label class="f">Follow-up</label><textarea id="w_followup">${WZ.followup}</textarea></div>`;
+}
+function wzStep3(){
+  let rows=WZ.budget.map((b,i)=>`<tr><td><input type="text" value="${b.desc}" oninput="WZ.budget[${i}].desc=this.value"></td>
+    <td style="width:140px"><input type="number" value="${b.amount}" oninput="WZ.budget[${i}].amount=+this.value||0;updTotals()"></td>
+    <td style="width:40px"><button class="btn sm red" onclick="delRow(${i})">✕</button></td></tr>`).join('');
+  const tot=WZ.budget.reduce((s,b)=>s+(+b.amount||0),0);
+  return `<h2 style="margin-top:0">Step 3 — Budget${WZ.dur>1?' (year 1)':''}</h2>
+  <div class="field" style="max-width:200px"><label class="f">Currency</label><select id="w_currency" onchange="WZ.currency=this.value">${["EUR","PLN","NOK","GBP","USD"].map(c=>`<option ${WZ.currency===c?'selected':''}>${c}</option>`).join('')}</select></div>
+  <table><thead><tr><th>Description</th><th>Amount</th><th></th></tr></thead><tbody>${rows}</tbody></table>
+  <div style="margin-top:10px"><button class="btn sm sec" onclick="addRow()">＋ Add line</button></div>
+  <div class="total-row"><span>Budget total</span><span id="budTot">${money(tot,WZ.currency)}</span></div>`;
+}
+function wzStep4(){
+  const bud=WZ.budget.reduce((s,b)=>s+(+b.amount||0),0);
+  const fin=(+WZ.f_local||0)+(+WZ.f_field||0)+(+WZ.f_union||0)+(+WZ.f_ted||0);const ok=fin===bud;
+  return `<h2 style="margin-top:0">Step 4 — Funding${WZ.dur>1?' (year 1)':''}</h2>
+  <div class="hint" style="margin-bottom:12px">Amounts are agreed outside the system; enter approved figures. The total must equal the budget.</div>
+  <div class="row">
+  <div class="col field"><label class="f">Local church</label><input type="number" id="f_local" value="${WZ.f_local}" oninput="WZ.f_local=+this.value||0;updMatch()"></div>
+  <div class="col field"><label class="f">Field / Conference</label><input type="number" id="f_field" value="${WZ.f_field}" oninput="WZ.f_field=+this.value||0;updMatch()"></div>
+  <div class="col field"><label class="f">Union</label><input type="number" id="f_union" value="${WZ.f_union}" oninput="WZ.f_union=+this.value||0;updMatch()"></div>
+  <div class="col field"><label class="f">TED (Division) requested <span class="req">*</span></label><input type="number" id="f_ted" value="${WZ.f_ted}" oninput="WZ.f_ted=+this.value||0;updMatch()"></div></div>
+  <div class="total-row"><span>Funding total</span><span id="finTot">${money(fin,WZ.currency)}</span></div>
+  <div style="margin-top:10px" id="matchBox" class="${ok?'match-ok':'match-no'}">${ok?'✔ Matches budget ('+money(bud,WZ.currency)+')':'✗ Mismatch! Budget: '+money(bud,WZ.currency)}</div>`;
+}
+function wzSummary(){const bud=WZ.budget.reduce((s,b)=>s+(+b.amount||0),0);
+  return `<h2 style="margin-top:0">Summary</h2>
+  <div class="kv">
+    <div class="k">Union / Field</div><div>${WZ.un||'—'}</div>
+    <div class="k">Fund</div><div>${WZ.fund?FUNDS[WZ.fund].name:'—'}</div>
+    <div class="k">Duration</div><div>${WZ.dur} ${WZ.dur===1?'year':'years'}${WZ.dur>1?' (separate cycle per year)':''}</div>
+    <div class="k">Title</div><div>${WZ.title||'—'}</div>
+    <div class="k">Director</div><div>${WZ.director||'—'} (${WZ.email||'—'})</div>
+    <div class="k">Budget (year 1)</div><div>${money(bud,WZ.currency)}</div>
+    <div class="k">TED requested</div><div><b>${money(WZ.f_ted,WZ.currency)}</b></div>
+  </div>
+  <div class="note" style="margin-top:16px">After submission the application follows: <b>Submitted → Union approved → Union sent → TED approved → ${wzGC()?'Sent to GC → ':''}Money transfers → Reporting → Completed</b>.</div>`;
+}
+function collectStep(){const g=id=>{const e=document.getElementById(id);return e?e.value:undefined};
+  if(WZSTEP===1){const u=g('w_un');if(u!==undefined)WZ.un=u;['year','country','city','title','director','email','org','peopleGroup','population','sdaPresence'].forEach(k=>{const v=g('w_'+k);if(v!==undefined)WZ[k]=v;});}
+  if(WZSTEP===2){['prep','conduct','followup'].forEach(k=>{const v=g('w_'+k);if(v!==undefined)WZ[k]=v;});}}
+function wzNext(){collectStep();if(WZSTEP===0&&!WZ.fund){toast('Choose a fund');return}if(WZSTEP===1&&!WZ.un){toast('Select union / field');return}WZSTEP++;render()}
+function wzPrev(){collectStep();WZSTEP--;render()}
+function addRow(){collectStep();WZ.budget.push({desc:"",amount:0});render()}
+function delRow(i){WZ.budget.splice(i,1);if(!WZ.budget.length)WZ.budget.push({desc:"",amount:0});render()}
+function updTotals(){const t=WZ.budget.reduce((s,b)=>s+(+b.amount||0),0);const e=document.getElementById('budTot');if(e)e.textContent=money(t,WZ.currency)}
+function updMatch(){const bud=WZ.budget.reduce((s,b)=>s+(+b.amount||0),0);const fin=(+WZ.f_local||0)+(+WZ.f_field||0)+(+WZ.f_union||0)+(+WZ.f_ted||0);const ft=document.getElementById('finTot');if(ft)ft.textContent=money(fin,WZ.currency);const mb=document.getElementById('matchBox');if(mb){const ok=fin===bud;mb.className=ok?'match-ok':'match-no';mb.textContent=ok?'✔ Matches budget ('+money(bud,WZ.currency)+')':'✗ Mismatch! Budget: '+money(bud,WZ.currency)}}
+function loadExample(){WZ=JSON.parse(JSON.stringify(AUDIO));WZ.fund='ted';WZ.dur=3;WZ.un=(CUR.role==='ted')?'PUC':CUR.un;WZSTEP=1;toast('Sample loaded: Audiobooks with Hope');render();}
+function saveDraft(){toast('💾 Draft saved (demo)');}
+function submitApp(){collectStep();
+  const un=WZ.un||CUR.un;
+  const startStatus=CUR.role==='union'?'Union approved':CUR.role==='ted'?'TED approved':'Submitted';
+  const sd='2026-06-23';
+  const seq=APPS.filter(a=>a.un===un).length+1;
+  const nr=un+"-26-"+String(seq).padStart(2,'0');
+  const years=[];for(let y=1;y<=WZ.dur;y++)years.push({y:y,status:y===1?startStatus:'Planned',sdate:sd,ted:(+WZ.f_ted||0),rep:'—'});
+  APPS.unshift({nr:nr,un:un,owner:CUR.id,fund:WZ.fund,toGC:!!WZ.toGC,dur:WZ.dur,wer:1,upd:sd,data:JSON.parse(JSON.stringify(WZ)),years:years});
+  const dest=startStatus==='Submitted'?'sent to '+un+' for approval':startStatus==='Union approved'?'ready to send to TED':(wzGC()?'ready to send to GC':'ready for funding');
+  toast('✔ Application '+nr+' submitted — '+dest);
+  WZ=blankWizard();WZSTEP=0;SCREEN='dash';render();}
+
+/* --- DETAIL + MULTI-YEAR + APPROVAL --- */
+function scrDetail(){
+  const a=APPS.find(x=>x.nr===CURRENT);if(!a)return'<p>Not found.</p>';
+  if(SELYEAR>=a.years.length)SELYEAR=0;
+  const d=a.data, y=a.years[SELYEAR];
+  let ytabs=a.years.map((yr,i)=>`<div class="ytab ${i===SELYEAR?'sel':''}" onclick="selYear(${i})">Year ${yr.y}<br>${badge(yr.status,a.un,yr.rep)}</div>`).join('');
+  let stSteps = projectGC(a)?STATUSES:STATUSES.filter(s=>s!=='Sent to GC');
+  let step = y.status==='Planned'
+    ? `<div class="note">🔒 Year ${y.y} is <b>planned</b>. It opens after the year ${y.y-1} report is accepted (annual cycle).</div>`
+    : `<div class="stepper">${stSteps.map(s=>`<div class="st ${sIdx(s)<sIdx(y.status)?'done':sIdx(s)===sIdx(y.status)?'cur':''}">${shortStatus(s,a.un)}</div>`).join('')}</div>`;
+  const budTot=(d.budget||[]).reduce((s,b)=>s+(+b.amount||0),0);
+  let budRows=(d.budget||[]).map(b=>`<tr><td>${b.desc}</td><td style="text-align:right">${money(b.amount)}</td></tr>`).join('');
+  let preview=`<div class="kv">
+    <div class="k">Title</div><div>${d.title}</div>
+    <div class="k">Director</div><div>${d.director} (${d.email})</div>
+    <div class="k">Organisation</div><div>${d.org}</div>
+    <div class="k">Location</div><div>${d.city}, ${d.country}</div>
+    <div class="k">People group</div><div>${d.peopleGroup}</div>
+    <div class="k">Population / SDA</div><div>${d.population} / ${d.sdaPresence}</div></div>
+    <h2>Description</h2>
+    <p><b>Preparation:</b> ${d.prep||'—'}</p>
+    <p><b>Conducting:</b> ${d.conduct||'—'}</p>
+    <p><b>Follow-up:</b> ${d.followup||'—'}</p>
+    <h2>Budget${a.dur>1?' (year 1)':''} — ${d.currency}</h2>
+    <table><thead><tr><th>Description</th><th style="text-align:right">Amount</th></tr></thead><tbody>${budRows}<tr><td><b>Total</b></td><td style="text-align:right"><b>${money(budTot)}</b></td></tr></tbody></table>
+    <h2>Funding — year ${y.y} (${d.currency})</h2>
+    <div class="kv"><div class="k">Local church</div><div>${money(d.f_local)}</div>
+    <div class="k">Field / Conference</div><div>${money(d.f_field)}</div>
+    <div class="k">Union</div><div>${money(d.f_union)}</div>
+    <div class="k">TED requested (year ${y.y})</div><div><b>${money(y.ted,d.currency)}</b></div></div>`;
+  let archBtn=(ROLE==='ted')?(a.archived?`<button class="btn warn sm" onclick="setArch('${a.nr}',false)">♻ Restore</button>`:`<button class="btn warn sm" onclick="setArch('${a.nr}',true)">📦 Archive (withdraw)</button>`):'';
+  return `<div style="display:flex;justify-content:space-between;align-items:center"><h1>${d.title} <span class="fund-tag">${fundLabel(a.fund)}</span> <span class="un-tag">${a.un}</span></h1><button class="btn ghost sm" onclick="nav('dash')">← List</button></div>
+  <p class="sub">${a.nr} · ${a.un} · applicant: ${submitterCode(a)} · ${a.dur>1?a.dur+' years (multi-year)':'1 year'}${a.archived?' · <span class="pill s6">ARCHIVED</span>':''}</p>
+  ${a.dur>1?`<div class="ytabs">${ytabs}</div>`:''}
+  <div class="card"><h2 style="margin-top:0">Year ${y.y}${a.dur>1?' of '+a.dur:''} cycle — approval path</h2>
+  <div style="margin-bottom:10px;font-size:13.5px"><b>Status:</b> ${badge(y.status,a.un,y.rep)} &nbsp;·&nbsp; <b>Since:</b> ${sdate(a,y)} &nbsp;·&nbsp; <b>Next (waiting on):</b> ${nextActor(a,y)}</div>
+  ${step}</div>
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0">Project preview</h2><div>${archBtn} <button class="btn sec sm" onclick="exportTED('${a.nr}')">📄 Export TED form (PDF)</button></div></div>${preview}</div>
+  ${panelActions(a,SELYEAR)}`;
+}
+function panelActions(a,yi){const y=a.years[yi];const can=(r)=>CUR.role===r;const unionOK=can('union')&&a.un===CUR.un;let h='';
+  if(y.status==='Planned'){if(can('ted'))h=`<div class="card"><h2 style="margin-top:0">Planned year</h2><p class="sub">In a live system this opens automatically once the previous year is closed. You can open it here (demo).</p><button class="btn" onclick="actYear('${a.nr}',${yi},'Submitted','Year ${y.y} opened (annual plan submitted)')">Open year ${y.y}</button></div>`;return h;}
+  if(y.status==='Submitted'&&unionOK){
+    h=`<div class="card"><h2 style="margin-top:0">Decision — Union (${a.un}), year ${y.y}</h2>
+      <div class="field" style="max-width:280px"><label class="f">Approved union contribution</label><input type="number" value="${a.data.f_union||0}"></div>
+      <textarea placeholder="Comment to applicant (optional)" style="margin-bottom:10px"></textarea>
+      <button class="btn ok" onclick="actYear('${a.nr}',${yi},'Union approved','${a.un} approved year ${y.y}')">✔ Approve</button>
+      <button class="btn warn" onclick="actYear('${a.nr}',${yi},'Draft','Returned for revision')">↩ Return</button>
+      <button class="btn red" onclick="actYear('${a.nr}',${yi},'Rejected','Application rejected')">✕ Reject</button></div>`;
+  } else if(y.status==='Union approved'&&unionOK){
+    h=`<div class="card"><h2 style="margin-top:0">Forward to TED — ${a.un}, year ${y.y}</h2>
+      <p class="sub">${a.un} has approved the application; now forward it to TED.</p>
+      <button class="btn ok" onclick="actYear('${a.nr}',${yi},'Union sent','${a.un} sent year ${y.y} to TED')">✔ Send to TED</button>
+      <button class="btn warn" onclick="actYear('${a.nr}',${yi},'Draft','Returned for revision')">↩ Return</button></div>`;
+  } else if(y.status==='Union sent'&&can('ted')){
+    h=`<div class="card"><h2 style="margin-top:0">Decision — TED, year ${y.y}</h2>
+      <textarea placeholder="TED note (optional)" style="margin-bottom:10px"></textarea>
+      <button class="btn ok" onclick="actYear('${a.nr}',${yi},'TED approved','TED approved year ${y.y}')">✔ Approve</button>
+      <button class="btn warn" onclick="actYear('${a.nr}',${yi},'Draft','Returned for revision')">↩ Return</button></div>`;
+  } else if(y.status==='TED approved'&&can('ted')){
+    h= a.fund==='ov27'
+      ? `<div class="card"><h2 style="margin-top:0">Routing decision (year ${y.y})</h2>
+      <p class="sub">OneVoice27 can be escalated to the GC, or end at TED and go straight to money transfers.</p>
+      <button class="btn sec" onclick="exportTED('${a.nr}')">📄 Generate TED form</button>
+      <button class="btn ok" onclick="routeGC('${a.nr}',${yi},true)">✔ Send to GC</button>
+      <button class="btn ok" onclick="routeGC('${a.nr}',${yi},false)">✔ End at TED → start money transfers</button></div>`
+      : projectGC(a)
+      ? `<div class="card"><h2 style="margin-top:0">Forward to GC (year ${y.y})</h2>
+      <p class="sub">Approved at all levels. This fund also requires GC — export the TED form and mark as sent to the General Conference.</p>
+      <button class="btn sec" onclick="exportTED('${a.nr}')">📄 Generate TED form</button>
+      <button class="btn ok" onclick="actYear('${a.nr}',${yi},'Sent to GC','Year ${y.y} sent to GC')">✔ Mark: sent to GC</button></div>`
+      : `<div class="card"><h2 style="margin-top:0">Funding (year ${y.y})</h2>
+      <p class="sub">${FUNDS[a.fund].code} ends at TED — no GC step. Start the funds transfer down to the applicant.</p>
+      <button class="btn sec" onclick="exportTED('${a.nr}')">📄 Generate TED form</button>
+      <button class="btn ok" onclick="actYear('${a.nr}',${yi},'Money transfers','Year ${y.y} approved — money transfers started')">✔ Mark: approved → start money transfers</button></div>`;
+  } else if(y.status==='Sent to GC'&&can('ted')){
+    h=`<div class="card"><h2 style="margin-top:0">GC decision (year ${y.y})</h2>
+      <p class="sub">Once GC approves and releases the funds, the money transfers down to the applicant begin.</p>
+      <button class="btn ok" onclick="actYear('${a.nr}',${yi},'Money transfers','GC released funds — money transfers started')">✔ Mark: GC funds released → start money transfers</button></div>`;
+  } else if(y.status==='Money transfers'){
+    const so=sendOrder(a);const xi=y.xfer||0;const allSent=xi>=so.length;const nextK=allSent?null:so[xi];
+    const canSend=nextK&&(CUR.role==='ted'||(CUR.role==='union'&&CUR.un===a.un));
+    const ownerOK=CUR.role==='applicant'&&a.owner===CUR.id;
+    h=`<div class="card"><h2 style="margin-top:0">Money transfers (year ${y.y})</h2>
+      <p class="sub">Funds cascade down level by level to the applicant. Filled square = sent · white border = received by the applicant.</p>
+      <div style="margin:12px 0">${fundsSquares(a,y,true)}</div>
+      <div class="hint" style="margin-bottom:12px">Levels: 🟨 conference · 🟧 union · 🟩 TED · 🟦 GC</div>
+      <div>${!allSent?(canSend?`<button class="btn ok" onclick="confirmXfer('${a.nr}',${yi})">✔ Send funds: ${lvlLabel(a,nextK)} → ${recipLabel(a,nextK)}</button>`:`<span class="hint">Waiting for ${lvlLabel(a,nextK)} to send the funds.</span>`):(y.received?`<span class="hint">All funds received by the applicant.</span>`:(ownerOK?`<button class="btn ok" onclick="confirmReceipt('${a.nr}',${yi})">✔ Confirm receipt of funds (applicant)</button>`:`<span class="hint">All levels have sent — waiting for the applicant to confirm receipt.</span>`))}</div></div>`;
+  } else if(y.status==='Reporting'){
+    const ownerOK=can('applicant')&&a.owner===CUR.id;
+    h=`<div class="card"><h2 style="margin-top:0">Report — year ${y.y}</h2>
+      <div class="row"><div class="col field"><label class="f">Date funds received</label><input type="text" value="2025-10-01"></div>
+      <div class="col field"><label class="f">Report status</label><input type="text" value="${y.rep}" disabled></div></div>
+      <div class="field"><label class="f">Implementation summary</label><textarea>Planned activities were carried out...</textarea></div>
+      <div class="field"><label class="f">Results / KPIs</label><textarea placeholder="attendance, baptisms, new groups..."></textarea></div>
+      <div class="field"><label class="f">One story (TED requirement)</label><textarea></textarea></div>
+      <table><thead><tr><th>Item</th><th>Plan</th><th>Actual</th></tr></thead><tbody>
+        ${(a.data.budget||[]).slice(0,3).map(b=>`<tr><td>${b.desc}</td><td>${money(b.amount)}</td><td><input type="number" value="${b.amount}" style="width:120px"></td></tr>`).join('')}
+      </tbody></table>
+      <div style="margin-top:12px">
+      ${ownerOK?`<button class="btn ok" onclick="setRep('${a.nr}',${yi},'Submitted','Report submitted')">✔ Submit report</button>`:''}
+      ${unionOK||can('ted')?`<button class="btn ok" onclick="actYear('${a.nr}',${yi},'Completed','Report accepted — year ${y.y} completed')">✔ Accept report &amp; complete year</button>`:''}
+      </div></div>`;
+  } else if(y.status==='Completed'){
+    h=`<div class="card"><div class="note info" style="margin:0">✔ Year ${y.y} completed (report accepted).${a.years[yi+1]?' The next year is available in the tabs above.':''}</div></div>`;
+  } else if(y.status==='Draft'&&can('applicant')&&a.owner===CUR.id){
+    h=`<div class="card"><h2 style="margin-top:0">Returned for revision</h2><p class="sub">Resubmit after changes.</p>
+      <button class="btn ok" onclick="actYear('${a.nr}',${yi},'Submitted','Resubmitted')">✔ Resubmit</button></div>`;
+  }
+  return h;}
+function actYear(nr,yi,to,msg){const a=APPS.find(x=>x.nr===nr);if(!a)return;a.years[yi].status=to;a.years[yi].sdate='2026-06-23';a.upd='2026-06-23';
+  if(to==='Money transfers'){a.years[yi].xfer=0;a.years[yi].received=false;}
+  if(to==='Reporting')a.years[yi].rep='Draft';
+  if(to==='Completed'&&a.years[yi+1]&&a.years[yi+1].status==='Planned'){a.years[yi+1].status='Submitted';a.years[yi+1].sdate='2026-06-23';}
+  toast('✔ '+msg);render();}
+function confirmXfer(nr,yi){const a=APPS.find(x=>x.nr===nr);if(!a)return;a.years[yi].xfer=(a.years[yi].xfer||0)+1;a.years[yi].sdate='2026-06-23';a.upd='2026-06-23';toast('✔ Funds sent down one level');render();}
+function confirmReceipt(nr,yi){const a=APPS.find(x=>x.nr===nr);if(!a)return;a.years[yi].received=true;a.years[yi].status='Reporting';a.years[yi].rep='Draft';a.years[yi].sdate='2026-06-23';a.upd='2026-06-23';toast('✔ Applicant confirmed receipt — reporting started');render();}
+function routeGC(nr,yi,gc){const a=APPS.find(x=>x.nr===nr);if(!a)return;a.toGC=gc;if(gc)actYear(nr,yi,'Sent to GC','Sent to GC');else actYear(nr,yi,'Money transfers','Ends at TED — money transfers started');}
+function setRep(nr,yi,to,msg){const a=APPS.find(x=>x.nr===nr);if(a)a.years[yi].rep=to;toast('✔ '+msg);render();}
+
+/* --- APPROVALS QUEUE --- */
+function scrQueue(){
+  const list=visibleApps().map(a=>({a,y:a.years[curYear(a)]})).filter(o=> CUR.role==='union' ? (o.y.status==='Submitted'||o.y.status==='Union approved') : o.y.status==='Union sent');
+  let rows=list.map(o=>`<tr class="clk" onclick="openApp('${o.a.nr}')"><td><b>${o.a.nr}</b></td><td>${o.a.data.title}</td><td><span class="fund-tag">${fundLabel(o.a.fund)}</span></td><td><span class="un-tag">${o.a.un}</span></td><td>${o.a.dur>1?'Year '+o.y.y+'/'+o.a.dur:''}</td><td>${badge(o.y.status,o.a.un,o.y.rep)}</td><td>${sdate(o.a,o.y)}</td><td>${nextActor(o.a,o.y)}</td><td style="text-align:right">${money(o.y.ted,o.a.data.currency)}</td><td>${fundsSquares(o.a,o.y)}</td></tr>`).join('');
+  return `<h1>Approvals</h1><p class="sub">Applications awaiting your decision (${CUR.role==='union'?CUR.un:'TED level'}).</p>
+  <div class="card">${list.length?`<table><thead><tr><th>Ref</th><th>Title</th><th>Fund</th><th>Union</th><th>Year</th><th>Status</th><th>Date</th><th>Next</th><th style="text-align:right">TED</th><th>FUNDS</th></tr></thead><tbody>${rows}</tbody></table>`:'<p>Nothing awaiting at this level. 🎉</p>'}</div>`;
+}
+
+/* --- REPORTS --- */
+function scrReport(){
+  const list=visibleApps().map(a=>({a,y:a.years[curYear(a)]})).filter(o=>o.y.status==='Reporting');
+  let rows=list.map(o=>`<tr class="clk" onclick="openApp('${o.a.nr}')"><td><b>${o.a.nr}</b></td><td>${o.a.data.title}</td><td><span class="un-tag">${o.a.un}</span></td><td>Year ${o.y.y}${o.a.dur>1?'/'+o.a.dur:''}</td><td>${badge(o.y.rep==='—'?'Draft':o.y.rep,o.a.un)}</td><td style="text-align:right">${money(o.y.ted,o.a.data.currency)}</td></tr>`).join('');
+  return `<h1>Reports</h1><p class="sub">Years currently requiring a 12-month report. Each year of a multi-year project has its own report.</p>
+  <div class="card">${list.length?`<table><thead><tr><th>Ref</th><th>Project</th><th>Union</th><th>Year</th><th>Report</th><th style="text-align:right">Amount</th></tr></thead><tbody>${rows}</tbody></table>`:'<p>No open reports.</p>'}</div>
+  <div class="note info">Open an item to complete the report inside that year's cycle.</div>`;
+}
+
+/* --- ADMIN --- */
+function scrAdmin(){
+  let urows=[
+    ["TED — Mission Director","director@ted.adventist","TED (admin)","—","M365 / SSO"],
+    ["TED — Executive Treasurer","treasurer@ted.adventist","TED (admin)","—","M365 / SSO"],
+    ["PUC — Union approver","union@puc.adventist","Approver","PUC","M365 / SSO"],
+    ["NUC — Union approver","union@nuc.adventist","Approver","NUC","M365 / SSO"],
+    ["GM — Mission approver","mission@gm.adventist","Approver","GM","M365 / SSO"],
+    ["AUC — Union approver","union@auc.adventist","Approver","AUC","M365 / SSO"],
+    ["PUC — Applicant","applicant@puc.adventist","Applicant","PUC","magic link"],
+    ["NUC — Applicant","applicant@nuc.adventist","Applicant","NUC","magic link"]
+  ];
+  return `<h1>Admin</h1><p class="sub">Access management. TED &amp; union approvers sign in with M365/SSO; applicants use a magic link (one-time sign-in link by email).</p>
+  <div class="card"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><h2 style="margin:0">Users</h2><button class="btn sm" onclick="toast('User invited (demo)')">＋ Add user</button></div>
+  <table><thead><tr><th>Name</th><th>Login / email</th><th>Role</th><th>Union</th><th>Sign-in</th><th></th></tr></thead><tbody>
+  ${urows.map(u=>`<tr><td>${u[0]}</td><td>${u[1]}</td><td>${u[2]}</td><td>${u[3]}</td><td><span class="fund-tag">${u[4]}</span></td><td><button class="btn ghost sm" onclick="toast('Sign-in link sent (demo)')">Send link</button></td></tr>`).join('')}
+  </tbody></table></div>
+  <div class="note">🔒 No public form — submitting requires an account. Applicants see only their own projects, unions only their own union, TED everything. Data hosted in the EU, encrypted, with backups; transfer to GC under data-protection terms.</div>`;
+}
+
+/* --- EXPORT TED FORM --- */
+function tedFormHTML(a,y){y=y||a.years[curYear(a)];const d=a.data;
+  const bud=(d.budget||[]).reduce((s,b)=>s+(+b.amount||0),0);const cur=d.currency||'EUR';
+  const rows=(d.budget||[]).map((b,i)=>`<tr><td>Item ${i+1}: ${b.desc||''}</td><td style="text-align:right">${(+b.amount||0).toLocaleString('en-US')}</td></tr>`).join('');
+  return `<div class="ted-form">
+    <div style="color:#1b4f72;font-weight:700">TRANS-EUROPEAN DIVISION — ${a.un}${a.dur>1?' — Year '+y.y+' of '+a.dur:''}</div>
+    <h2>APPLICATION — ${FUNDS[a.fund].name} (${FUNDS[a.fund].code})</h2>
+    <div class="hd">Step 1: Basic information</div>
+    <table>
+      <tr><td>Year of the outreach</td><td>${d.year||''}</td><td>Country</td><td>${d.country||''}</td></tr>
+      <tr><td>Project title</td><td>${d.title||''}</td><td>City/Town</td><td>${d.city||''}</td></tr>
+      <tr><td>Project Director</td><td>${d.director||''}</td><td>People Group</td><td>${d.peopleGroup||''}</td></tr>
+      <tr><td>Director email</td><td>${d.email||''}</td><td>Est. population</td><td>${d.population||''}</td></tr>
+      <tr><td>Organisation responsible</td><td>${d.org||''}</td><td>Est. SDA presence</td><td>${d.sdaPresence||''}</td></tr>
+    </table>
+    <div class="hd">Step 2: Project Description</div>
+    <p>${[d.prep,d.conduct,d.followup].filter(Boolean).join(' ')||'—'}</p>
+    <div class="hd">Step 3: Budget request — ${cur}</div>
+    <table>${rows}<tr><td><b>Total</b></td><td style="text-align:right"><b>${bud.toLocaleString('en-US')}</b></td></tr></table>
+    <div class="hd">Step 4: Project Funding — ${cur}</div>
+    <table>
+      <tr><td>Local church</td><td style="text-align:right">${(+d.f_local||0).toLocaleString('en-US')}</td></tr>
+      <tr><td>Conference/Mission</td><td style="text-align:right">${(+d.f_field||0).toLocaleString('en-US')}</td></tr>
+      <tr><td>Union</td><td style="text-align:right">${(+d.f_union||0).toLocaleString('en-US')}</td></tr>
+      <tr><td>Division funding requested</td><td style="text-align:right">${(+y.ted||0).toLocaleString('en-US')}</td></tr>
+    </table>
+    <p style="margin-top:20px;font-size:11px;color:#666">Generated by the TED Mission Funding Platform (prototype).</p>
+  </div>`;}
+function exportTED(nr){const a=APPS.find(x=>x.nr===nr);document.getElementById('printArea').innerHTML=tedFormHTML(a,a.years[SELYEAR]||a.years[0]);toast('Opening print preview — choose “Save as PDF"');setTimeout(()=>window.print(),400);}
+function buildPrint(nrs){document.getElementById('printArea').innerHTML=nrs.map(nr=>tedFormHTML(APPS.find(a=>a.nr===nr))).join('<div style="page-break-after:always"></div>');}
+function downloadFile(name,content,mime){const b=new Blob([content],{type:mime});const u=URL.createObjectURL(b);const el=document.createElement('a');el.href=u;el.download=name;document.body.appendChild(el);el.click();document.body.removeChild(el);setTimeout(()=>URL.revokeObjectURL(u),1500);}
+function exportExcel(){let nrs=selectedNrs();if(!nrs.length)nrs=visibleApps().map(a=>a.nr);
+  const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const head=['Ref','Title','Fund','Applicant','Year','Status','Next','Currency','TED requested'];
+  const body=nrs.map(nr=>{const a=APPS.find(x=>x.nr===nr);const y=a.years[curYear(a)];return '<tr>'+[a.nr,a.data.title,fundLabel(a.fund),submitterCode(a),(a.dur>1?'Year '+y.y+'/'+a.dur:'1'),shortStatus(y.status,a.un),nextActor(a,y),a.data.currency,y.ted].map(c=>'<td>'+esc(c)+'</td>').join('')+'</tr>';}).join('');
+  const html='<html><head><meta charset="UTF-8"></head><body><table border="1"><tr>'+head.map(h=>'<th>'+h+'</th>').join('')+'</tr>'+body+'</table></body></html>';
+  downloadFile('TED-projects.xls',html,'application/vnd.ms-excel');toast('⬇ Excel exported ('+nrs.length+' projects)');}
+
+/* --- HELPERS --- */
+let toastT;
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600)}
+
+fillUserSel();render();
+</script>
+</body>
+</html>

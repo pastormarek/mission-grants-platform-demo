@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Wniosków Misyjnych PL → TED — Prototyp</title>
+<style>
+  :root{
+    --blue:#1b4f72; --blue2:#2e6da4; --blue-l:#eaf1f8; --accent:#138d75;
+    --bg:#f4f6f9; --card:#ffffff; --line:#dde3ea; --txt:#1f2a36;
+    --muted:#6b7785; --warn:#b9770e; --ok:#1e8449; --red:#c0392b; --gold:#d4ac0d;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--txt);font-size:15px}
+  a{color:var(--blue2)}
+  header.top{background:var(--blue);color:#fff;display:flex;align-items:center;gap:16px;padding:10px 18px;position:sticky;top:0;z-index:30}
+  header.top .brand{font-weight:700;font-size:16px;letter-spacing:.2px}
+  header.top .brand small{display:block;font-weight:400;font-size:11px;opacity:.8}
+  header.top .spacer{flex:1}
+  .badge-demo{background:var(--gold);color:#3a2e00;font-weight:700;border-radius:4px;padding:2px 8px;font-size:11px}
+  header.top select{background:#fff;border:0;border-radius:6px;padding:6px 8px;font-size:13px;color:var(--txt)}
+  header.top label{font-size:12px;opacity:.9}
+  .app{display:flex;min-height:calc(100vh - 52px)}
+  nav.side{width:230px;background:#13384f;color:#cfdbe6;padding:10px 0;flex-shrink:0}
+  nav.side a{display:flex;align-items:center;gap:10px;padding:11px 18px;color:#cfdbe6;text-decoration:none;cursor:pointer;font-size:14px;border-left:3px solid transparent}
+  nav.side a:hover{background:#17435e;color:#fff}
+  nav.side a.active{background:#0f2e42;color:#fff;border-left-color:var(--gold);font-weight:600}
+  nav.side a .ic{width:18px;text-align:center}
+  nav.side .grp{padding:14px 18px 6px;font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:#7d97ab}
+  nav.side .who{padding:8px 18px;font-size:12px;color:#9fb6c8;border-top:1px solid #20455c;margin-top:8px}
+  main{flex:1;padding:24px 30px;overflow:auto}
+  h1{font-size:22px;margin:0 0 4px} h2{font-size:17px;margin:22px 0 10px;color:var(--blue)}
+  .sub{color:var(--muted);margin:0 0 18px;font-size:13px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px;margin-bottom:18px;box-shadow:0 1px 2px rgba(20,40,60,.04)}
+  .row{display:flex;gap:18px;flex-wrap:wrap}
+  .col{flex:1;min-width:230px}
+  label.f{display:block;font-size:12.5px;font-weight:600;color:#3a4756;margin:0 0 4px}
+  label.f .req{color:var(--red)}
+  input[type=text],input[type=email],input[type=number],select,textarea{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:7px;font-size:14px;font-family:inherit;background:#fff}
+  textarea{min-height:80px;resize:vertical}
+  .hint{font-size:11.5px;color:var(--muted);margin-top:3px}
+  .field{margin-bottom:14px}
+  button{cursor:pointer;font-family:inherit}
+  .btn{background:var(--blue);color:#fff;border:0;border-radius:7px;padding:10px 16px;font-size:14px;font-weight:600}
+  .btn:hover{background:var(--blue2)}
+  .btn.sec{background:#fff;color:var(--blue);border:1px solid var(--blue)}
+  .btn.sec:hover{background:var(--blue-l)}
+  .btn.ok{background:var(--ok)} .btn.ok:hover{filter:brightness(1.08)}
+  .btn.warn{background:var(--warn)} .btn.red{background:var(--red)}
+  .btn.sm{padding:6px 10px;font-size:12.5px}
+  .btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{text-align:left;padding:10px 10px;border-bottom:1px solid var(--line)}
+  th{font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;color:#5b6b7b;background:#f7f9fb}
+  tr.clk:hover{background:#f3f8fd;cursor:pointer}
+  .pill{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11.5px;font-weight:600;white-space:nowrap}
+  /* kolor statusu = KTO TERAZ DZIAŁA: krajowy=żółty→pomarańcz, TED=zielony, transfer=teal, raport=czerwony, czarny=zakończony, szary=anulowany */
+  .s0{background:#ffe680;color:#5c4a00} /* Szkic — składający (krajowy) */
+  .s1{background:#ffc83d;color:#4d3a00} /* Złożony — diecezja (krajowy) */
+  .s2{background:#f0922b;color:#3d2600} /* Zatw. diecezja — ZK (krajowy) */
+  .s3{background:#e67e22;color:#fff}    /* Zatw. Zarząd — ZK musi wysłać do TED (krajowy, pomarańczowy) */
+  .s4{background:#27ae60;color:#fff}    /* Wysłany do TED — TED (średni zielony) */
+  .s5{background:#8e44ad;color:#fff}    /* Transfer środków — fioletowy */
+  .s6{background:#e74c3c;color:#fff}    /* Raportowanie — raport do wysłania (czerwony) */
+  .s7{background:#1a1a1a;color:#fff}    /* Zakończony — czarny */
+  .sP{background:#f0f0f3;color:#9aa3ad;border:1px dashed #c7ced6}
+  .sR{background:#8a939c;color:#fff}    /* Odrzucony/anulowany — szary */
+  .sG{background:#145a32;color:#fff}    /* Raport złożony — czeka na przyjęcie (ciemny zielony) */
+  .fund-tag{display:inline-block;font-size:11px;padding:2px 7px;border-radius:4px;background:var(--blue-l);color:var(--blue);font-weight:600}
+  .stepper{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}
+  .stepper .st{flex:1;min-width:90px;text-align:center;font-size:11px;padding:8px 4px;border-radius:6px;background:#eef2f5;color:#7a8a99}
+  .stepper .st.done{background:#d4efdf;color:#1e8449}
+  .stepper .st.cur{background:var(--blue);color:#fff;font-weight:700}
+  .ytabs{display:flex;gap:8px;margin:0 0 14px;flex-wrap:wrap}
+  .ytab{padding:9px 16px;border:1px solid var(--line);border-radius:8px 8px 0 0;background:#f1f5f8;cursor:pointer;font-size:13px;font-weight:600;color:#5b6b7b}
+  .ytab.sel{background:#fff;border-bottom-color:#fff;color:var(--blue);box-shadow:0 -2px 0 var(--blue) inset}
+  .ytab small{display:block;font-weight:400;font-size:10.5px;color:var(--muted)}
+  .fcards{display:flex;gap:14px;flex-wrap:wrap}
+  .fcard{flex:1;min-width:220px;border:2px solid var(--line);border-radius:10px;padding:16px;cursor:pointer;background:#fff}
+  .fcard:hover{border-color:var(--blue2);background:var(--blue-l)}
+  .fcard.sel{border-color:var(--blue);background:var(--blue-l);box-shadow:0 0 0 3px rgba(46,109,164,.15)}
+  .fcard h3{margin:0 0 6px;font-size:15px;color:var(--blue)}
+  .fcard p{margin:2px 0;font-size:12.5px;color:var(--muted)}
+  .wz{display:flex;gap:8px;margin:0 0 18px;flex-wrap:wrap}
+  .wz div{flex:1;min-width:110px;font-size:12px;padding:8px;border-radius:6px;background:#eef2f5;color:#7a8a99;text-align:center}
+  .wz div.cur{background:var(--blue);color:#fff;font-weight:700}
+  .wz div.done{background:#d4efdf;color:#1e8449}
+  .en-box{background:#f6faf8;border:1px dashed #9ccabb;border-radius:7px;padding:8px 10px;margin-top:6px}
+  .en-box .lbl{font-size:11px;color:var(--accent);font-weight:700;display:flex;align-items:center;gap:6px;margin-bottom:4px}
+  .total-row{display:flex;justify-content:space-between;font-weight:700;padding:10px;background:var(--blue-l);border-radius:7px;margin-top:8px}
+  .match-ok{color:var(--ok);font-weight:700} .match-no{color:var(--red);font-weight:700}
+  .toast{position:fixed;bottom:22px;right:22px;background:#13384f;color:#fff;padding:12px 18px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.25);z-index:60;font-size:14px;opacity:0;transform:translateY(10px);transition:.25s}
+  .toast.show{opacity:1;transform:none}
+  .kv{display:grid;grid-template-columns:210px 1fr;gap:6px 14px;font-size:14px}
+  .kv .k{color:var(--muted)}
+  .note{background:#fffbe6;border:1px solid #f1d77a;border-radius:8px;padding:10px 12px;font-size:12.5px;color:#6b5800;margin-bottom:16px}
+  .note.info{background:#eef6fc;border-color:#bcdcf3;color:#1f5577}
+  .ov{position:fixed;inset:0;background:rgba(15,30,45,.55);display:flex;align-items:center;justify-content:center;z-index:80;padding:20px}
+  .ov .box{background:#fff;border-radius:12px;max-width:580px;padding:26px;box-shadow:0 12px 40px rgba(0,0,0,.3)}
+  .ov h2{margin-top:0}
+  .hidden{display:none!important}
+  #printArea{display:none}
+  @media print{
+    body *{visibility:hidden}
+    #printArea,#printArea *{visibility:visible}
+    #printArea{display:block;position:absolute;left:0;top:0;width:100%;padding:24px}
+    .noprint{display:none!important}
+  }
+  .ted-form{font-size:13px;color:#000;max-width:780px}
+  .ted-form h2{color:var(--blue);border-bottom:2px solid var(--blue);padding-bottom:4px}
+  .ted-form .hd{color:var(--blue);font-weight:700;font-size:11px;text-transform:uppercase;margin-top:16px}
+</style>
+</head>
+<body>
+
+<div class="ov" id="intro">
+  <div class="box">
+    <h2>Prototyp (demo) — System Wniosków Misyjnych PL → TED</h2>
+    <p style="font-size:14px;line-height:1.5">To <b>klikalna makieta</b>, nie działająca aplikacja. Pokazuje wygląd i przepływ:
+    składanie, podgląd, dwujęzyczność PL/EN, dwustopniowe zatwierdzanie, <b>projekty wieloletnie</b> oraz raportowanie.</p>
+    <ul style="font-size:13.5px;line-height:1.6;color:#445">
+      <li>Działa <b>lokalnie w przeglądarce</b> — nic nie wysyła do internetu ani nie zapisuje na serwerze.</li>
+      <li>Dane wpisane w demo znikają po odświeżeniu strony.</li>
+      <li>Przełącznik <b>„Zalogowany jako"</b> (u góry) pokazuje, że każda rola widzi <b>tylko swoje</b> wnioski.</li>
+    </ul>
+    <p style="font-size:12.5px;color:#888">Przykładowe dane oparte na realnych projektach (m.in. „Audiobooki z nadzieją").</p>
+    <div style="text-align:right;margin-top:14px"><button class="btn" onclick="document.getElementById('intro').classList.add('hidden')">Rozumiem, wejdź do demo</button></div>
+  </div>
+</div>
+
+<div class="ov hidden" id="modal"><div class="box" id="modalBox"></div></div>
+
+<header class="top">
+  <div class="brand">System Wniosków Misyjnych <small>Polska → Wydział Transeuropejski (TED)</small></div>
+  <span class="badge-demo">PROTOTYP / DEMO</span>
+  <div class="spacer"></div>
+  <label>Zalogowany jako:&nbsp;</label>
+  <select id="userSel" onchange="setUser(this.value)"></select>
+</header>
+
+<div class="app">
+  <nav class="side" id="nav"></nav>
+  <main id="view"></main>
+</div>
+
+<div class="toast" id="toast"></div>
+<div id="printArea"></div>
+
+<script>
+/* ---------------- SŁOWNIKI ---------------- */
+const STATUSES = ["Szkic","Złożony","Zatwierdzony — diecezja","Zatwierdzony — Zarząd","Wysłany do TED","Transfer środków","Raportowanie","Zakończony"];
+const SCLS = ["s0","s1","s2","s3","s4","s5","s6","s7"];
+const FUNDS = {
+  gm:  {code:"GM",         num:1, name:"Global Mission — zakładanie zborów", limit:"GC 20–70% + TED 10–25%", dur:"3–5 lat"},
+  uci: {code:"UCI",        num:2, name:"Urban Centres of Influence",         limit:"GC $25–150k + TED $10k",  dur:"5 lat"},
+  ted: {code:"TED_MBP",    num:3, name:"TED Mission Board Projects",          limit:"£500 – £20 000",          dur:"1–3 lata"},
+  ciof:{code:"CIOF",       num:4, name:"Creative & Innovative Outreach",      limit:"do ~£6 000 / projekt",    dur:"1 rok"},
+  mif: {code:"MIF",        num:5, name:"GC Mission Impact Fund",              limit:"$30 000 – $100 000",      dur:"1–2 lata"},
+  ov27:{code:"OneVoice27",        name:"OneVoice27",                          limit:"wg ustaleń",              dur:"1 rok"}
+};
+function sIdx(s){return STATUSES.indexOf(s)}
+function pill(s){return s==='Planowany'?`<span class="pill sP">Planowany</span>`:`<span class="pill ${SCLS[sIdx(s)]}">${s}</span>`}
+function money(n){return (Number(n)||0).toLocaleString('pl-PL')}
+function fundLabel(f){const x=FUNDS[f];return x.code+(x.num?' ('+x.num+')':'');}
+function diecCode(d){return d==='Diecezja Południowa'?'DP':d==='Diecezja Zachodnia'?'DZ':d==='Diecezja Wschodnia'?'DW':'D'}
+function shortStatus(s,diec){if(s==='Zatwierdzony — diecezja')return 'Zatw. '+diecCode(diec);if(s==='Zatwierdzony — Zarząd')return 'Zatw. ZK';if(s==='Raportowanie')return 'Raport';return s;}
+function badge(s,diec,rep){if(s==='Planowany')return `<span class="pill sP">Planowany</span>`;if(s==='Odrzucony')return `<span class="pill sR">Odrzucony</span>`;if(s==='Raportowanie')return `<span class="pill ${rep==='Złożony'?'sG':'s6'}">${shortStatus(s,diec)}</span>`;return `<span class="pill ${SCLS[sIdx(s)]}">${shortStatus(s,diec)}</span>`;}
+function sdate(a,y){return y.sdate||a.upd;}
+function ownerRole(a){const u=USERS.find(x=>x.id===a.owner);return u?u.role:'pastor';}
+function submitterCode(a){return ownerRole(a)==='zarzad'?'ZK':diecCode(a.diec);}
+function projectGC(a){return ['gm','uci','mif'].includes(a.fund);}
+function fundLevels(a){return projectGC(a)?['conf','union','ted','gc']:['conf','union','ted'];}
+function sendOrder(a){return projectGC(a)?['gc','ted','union','conf']:['ted','union','conf'];}
+const LVLC={conf:'#f1c40f',union:'#e67e22',ted:'#2e8b57',gc:'#2e6da4'};
+function lvlLabel(a,k){return k==='conf'?diecCode(a.diec):k==='union'?'PUC':k==='ted'?'TED':'GC';}
+function recipLabel(a,k){return k==='gc'?'TED':k==='ted'?'PUC':k==='union'?diecCode(a.diec):'aplikant';}
+function fundsSquares(a,y,big){const so=sendOrder(a);const past=y&&(y.status==='Raportowanie'||y.status==='Zakończony');const xi=past?so.length:((y&&y.xfer)||0);const rec=past?true:(y&&y.received);const sz=big?18:13;
+  return fundLevels(a).map(k=>{const sent=so.indexOf(k)<xi;const base=`display:inline-block;width:${sz}px;height:${sz}px;border-radius:3px;margin-right:3px;vertical-align:middle;`;
+    const sty=!sent?base+'background:#fff;border:1.5px solid #cfd6dd;':rec?base+`background:${LVLC[k]};border:2px solid #fff;box-shadow:0 0 0 1px #8a939c;`:base+`background:${LVLC[k]};border:1.5px solid ${LVLC[k]};`;
+    return `<span title="${lvlLabel(a,k)}${sent?(rec?' — odebrane':' — wysłane'):' — oczekuje'}" style="${sty}"></span>`;}).join('');}
+function nextActor(a,y){switch(y.status){case 'Szkic':return 'Składający';case 'Złożony':return diecCode(a.diec);case 'Zatwierdzony — diecezja':return 'ZK';case 'Zatwierdzony — Zarząd':return 'ZK - wysłać do TED';case 'Wysłany do TED':return 'TED';case 'Transfer środków':return 'Transfer środków';case 'Raportowanie':return y.rep==='Złożony'?'Akceptacja raportu':submitterCode(a)+' - raport';case 'Zakończony':return '';case 'Odrzucony':return '— (odrzucone)';case 'Planowany':return 'Po rozliczeniu roku '+(y.y-1);default:return '—';}}
+
+/* ---------------- UŻYTKOWNICY (persony demo) ---------------- */
+const USERS = [
+  {id:'anna',  name:'Anna Nowak — Pastor',                 role:'pastor',   diec:'Diecezja Zachodnia'},
+  {id:'piotr', name:'Piotr Wiśniewski — Pastor',           role:'pastor',   diec:'Diecezja Wschodnia'},
+  {id:'dzach', name:'Diecezja Zachodnia — zatwierdzający',  role:'diecezja', diec:'Diecezja Zachodnia'},
+  {id:'dwsch', name:'Diecezja Wschodnia — zatwierdzający',  role:'diecezja', diec:'Diecezja Wschodnia'},
+  {id:'dyrektor',name:'Zarząd Kościoła — Dyrektor Misji',   role:'zarzad',   diec:null},
+  {id:'skarbnik',name:'Zarząd Kościoła — Skarbnik',          role:'zarzad',   diec:null}
+];
+
+/* ---------------- DANE PRZYKŁADOWE ---------------- */
+const AUDIO = {
+  rok:"2026", kraj:"Polska", miasto:"Cała Polska",
+  title_pl:"Audiobooki z nadzieją", title_en:"Audiobooks with Hope",
+  dyr:"Anna Nowak", email:"a.nowak@adwent.pl", org:"Dział Misji, Zarząd Kościoła (PUC)",
+  grupa_pl:"Młodzież / młodzi dorośli", grupa_en:"Youth / Young adults", pop:"10 000 000", ads:"6000",
+  prep_pl:"PozytywneAudio (pozytywneaudio.pl) to cyfrowa platforma ewangelizacyjna z bezpłatnymi audiobookami chrześcijańskimi. Obecnie oferuje 25 audiobooków i już działa, promowana przez członków zborów.",
+  prep_en:"PositiveAudio (pozytywneaudio.pl) is a digital evangelistic platform offering free Christian audiobooks. It currently offers 25 audiobooks and is already running, promoted by church members.",
+  con_pl:"Celem jest stworzenie dedykowanego systemu WWW i aplikacji mobilnej umożliwiającej spersonalizowane słuchanie, robienie notatek i dwustronną komunikację z użytkownikami. Platforma będzie przygotowana pod łatwe tłumaczenie na inne języki, by mogła służyć innym krajom TED.",
+  con_en:"The goal is to build a dedicated website system and mobile app enabling personalized listening, note-taking, and two-way communication with users. The platform will be designed for easy translation into other languages so it can serve other TED countries.",
+  fup_pl:"W ramach promocji planujemy billboardy przy głównych trasach wakacyjnych, zachęcające podróżnych do słuchania w drodze. Dwustronna komunikacja pozwoli na dalszy kontakt i opiekę nad zainteresowanymi.",
+  fup_en:"As part of promotion we plan billboards along major holiday routes, encouraging travelers to listen during their journeys. Two-way communication will enable ongoing contact and care for interested listeners.",
+  budget:[
+    {pl:"Projekt i wykonanie dedykowanej aplikacji mobilnej", en:"Design and development of dedicated mobile App", kwota:8000},
+    {pl:"Rozbudowa i integracja platformy WWW", en:"Website platform upgrade and integration", kwota:3000},
+    {pl:"Projekt i testy interfejsu użytkownika", en:"User interface design and testing", kwota:2000},
+    {pl:"Hosting serwera i infrastruktura (1 rok)", en:"Server hosting and technical infrastructure (1y)", kwota:2000},
+    {pl:"Materiały promocyjne (wizytówki, naklejki)", en:"Promotional materials (business cards, stickers)", kwota:4000},
+    {pl:"Promocja na billboardach przy trasach wakacyjnych", en:"Billboard promotion on major holiday travel routes", kwota:6000},
+    {pl:"Rezerwa", en:"Reserve", kwota:1000}
+  ],
+  waluta:"PLN", f_zbor:0, f_diec:0, f_unia:6000, f_ted:20000
+};
+const SAUNA = {
+  rok:"2026", kraj:"Polska", miasto:"Łódź / Podkowa Leśna",
+  title_pl:"Sauna z pastorem", title_en:"Sauna with pastor",
+  dyr:"Anna Nowak", email:"a.nowak@adwent.pl", org:"Adventist Mission, PUC",
+  grupa_pl:"Młodzi dorośli, dorośli", grupa_en:"Young adult, adult", pop:"100 000", ads:"200",
+  prep_pl:"Mobilna sauna do szczerych rozmów z pastorami o sensie życia, duchowości i zdrowiu.",
+  prep_en:"A mobile sauna for honest talks with pastors about the meaning of life, spirituality and health.",
+  con_pl:"Wyjazdy w plenery i na wydarzenia; rozmowy w nieformalnej atmosferze.", con_en:"Trips to outdoor spots and events; conversations in an informal atmosphere.",
+  fup_pl:"Zaproszenia na kolejne spotkania i grupy.", fup_en:"Invitations to further meetings and groups.",
+  budget:[
+    {pl:"Mobilna sauna z przyczepą", en:"Mobile sauna with trailer", kwota:23000},
+    {pl:"Rejestracja przyczepy", en:"Registration of trailer", kwota:400},
+    {pl:"Akcesoria do sauny", en:"Sauna accessories", kwota:300},
+    {pl:"Transport i logistyka", en:"Travel and logistics support", kwota:1000},
+    {pl:"Materiały promocyjne", en:"Promotional materials", kwota:100},
+    {pl:"Kampania w mediach społ.", en:"Social media campaign", kwota:200}
+  ],
+  waluta:"PLN", f_zbor:0, f_diec:0, f_unia:6000, f_ted:19000
+};
+function gen(title_pl,title_en,dyr,email,diec,miasto,ted){return{rok:"2026",kraj:"Polska",miasto:miasto,title_pl:title_pl,title_en:title_en,dyr:dyr,email:email,org:diec,grupa_pl:"Społeczność lokalna",grupa_en:"Local community",pop:"50 000",ads:"150",prep_pl:"Opis przygotowania projektu (przykład).",prep_en:"Project preparation description (sample).",con_pl:"Opis przebiegu inicjatywy (przykład).",con_en:"Description of the initiative (sample).",fup_pl:"Działania po zakończeniu (przykład).",fup_en:"Follow-up activities (sample).",budget:[{pl:"Pozycja główna",en:"Main item",kwota:Math.round(ted*0.7)},{pl:"Materiały",en:"Materials",kwota:Math.round(ted*0.2)},{pl:"Rezerwa",en:"Reserve",kwota:Math.round(ted*0.1)}],waluta:"PLN",f_zbor:0,f_diec:0,f_unia:Math.round(ted*0.1),f_ted:ted}}
+
+/* ---------------- WNIOSKI ---------------- */
+let APPS = [
+  {nr:"PL-2026-001", fund:"ted",  owner:"anna",  diec:"Diecezja Zachodnia", dur:3, wer:1, upd:"2026-06-18",
+    data:AUDIO, years:[
+      {y:1,status:"Złożony",ted:20000,rep:"—"},
+      {y:2,status:"Planowany",ted:18000,rep:"—"},
+      {y:3,status:"Planowany",ted:15000,rep:"—"}]},
+  {nr:"PL-2026-002", fund:"ciof", owner:"dyrektor",  diec:"Diecezja Wschodnia", dur:1, wer:1, upd:"2026-06-12",
+    data:SAUNA, years:[{y:1,status:"Wysłany do TED",ted:19000,rep:"—"}]},
+  {nr:"PL-2026-003", fund:"mif", owner:"piotr", diec:"Diecezja Wschodnia", dur:2, wer:1, upd:"2026-06-05",
+    data:gen("Centrum Pozytywnej Zmiany (Łódź)","Center of Positive Change (Łódź)","Piotr Wiśniewski","p.wisniewski@adwent.pl","Diecezja Wschodnia","Łódź",150000),
+    years:[{y:1,status:"Transfer środków",sdate:"2026-06-05",ted:150000,rep:"—",xfer:1},{y:2,status:"Planowany",ted:130000,rep:"—"}]},
+  {nr:"PL-2026-004", fund:"ted",  owner:"anna", diec:"Diecezja Zachodnia", dur:1, wer:1, upd:"2026-05-28",
+    data:gen("Pomocna Dłoń","Helping Hand","Anna Nowak","a.nowak@adwent.pl","Diecezja Zachodnia","Wrocław",15000),
+    years:[{y:1,status:"Zatwierdzony — diecezja",ted:15000,rep:"—"}]},
+  {nr:"PL-2026-005", fund:"ted",  owner:"piotr", diec:"Diecezja Wschodnia", dur:1, wer:1, upd:"2026-04-30",
+    data:gen("Nadzieja dla Warszawy","Hope for Warsaw","Piotr Wiśniewski","p.wisniewski@adwent.pl","Diecezja Wschodnia","Warszawa",18000),
+    years:[{y:1,status:"Raportowanie",ted:18000,rep:"Szkic"}]},
+  {nr:"PL-2026-006", fund:"ov27", owner:"anna", diec:"Diecezja Zachodnia", dur:1, wer:1, upd:"2026-06-19",
+    data:gen("OneVoice27 — kampania medialna","OneVoice27 Media Campaign","Anna Nowak","a.nowak@adwent.pl","Diecezja Zachodnia","Cała Polska",40000),
+    years:[{y:1,status:"Zatwierdzony — Zarząd",ted:40000,rep:"—"}]},
+  {nr:"PL-2026-007", fund:"uci", owner:"piotr", diec:"Diecezja Wschodnia", dur:3, wer:1, upd:"2026-05-30",
+    data:gen("Centrum Wpływu — Kraków","Centre of Influence — Kraków","Piotr Wiśniewski","p.wisniewski@adwent.pl","Diecezja Wschodnia","Kraków",50000),
+    years:[{y:1,status:"Zatwierdzony — diecezja",ted:50000,rep:"—"},{y:2,status:"Planowany",ted:48000,rep:"—"},{y:3,status:"Planowany",ted:46000,rep:"—"}]},
+  /* zarchiwizowany, poprzedni rok (2025) — do filtra lat / archiwum */
+  {nr:"PL-2025-01", fund:"ciof", owner:"anna", diec:"Diecezja Zachodnia", dur:1, wer:1, upd:"2025-03-10", archived:true, data:Object.assign(gen("Wiosenna akcja Lublin","Lublin Spring Outreach","Anna Nowak","a.nowak@adwent.pl","Diecezja Zachodnia","Lublin",6000),{rok:"2025"}),
+    years:[{y:1,status:"Zakończony",sdate:"2025-03-10",ted:6000,rep:"Approved"}]}
+];
+
+const TRANS = {[AUDIO.prep_pl]:AUDIO.prep_en,[AUDIO.con_pl]:AUDIO.con_en,[AUDIO.fup_pl]:AUDIO.fup_en,[AUDIO.title_pl]:AUDIO.title_en,[AUDIO.grupa_pl]:AUDIO.grupa_en};
+
+/* ---------------- STAN ---------------- */
+let CUR=USERS.find(u=>u.id==='skarbnik')||USERS[0], ROLE=CUR.role, SCREEN="dash", WZSTEP=0, WZ=blankWizard(), CURRENT=null, SELYEAR=0, SHOWARCH=false, SORTKEY='nr', SORTDIR=1, SELSET={}, ATTED=false, YEARS=[], ARCHOPEN=false;
+function blankWizard(){return{fund:null,korektaOf:null,diec:null,dur:1,rok:"",kraj:"Polska",miasto:"",title_pl:"",title_en:"",dyr:"",email:"",org:"",grupa_pl:"",grupa_en:"",pop:"",ads:"",prep_pl:"",prep_en:"",con_pl:"",con_en:"",fup_pl:"",fup_en:"",budget:[{pl:"",en:"",kwota:0}],waluta:"PLN",f_zbor:0,f_diec:0,f_unia:0,f_ted:0}}
+
+/* ---------------- WIDOCZNOŚĆ ---------------- */
+function visibleApps(){
+  let list;
+  if(CUR.role==='pastor')        list=APPS.filter(a=>a.owner===CUR.id);
+  else if(CUR.role==='diecezja') list=APPS.filter(a=>a.diec===CUR.diec);
+  else                           list=APPS.slice();
+  if(YEARS.length) list=list.filter(a=>isPast(a)&&YEARS.includes(String(a.data.rok))); else list=list.filter(a=>!isPast(a));
+  return list;
+}
+function setArch(nr,v){const a=APPS.find(x=>x.nr===nr);if(a){a.archived=v;a.upd='2026-06-23';}toast(v?'📦 Projekt zarchiwizowany (wycofany)':'♻ Projekt przywrócony');render();}
+function toggleSel(nr,e){if(e)e.stopPropagation();SELSET[nr]=!SELSET[nr];render();}
+function selectedNrs(){return visibleApps().filter(a=>SELSET[a.nr]).map(a=>a.nr);}
+function selectAll(chk){visibleApps().forEach(a=>SELSET[a.nr]=chk);render();}
+function clearSel(){SELSET={};render();}
+function toggleYear(y){const i=YEARS.indexOf(y);if(i<0)YEARS.push(y);else YEARS.splice(i,1);render();}
+function showModal(h){document.getElementById('modalBox').innerHTML=h;document.getElementById('modal').classList.remove('hidden');}
+function closeModal(){document.getElementById('modal').classList.add('hidden');}
+function askExport(){const n=selectedNrs().length;if(!n){toast('Zaznacz co najmniej jeden projekt');return;}showModal(`<h2>Eksport ${n} zaznaczonych projektów</h2><p style="font-size:13.5px;color:#445">Jak wyeksportować formularze TED?</p><div style="display:flex;flex-direction:column;gap:10px;margin-top:12px"><button class="btn" onclick="doExport('combined')">📄 Jeden zbiorczy PDF</button><button class="btn sec" onclick="doExport('separate')">🗂 Osobne pliki (po jednym na projekt)</button></div><div style="text-align:right;margin-top:14px"><button class="btn ghost sm" onclick="closeModal()">Anuluj</button></div>`);}
+function doExport(mode){const nrs=selectedNrs();closeModal();buildPrint(nrs);if(mode==='separate')toast('(demo) W produkcji powstanie '+nrs.length+' osobnych plików PDF');setTimeout(()=>window.print(),400);}
+function emailSel(){const n=selectedNrs().length;if(!n){toast('Zaznacz co najmniej jeden projekt');return;}toast('✉ (demo) Wysłano '+n+' projekt(ów) mailem do TED');}
+function archiveSel(){const nrs=selectedNrs();nrs.forEach(nr=>{const a=APPS.find(x=>x.nr===nr);if(a)a.archived=true;});SELSET={};toast('🗄 Zarchiwizowano '+nrs.length+' projekt(ów)');render();}
+function curYear(a){for(let i=0;i<a.years.length;i++){if(a.years[i].status!=='Zakończony'&&a.years[i].status!=='Odrzucony')return i;}return a.years.length-1;}
+function isPast(a){return !!a.archived;}
+function archiveYears(){return [...new Set(APPS.filter(isPast).map(a=>String(a.data.rok)))].sort().reverse();}
+function atTED(a){return sIdx(a.years[curYear(a)].status)>=sIdx('Zatwierdzony — diecezja');}
+function sortVal(a,key){const yi=curYear(a);const y=a.years[yi];switch(key){case 'nr':return a.nr;case 'title':return (a.data.title_pl||'').toLowerCase();case 'fund':return a.fund;case 'skl':return submitterCode(a);case 'rok':return a.dur*100+y.y;case 'status':return sIdx(y.status);case 'data':return sdate(a,y);case 'next':return nextActor(a,y);default:return a.nr;}}
+function sortApps(arr){return arr.slice().sort((x,z)=>{const vx=sortVal(x,SORTKEY),vz=sortVal(z,SORTKEY);if(vx<vz)return -SORTDIR;if(vx>vz)return SORTDIR;return 0;});}
+function setSort(k){if(SORTKEY===k)SORTDIR*=-1;else{SORTKEY=k;SORTDIR=1;}render();}
+function th(k,lbl){const ac=SORTKEY===k;const ar=ac?(SORTDIR>0?'▲':'▼'):'↕';return `<th onclick="setSort('${k}')" style="cursor:pointer;user-select:none">${lbl} <span style="font-size:10px;color:${ac?'#000':'#c2cad3'}">${ar}</span></th>`;}
+
+/* ---------------- NAWIGACJA ---------------- */
+function fillUserSel(){document.getElementById('userSel').innerHTML=USERS.map(u=>`<option value="${u.id}">${u.name}</option>`).join('');document.getElementById('userSel').value=CUR.id;}
+function setUser(id){CUR=USERS.find(u=>u.id===id);ROLE=CUR.role;ATTED=false;YEARS=[];ARCHOPEN=false;if(SCREEN==='admin'&&ROLE!=='zarzad')SCREEN='dash';if(SCREEN==='queue'&&ROLE==='pastor')SCREEN='dash';render();}
+function nav(s){SCREEN=s;if(s==='wizard'&&!WZ.korektaOf){WZ=blankWizard();WZ.diec=(CUR.role==='zarzad')?'':CUR.diec;WZSTEP=0;}window.scrollTo(0,0);render();}
+function openApp(nr){CURRENT=nr;const a=APPS.find(x=>x.nr===nr);SELYEAR=a?curYear(a):0;SCREEN='detail';window.scrollTo(0,0);render();}
+function selYear(i){SELYEAR=i;render();}
+
+function renderNav(){
+  const items=[["dash","📋","Pulpit / Wnioski"]];
+  items.push(["wizard","➕","Nowy wniosek"]);
+  if(ROLE==='diecezja'||ROLE==='zarzad'){items.push(["queue","✔️","Do zatwierdzenia"]);}
+  items.push(["report","📝","Raporty"]);
+  if(ROLE==='zarzad'){items.push(["admin","⚙️","Administracja"]);}
+  let h=`<div class="grp">Menu</div>`;
+  items.forEach(([k,ic,lbl])=>{h+=`<a class="${SCREEN===k||(SCREEN==='detail'&&k==='dash')?'active':''}" onclick="nav('${k}')"><span class="ic">${ic}</span>${lbl}</a>`});
+  h+=`<div class="grp">Pomoc</div><a onclick="document.getElementById('intro').classList.remove('hidden')"><span class="ic">ℹ️</span>O prototypie</a>`;
+  h+=`<div class="who">👤 ${CUR.name}<br>${CUR.diec?('📍 '+CUR.diec):'📍 cała Polska (Zarząd)'}</div>`;
+  document.getElementById('nav').innerHTML=h;
+}
+
+/* ---------------- RENDER ---------------- */
+function render(){
+  renderNav();
+  const v=document.getElementById('view');
+  if(SCREEN==='dash')v.innerHTML=scrDash();
+  else if(SCREEN==='wizard')v.innerHTML=scrWizard();
+  else if(SCREEN==='detail')v.innerHTML=scrDetail();
+  else if(SCREEN==='queue')v.innerHTML=scrQueue();
+  else if(SCREEN==='report')v.innerHTML=scrReport();
+  else if(SCREEN==='admin')v.innerHTML=scrAdmin();
+}
+
+/* --- PULPIT --- */
+function scrDash(){
+  let apps=sortApps(visibleApps());if(ATTED&&ROLE==='zarzad')apps=apps.filter(atTED);const selN=selectedNrs().length;const selComplete=ROLE==='zarzad'&&selN>0&&selectedNrs().every(nr=>{const a=APPS.find(x=>x.nr===nr);return a&&a.years[curYear(a)].status==='Zakończony';});
+  let rows=apps.map(a=>{const yi=curYear(a);const y=a.years[yi];return `<tr class="clk" onclick="openApp('${a.nr}')">
+    <td onclick="event.stopPropagation()"><input type="checkbox" ${SELSET[a.nr]?'checked':''} onclick="toggleSel('${a.nr}',event)"></td>
+    <td><b>${a.nr}</b>${a.archived?' <span class="pill s6">archiwum</span>':''}</td><td>${a.data.title_pl}</td>
+    <td><span class="fund-tag">${fundLabel(a.fund)}</span></td>
+    ${ROLE!=='pastor'?`<td>${submitterCode(a)}</td>`:''}
+    <td>${a.dur>1?'Rok '+y.y+'/'+a.dur:''}</td>
+    <td>${badge(y.status,a.diec,y.rep)}</td>
+    <td>${sdate(a,y)}</td>
+    <td>${nextActor(a,y)}</td>
+    <td>${fundsSquares(a,y)}</td></tr>`}).join('');
+  return `<h1>${ROLE==='pastor'?'Moje wnioski':ROLE==='diecezja'?'Wnioski — '+CUR.diec:'Wszystkie wnioski'}</h1>
+  <p class="sub">${ROLE==='pastor'?'Widzisz tylko wnioski, które złożyłeś/aś.':ROLE==='diecezja'?'Widzisz tylko wnioski ze swojej diecezji.':'Zarząd widzi wnioski ze wszystkich diecezji.'}</p>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div><b>${apps.length}</b> wniosków</div>
+      <button class="btn" onclick="nav('wizard')">➕ Nowy wniosek</button>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap;font-size:13px;color:var(--muted)">
+      <span><b>${selN}</b> zaznaczonych</span>
+      <button class="btn sm" onclick="askExport()">📄 Eksport do PDF</button>
+      <button class="btn sm sec" onclick="exportExcel()">⬇ Eksport do Excela</button>
+      <button class="btn sm sec" onclick="emailSel()">✉ Wyślij mailem</button>
+      ${selComplete?`<button class="btn sm warn" onclick="archiveSel()">🗄 Archive</button>`:''}
+      ${selN?`<button class="btn ghost sm" onclick="clearSel()">Wyczyść</button>`:''}
+      ${ROLE==='zarzad'?`<button class="btn sm ${ATTED?'':'sec'}" onclick="ATTED=!ATTED;render()" title="Ukryj wnioski, które nie wpłynęły jeszcze do Zarządu">${ATTED?'☑':'☐'} Tylko ZK</button>
+      <span style="position:relative;display:inline-block">
+        <button class="btn sm ${YEARS.length?'':'sec'}" onclick="ARCHOPEN=!ARCHOPEN;render()">${YEARS.length?'☑':'☐'} Pokaż archiwum ▾</button>
+        ${ARCHOPEN?`<div style="position:absolute;top:112%;left:0;background:#fff;border:1px solid var(--line);border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.18);padding:8px 12px;z-index:50;min-width:160px;color:var(--txt)">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:5px">Zakończone / zarchiwizowane — lata:</div>
+          ${archiveYears().length?archiveYears().map(yy=>`<label style="display:block;font-size:13px;padding:3px 0;cursor:pointer"><input type="checkbox" ${YEARS.includes(yy)?'checked':''} onclick="toggleYear('${yy}')"> ${yy}</label>`).join(''):'<div style="font-size:12px;color:var(--muted)">Brak projektów w archiwum</div>'}
+        </div>`:''}
+      </span>`:''}
+    </div>
+    ${apps.length?`<table><thead><tr><th style="width:28px"><input type="checkbox" onclick="selectAll(this.checked)"></th>${th('nr','Nr')}${th('title','Tytuł')}${th('fund','Fundusz')}${ROLE!=='pastor'?th('skl','Składający'):''}${th('rok','Rok')}${th('status','Status')}${th('data','Data')}${th('next','Następne')}<th>FUNDS</th></tr></thead><tbody>${rows}</tbody></table>`:'<p>Brak wniosków.</p>'}
+  </div>
+  <div class="note info">💡 Kliknij wiersz, aby otworzyć <b>pełny podgląd</b> projektu i przełączać <b>lata</b>. Zaznacz wiersze (☑), aby <b>wyeksportować do PDF</b> lub <b>wysłać mailem</b> zbiorczo.<br>
+  <span style="display:inline-block;margin-top:6px">Kolor statusu = kto teraz działa: <span class="pill s2">krajowy</span> <span class="pill s4">TED</span> <span class="pill s5">transfer</span> <span class="pill s6">raport</span> <span class="pill s7">zakończony</span> <span class="pill sR">anulowany</span></span></div>`;
+}
+
+/* --- KREATOR / KOREKTA --- */
+function scrWizard(){
+  const kor=!!WZ.korektaOf;
+  const steps=["Fundusz","1. Podstawowe","2. Opis","3. Budżet","4. Finansowanie","Podsumowanie"];
+  let wz=steps.map((s,i)=>`<div class="${i===WZSTEP?'cur':i<WZSTEP?'done':''}">${s}</div>`).join('');
+  let body=[wzFund,wzStep1,wzStep2,wzStep3,wzStep4,wzSummary][WZSTEP]();
+  let left = WZSTEP>0 ? `<button class="btn sec" onclick="wzPrev()">← Wstecz</button>` : (kor?'':`<button class="btn ghost" onclick="loadExample()">Wczytaj przykład (Audiobooki)</button>`);
+  let right = WZSTEP<5 ? `<button class="btn" onclick="wzNext()">Dalej →</button>` : `<button class="btn sec" onclick="saveDraft()">Zapisz szkic</button> <button class="btn ok" onclick="submitApp()">✔ ${kor?'Złóż korektę':'Złóż wniosek'}</button>`;
+  return `<h1>${kor?'Korekta wniosku — '+WZ.korektaOf:'Nowy wniosek'}</h1>
+  <p class="sub">${kor?'Popraw dane i złóż ponownie. Zatwierdzanie ruszy od nowa (nowa wersja).':'Wniosek odwzorowuje oficjalny formularz TED (kroki 1–4). Wersję angielską system generuje automatycznie.'}</p>
+  <div class="wz">${wz}</div><div class="card">${body}</div>
+  <div style="display:flex;justify-content:space-between;margin-top:18px"><div>${left}</div><div>${right}</div></div>`;
+}
+function wzFund(){if(WZ.fund==='ov27')WZ.dur=1;
+  return `<h2 style="margin-top:0">Wybierz typ funduszu</h2>
+  <div class="fcards">${Object.entries(FUNDS).map(([k,f])=>`
+    <div class="fcard ${WZ.fund===k?'sel':''}" onclick="WZ.fund='${k}';render()">
+      <h3>${f.num?`${f.code} (${f.num}) — ${f.name}`:f.name}</h3><p>💰 ${f.limit}</p><p>⏱ ${f.dur}</p>${WZ.fund===k?'<p style="color:var(--blue);font-weight:700;margin-top:8px">✔ wybrano</p>':''}
+    </div>`).join('')}</div>
+  <div class="field" style="max-width:260px;margin-top:16px"><label class="f">Czas trwania projektu (lata)</label>
+    <select onchange="WZ.dur=+this.value" ${WZ.fund==='ov27'?'disabled':''}><option ${WZ.dur===1?'selected':''}>1</option><option ${WZ.dur===2?'selected':''}>2</option><option ${WZ.dur===3?'selected':''}>3</option></select>
+    <div class="hint">${WZ.fund==='ov27'?'OneVoice27 to projekt jednoroczny (jednorazowy).':'Projekt wieloletni utworzy osobny cykl (dofinansowanie + raport) na każdy rok.'}</div></div>`;
+}
+function wzStep1(){
+  return `<h2 style="margin-top:0">Krok 1 — Podstawowe informacje</h2>
+  <div class="field"><label class="f">Diecezja / poziom <span class="req">*</span></label>
+  ${CUR.role==='zarzad'
+    ? `<select id="w_diec" onchange="WZ.diec=this.value"><option value="">— wybierz —</option><option ${WZ.diec==='Diecezja Zachodnia'?'selected':''}>Diecezja Zachodnia</option><option ${WZ.diec==='Diecezja Wschodnia'?'selected':''}>Diecezja Wschodnia</option><option ${WZ.diec==='Diecezja Południowa'?'selected':''}>Diecezja Południowa</option></select>`
+    : `<input type="text" id="w_diec_ro" value="${CUR.diec}" disabled>`}
+  <div class="hint">Określa, do której diecezji należy wniosek i kto go opiniuje. Złożony przez diecezję startuje od akceptacji Zarządu; złożony przez Zarząd — od gotowości do TED.</div></div>
+  <div class="row"><div class="col field"><label class="f">Rok inicjatywy <span class="req">*</span></label><input type="text" id="w_rok" value="${WZ.rok}"></div>
+  <div class="col field"><label class="f">Kraj <span class="req">*</span></label><input type="text" id="w_kraj" value="${WZ.kraj}"></div>
+  <div class="col field"><label class="f">Miasto / region <span class="req">*</span></label><input type="text" id="w_miasto" value="${WZ.miasto}"></div></div>
+  <div class="field"><label class="f">Tytuł projektu (PL) <span class="req">*</span></label><input type="text" id="w_title_pl" value="${WZ.title_pl}">
+    <div class="en-box"><div class="lbl">🌐 Tytuł (EN) — automatycznie <button class="btn sm sec" onclick="genEN('title')">Generuj EN</button></div><input type="text" id="w_title_en" value="${WZ.title_en}" placeholder="zostanie wygenerowany"></div></div>
+  <div class="row"><div class="col field"><label class="f">Dyrektor projektu <span class="req">*</span></label><input type="text" id="w_dyr" value="${WZ.dyr}"></div>
+  <div class="col field"><label class="f">E-mail dyrektora <span class="req">*</span></label><input type="email" id="w_email" value="${WZ.email}"></div></div>
+  <div class="field"><label class="f">Organizacja odpowiedzialna <span class="req">*</span></label><input type="text" id="w_org" value="${WZ.org}"></div>
+  <div class="field"><label class="f">Grupa docelowa (PL)</label><input type="text" id="w_grupa_pl" value="${WZ.grupa_pl}">
+    <div class="en-box"><div class="lbl">🌐 Grupa docelowa (EN) <button class="btn sm sec" onclick="genEN('grupa')">Generuj EN</button></div><input type="text" id="w_grupa_en" value="${WZ.grupa_en}"></div></div>
+  <div class="row"><div class="col field"><label class="f">Szac. populacja grupy</label><input type="text" id="w_pop" value="${WZ.pop}"></div>
+  <div class="col field"><label class="f">Szac. obecność ADS</label><input type="text" id="w_ads" value="${WZ.ads}"></div></div>`;
+}
+function wzStep2(){
+  const blk=(key,lbl)=>`<div class="field"><label class="f">${lbl} (PL)</label><textarea id="w_${key}_pl">${WZ[key+'_pl']}</textarea>
+    <div class="en-box"><div class="lbl">🌐 ${lbl} (EN) — automatycznie <button class="btn sm sec" onclick="genEN('${key}')">Generuj EN</button></div><textarea id="w_${key}_en" placeholder="kliknij „Generuj EN"">${WZ[key+'_en']}</textarea></div></div>`;
+  return `<h2 style="margin-top:0">Krok 2 — Opis projektu</h2>
+  <div class="hint" style="margin-bottom:12px">Piszesz po polsku — wersję angielską dla TED system tworzy automatycznie (do sprawdzenia).</div>
+  ${blk('prep','Przygotowanie')}${blk('con','Przebieg inicjatywy')}${blk('fup','Działania po (follow-up)')}
+  <div style="text-align:right"><button class="btn sec" onclick="genENall()">🌐 Generuj całą wersję EN</button></div>`;
+}
+function wzStep3(){
+  let rows=WZ.budget.map((b,i)=>`<tr>
+    <td><input type="text" value="${b.pl}" oninput="WZ.budget[${i}].pl=this.value"></td>
+    <td><input type="text" value="${b.en}" oninput="WZ.budget[${i}].en=this.value" placeholder="EN"></td>
+    <td style="width:120px"><input type="number" value="${b.kwota}" oninput="WZ.budget[${i}].kwota=+this.value||0;updTotals()"></td>
+    <td style="width:40px"><button class="btn sm red" onclick="delRow(${i})">✕</button></td></tr>`).join('');
+  const tot=WZ.budget.reduce((s,b)=>s+(+b.kwota||0),0);
+  return `<h2 style="margin-top:0">Krok 3 — Budżet${WZ.dur>1?' (rok 1)':''}</h2>
+  ${WZ.dur>1?'<div class="note">Projekt wieloletni: tu wpisujesz budżet roku 1. Budżety kolejnych lat uzupełnisz w cyklu rocznym danego roku.</div>':''}
+  <div class="field" style="max-width:200px"><label class="f">Waluta</label><select id="w_waluta" onchange="WZ.waluta=this.value"><option ${WZ.waluta==='PLN'?'selected':''}>PLN</option><option ${WZ.waluta==='EUR'?'selected':''}>EUR</option><option ${WZ.waluta==='GBP'?'selected':''}>GBP</option><option ${WZ.waluta==='USD'?'selected':''}>USD</option></select></div>
+  <table><thead><tr><th>Opis (PL)</th><th>Opis (EN)</th><th>Kwota</th><th></th></tr></thead><tbody>${rows}</tbody></table>
+  <div style="margin-top:10px"><button class="btn sm sec" onclick="addRow()">＋ Dodaj pozycję</button></div>
+  <div class="total-row"><span>Razem budżet</span><span id="budTot">${money(tot)} ${WZ.waluta}</span></div>`;
+}
+function wzStep4(){
+  const bud=WZ.budget.reduce((s,b)=>s+(+b.kwota||0),0);
+  const fin=(+WZ.f_zbor||0)+(+WZ.f_diec||0)+(+WZ.f_unia||0)+(+WZ.f_ted||0);const ok=fin===bud;
+  return `<h2 style="margin-top:0">Krok 4 — Finansowanie${WZ.dur>1?' (rok 1)':''}</h2>
+  <div class="hint" style="margin-bottom:12px">Kwoty wkładów ustalane poza systemem; tu wpisujemy zatwierdzone. Suma musi równać się budżetowi.</div>
+  <div class="row">
+  <div class="col field"><label class="f">Lokalny zbór</label><input type="number" id="f_zbor" value="${WZ.f_zbor}" oninput="WZ.f_zbor=+this.value||0;updMatch()"></div>
+  <div class="col field"><label class="f">Diecezja / Conference</label><input type="number" id="f_diec" value="${WZ.f_diec}" oninput="WZ.f_diec=+this.value||0;updMatch()"></div>
+  <div class="col field"><label class="f">Unia (PUC)</label><input type="number" id="f_unia" value="${WZ.f_unia}" oninput="WZ.f_unia=+this.value||0;updMatch()"></div>
+  <div class="col field"><label class="f">Wnioskowane z TED <span class="req">*</span></label><input type="number" id="f_ted" value="${WZ.f_ted}" oninput="WZ.f_ted=+this.value||0;updMatch()"></div></div>
+  <div class="total-row"><span>Suma finansowania</span><span id="finTot">${money(fin)} ${WZ.waluta}</span></div>
+  <div style="margin-top:10px" id="matchBox" class="${ok?'match-ok':'match-no'}">${ok?'✔ Zgadza się z budżetem ('+money(bud)+' '+WZ.waluta+')':'✗ Niezgodność! Budżet: '+money(bud)+' '+WZ.waluta}</div>`;
+}
+function wzSummary(){
+  const bud=WZ.budget.reduce((s,b)=>s+(+b.kwota||0),0);
+  return `<h2 style="margin-top:0">Podsumowanie</h2>
+  <div class="kv">
+    <div class="k">Fundusz</div><div>${WZ.fund?FUNDS[WZ.fund].name:'—'}</div>
+    <div class="k">Czas trwania</div><div>${WZ.dur} ${WZ.dur===1?'rok':'lata'}${WZ.dur>1?' (osobny cykl na każdy rok)':''}</div>
+    <div class="k">Tytuł (PL / EN)</div><div>${WZ.title_pl||'—'} <span style="color:var(--accent)">/ ${WZ.title_en||'—'}</span></div>
+    <div class="k">Dyrektor</div><div>${WZ.dyr||'—'} (${WZ.email||'—'})</div>
+    <div class="k">Budżet (rok 1)</div><div>${money(bud)} ${WZ.waluta}</div>
+    <div class="k">Wnioskowane z TED</div><div><b>${money(WZ.f_ted)} ${WZ.waluta}</b></div>
+  </div>
+  <div class="note" style="margin-top:16px">Po złożeniu wniosek trafi do <b>diecezji</b> do zatwierdzenia, następnie do <b>Zarządu</b>, a po akceptacji zostanie przygotowany do wysłania do TED.</div>`;
+}
+function collectStep(){const g=id=>{const e=document.getElementById(id);return e?e.value:undefined};
+  if(WZSTEP===1){const dd=g('w_diec');if(dd!==undefined)WZ.diec=dd;WZ.rok=g('w_rok');WZ.kraj=g('w_kraj');WZ.miasto=g('w_miasto');WZ.title_pl=g('w_title_pl');WZ.title_en=g('w_title_en');WZ.dyr=g('w_dyr');WZ.email=g('w_email');WZ.org=g('w_org');WZ.grupa_pl=g('w_grupa_pl');WZ.grupa_en=g('w_grupa_en');WZ.pop=g('w_pop');WZ.ads=g('w_ads');}
+  if(WZSTEP===2){['prep','con','fup'].forEach(k=>{WZ[k+'_pl']=g('w_'+k+'_pl');WZ[k+'_en']=g('w_'+k+'_en');});}}
+function wzNext(){collectStep();if(WZSTEP===0&&!WZ.fund){toast('Wybierz fundusz');return}if(WZSTEP===1&&!WZ.diec){toast('Wskaż diecezję / poziom');return}WZSTEP++;render()}
+function wzPrev(){collectStep();WZSTEP--;render()}
+function addRow(){collectStep();WZ.budget.push({pl:"",en:"",kwota:0});render()}
+function delRow(i){WZ.budget.splice(i,1);if(!WZ.budget.length)WZ.budget.push({pl:"",en:"",kwota:0});render()}
+function updTotals(){const t=WZ.budget.reduce((s,b)=>s+(+b.kwota||0),0);const e=document.getElementById('budTot');if(e)e.textContent=money(t)+' '+WZ.waluta}
+function updMatch(){const bud=WZ.budget.reduce((s,b)=>s+(+b.kwota||0),0);const fin=(+WZ.f_zbor||0)+(+WZ.f_diec||0)+(+WZ.f_unia||0)+(+WZ.f_ted||0);const ft=document.getElementById('finTot');if(ft)ft.textContent=money(fin)+' '+WZ.waluta;const mb=document.getElementById('matchBox');if(mb){const ok=fin===bud;mb.className=ok?'match-ok':'match-no';mb.textContent=ok?'✔ Zgadza się z budżetem ('+money(bud)+' '+WZ.waluta+')':'✗ Niezgodność! Budżet: '+money(bud)+' '+WZ.waluta}}
+function tr(t){if(!t)return"";return TRANS[t]||("[EN] "+t)}
+function genEN(key){collectStep();if(key==='title')WZ.title_en=tr(WZ.title_pl);else if(key==='grupa')WZ.grupa_en=tr(WZ.grupa_pl);else WZ[key+'_en']=tr(WZ[key+'_pl']);toast('Wersja EN wygenerowana (demo)');render();}
+function genENall(){collectStep();['prep','con','fup'].forEach(k=>WZ[k+'_en']=tr(WZ[k+'_pl']));toast('Cała wersja EN wygenerowana (demo)');render();}
+function loadExample(){WZ=JSON.parse(JSON.stringify(AUDIO));WZ.fund='ted';WZ.dur=3;WZ.korektaOf=null;WZ.diec=(CUR.role==='zarzad')?'Diecezja Zachodnia':CUR.diec;WZSTEP=1;toast('Wczytano przykład „Audiobooki z nadzieją"');render();}
+function loadAppToWizard(nr){const a=APPS.find(x=>x.nr===nr);WZ=JSON.parse(JSON.stringify(a.data));WZ.fund=a.fund;WZ.dur=a.dur;WZ.diec=a.diec;WZ.korektaOf=nr;WZSTEP=1;SCREEN='wizard';window.scrollTo(0,0);render();}
+function saveDraft(){toast('💾 Szkic zapisany (demo)');}
+function submitApp(){collectStep();
+  const diec=WZ.diec||CUR.diec;
+  const startStatus=CUR.role==='diecezja'?'Zatwierdzony — diecezja':CUR.role==='zarzad'?'Zatwierdzony — Zarząd':'Złożony';
+  const sd='2026-06-23';
+  if(WZ.korektaOf){const base=WZ.korektaOf.replace(/-K\d+$/,'');const a=APPS.find(x=>x.nr===WZ.korektaOf);const newWer=(a?a.wer:1)+1;
+    APPS.unshift({nr:base+'-K'+newWer,fund:WZ.fund,owner:CUR.id,diec:diec,dur:WZ.dur,wer:newWer,upd:sd,data:JSON.parse(JSON.stringify(WZ)),years:[{y:1,status:startStatus,sdate:sd,ted:(+WZ.f_ted||0),rep:'—'}]});
+    toast('✔ Korekta złożona — zatwierdzanie rusza od nowa');}
+  else{const nr="PL-2026-"+String(100+APPS.length).padStart(3,'0');
+    const years=[];for(let y=1;y<=WZ.dur;y++)years.push({y:y,status:y===1?startStatus:'Planowany',sdate:sd,ted:(+WZ.f_ted||0),rep:'—'});
+    APPS.unshift({nr:nr,fund:WZ.fund,owner:CUR.id,diec:diec,dur:WZ.dur,wer:1,upd:sd,data:JSON.parse(JSON.stringify(WZ)),years:years});
+    const dest=startStatus==='Złożony'?'trafił do diecezji':startStatus==='Zatwierdzony — diecezja'?'trafił do Zarządu':'gotowy do wysłania do TED';
+    toast('✔ Wniosek '+nr+' złożony — '+dest);}
+  WZ=blankWizard();WZSTEP=0;SCREEN='dash';render();}
+
+/* --- SZCZEGÓŁY + WIELOLETNI CYKL + ZATWIERDZANIE --- */
+function scrDetail(){
+  const a=APPS.find(x=>x.nr===CURRENT);if(!a)return'<p>Nie znaleziono.</p>';
+  if(SELYEAR>=a.years.length)SELYEAR=0;
+  const d=a.data, y=a.years[SELYEAR];
+  // zakładki lat
+  let ytabs=a.years.map((yr,i)=>`<div class="ytab ${i===SELYEAR?'sel':''}" onclick="selYear(${i})">Rok ${yr.y}<br>${badge(yr.status,a.diec,yr.rep)}</div>`).join('');
+  // stepper dla wybranego roku
+  let step = y.status==='Planowany'
+    ? `<div class="note">🔒 Rok ${y.y} jest <b>planowany</b>. Otworzy się po zaakceptowaniu raportu z roku ${y.y-1} (cykl roczny).</div>`
+    : `<div class="stepper">${STATUSES.map((s,i)=>`<div class="st ${i<sIdx(y.status)?'done':i===sIdx(y.status)?'cur':''}">${shortStatus(s,a.diec)}</div>`).join('')}</div>`;
+  // podgląd projektu (pełny) — zawsze widoczny
+  const budTot=(d.budget||[]).reduce((s,b)=>s+(+b.kwota||0),0);
+  let budRows=(d.budget||[]).map(b=>`<tr><td>${b.pl}</td><td style="color:var(--accent)">${b.en||''}</td><td style="text-align:right">${money(b.kwota)}</td></tr>`).join('');
+  let preview=`<div class="kv">
+    <div class="k">Tytuł (PL / EN)</div><div>${d.title_pl} <span style="color:var(--accent)">/ ${d.title_en}</span></div>
+    <div class="k">Dyrektor</div><div>${d.dyr} (${d.email})</div>
+    <div class="k">Organizacja</div><div>${d.org}</div>
+    <div class="k">Lokalizacja</div><div>${d.miasto}, ${d.kraj}</div>
+    <div class="k">Grupa docelowa</div><div>${d.grupa_pl} / ${d.grupa_en}</div>
+    <div class="k">Populacja / ADS</div><div>${d.pop} / ${d.ads}</div></div>
+    <h2>Opis</h2>
+    <p><b>Przygotowanie:</b> ${d.prep_pl||'—'}<br><span style="color:var(--accent)">${d.prep_en||''}</span></p>
+    <p><b>Przebieg:</b> ${d.con_pl||'—'}<br><span style="color:var(--accent)">${d.con_en||''}</span></p>
+    <p><b>Follow-up:</b> ${d.fup_pl||'—'}<br><span style="color:var(--accent)">${d.fup_en||''}</span></p>
+    <h2>Budżet${a.dur>1?' (rok 1)':''} — ${d.waluta}</h2>
+    <table><thead><tr><th>Opis (PL)</th><th>Opis (EN)</th><th style="text-align:right">Kwota</th></tr></thead><tbody>${budRows}<tr><td colspan="2"><b>Razem</b></td><td style="text-align:right"><b>${money(budTot)}</b></td></tr></tbody></table>
+    <h2>Finansowanie roku ${y.y} — ${d.waluta}</h2>
+    <div class="kv"><div class="k">Lokalny zbór</div><div>${money(d.f_zbor)}</div>
+    <div class="k">Diecezja</div><div>${money(d.f_diec)}</div>
+    <div class="k">Unia (PUC)</div><div>${money(d.f_unia)}</div>
+    <div class="k">Wnioskowane z TED (rok ${y.y})</div><div><b>${money(y.ted)} ${d.waluta}</b></div></div>`;
+
+  // panel akcji wg roli i statusu wybranego roku
+  let actions=panelActions(a,SELYEAR);
+  // korekta dla właściciela
+  let korBtn='';
+  let archBtn=(ROLE==='zarzad')?(a.archived?`<button class="btn warn sm" onclick="setArch('${a.nr}',false)">♻ Przywróć</button>`:`<button class="btn warn sm" onclick="setArch('${a.nr}',true)">📦 Archiwizuj (wycofany)</button>`):'';
+
+  return `<div style="display:flex;justify-content:space-between;align-items:center"><h1>${d.title_pl} <span class="fund-tag">${fundLabel(a.fund)}</span></h1><button class="btn ghost sm" onclick="nav('dash')">← Lista</button></div>
+  <p class="sub">${a.nr} ${a.wer>1?'· wersja '+a.wer+' (korekta)':''} · ${a.diec} · właściciel: ${userName(a.owner)} · ${a.dur>1?a.dur+' lata (wieloletni)':'1 rok'}${a.archived?' · <span class="pill s6">ARCHIWUM</span>':''}</p>
+  ${a.dur>1?`<div class="ytabs">${ytabs}</div>`:''}
+  <div class="card"><h2 style="margin-top:0">Cykl roku ${y.y}${a.dur>1?' z '+a.dur:''} — ścieżka zatwierdzania</h2>
+  <div style="margin-bottom:10px;font-size:13.5px"><b>Status:</b> ${badge(y.status,a.diec,y.rep)} &nbsp;·&nbsp; <b>Od:</b> ${sdate(a,y)} &nbsp;·&nbsp; <b>Następne (oczekuje na):</b> ${nextActor(a,y)}</div>
+  ${step}</div>
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0">Podgląd projektu</h2><div>${korBtn} ${archBtn} <button class="btn sec sm" onclick="exportTED('${a.nr}')">📄 Eksport TED (PDF)</button></div></div>${preview}</div>
+  ${actions}`;
+}
+function userName(id){const u=USERS.find(x=>x.id===id);return u?u.name.split(' — ')[0]:id}
+
+function panelActions(a,yi){
+  const y=a.years[yi];const can=(role)=>CUR.role===role;
+  const diecOK=can('diecezja')&&a.diec===CUR.diec;
+  let h='';
+  if(y.status==='Planowany'){
+    if(can('zarzad'))h=`<div class="card"><h2 style="margin-top:0">Rok planowany</h2><p class="sub">W realnym systemie rok otwiera się automatycznie po rozliczeniu poprzedniego. Tu możesz otworzyć ręcznie (demo).</p><button class="btn" onclick="actYear('${a.nr}',${yi},'Złożony','Otworzono rok ${y.y} (plan roczny złożony)')">Otwórz rok ${y.y}</button></div>`;
+    return h;
+  }
+  if(y.status==='Złożony'&&diecOK){
+    h=`<div class="card"><h2 style="margin-top:0">Decyzja — Diecezja (rok ${y.y})</h2>
+      <div class="field" style="max-width:280px"><label class="f">Zatwierdzona kwota wkładu diecezji</label><input type="number" value="${a.data.f_diec||0}"></div>
+      <textarea placeholder="Uwagi dla składającego (opcjonalnie)" style="margin-bottom:10px"></textarea>
+      <button class="btn ok" onclick="actYear('${a.nr}',${yi},'Zatwierdzony — diecezja','Diecezja zatwierdziła rok ${y.y}')">✔ Zatwierdź</button>
+      <button class="btn warn" onclick="actYear('${a.nr}',${yi},'Szkic','Odesłano do poprawy')">↩ Odeślij do poprawy</button>
+      <button class="btn red" onclick="actYear('${a.nr}',${yi},'Odrzucony','Wniosek odrzucony')">✕ Odrzuć</button></div>`;
+  } else if(y.status==='Zatwierdzony — diecezja'&&can('zarzad')){
+    h=`<div class="card"><h2 style="margin-top:0">Decyzja — Zarząd (rok ${y.y})</h2>
+      <div class="field" style="max-width:280px"><label class="f">Zatwierdzona kwota wkładu Unii</label><input type="number" value="${a.data.f_unia||0}"></div>
+      <textarea placeholder="Uwagi" style="margin-bottom:10px"></textarea>
+      <button class="btn ok" onclick="actYear('${a.nr}',${yi},'Zatwierdzony — Zarząd','Zarząd zatwierdził rok ${y.y}')">✔ Zatwierdź</button>
+      <button class="btn warn" onclick="actYear('${a.nr}',${yi},'Szkic','Odesłano do poprawy')">↩ Odeślij do poprawy</button></div>`;
+  } else if(y.status==='Zatwierdzony — Zarząd'&&can('zarzad')){
+    h=`<div class="card"><h2 style="margin-top:0">Przekazanie do TED (rok ${y.y})</h2>
+      <p class="sub">Rok zatwierdzony na wszystkich poziomach. Wygeneruj formularz TED (PL+EN) i oznacz jako wysłany.</p>
+      <button class="btn sec" onclick="exportTED('${a.nr}')">📄 Generuj formularz TED</button>
+      <button class="btn ok" onclick="actYear('${a.nr}',${yi},'Wysłany do TED','Rok ${y.y} wysłany do TED')">✔ Oznacz: wysłany do TED</button></div>`;
+  } else if(y.status==='Wysłany do TED'&&can('zarzad')){
+    h=`<div class="card"><h2 style="margin-top:0">Środki (rok ${y.y})</h2>
+      <p class="sub">Po decyzji TED/GC środki spływają w dół: TED → Zarząd → diecezja → aplikant.</p>
+      <button class="btn ok" onclick="actYear('${a.nr}',${yi},'Transfer środków','Rozpoczęto transfer środków')">✔ Oznacz: środki z góry → rozpocznij transfer</button></div>`;
+  } else if(y.status==='Transfer środków'){
+    const so=sendOrder(a);const xi=y.xfer||0;const allSent=xi>=so.length;const nextK=allSent?null:so[xi];
+    const canSend=nextK&&(CUR.role==='zarzad'||(CUR.role==='diecezja'&&CUR.diec===a.diec));
+    const ownerOK=CUR.role==='pastor'&&a.owner===CUR.id;
+    h=`<div class="card"><h2 style="margin-top:0">Transfer środków (rok ${y.y})</h2>
+      <p class="sub">Środki spływają poziom po poziomie aż do aplikanta. Wypełniony kwadrat = wysłane · biała ramka = odebrane przez aplikanta.</p>
+      <div style="margin:12px 0">${fundsSquares(a,y,true)}</div>
+      <div class="hint" style="margin-bottom:12px">Szczeble: 🟨 diecezja (konferencja) · 🟧 unia (PUC) · 🟩 TED · 🟦 GC</div>
+      <div>${!allSent?(canSend?`<button class="btn ok" onclick="confirmXfer('${a.nr}',${yi})">✔ Wyślij środki: ${lvlLabel(a,nextK)} → ${recipLabel(a,nextK)}</button>`:`<span class="hint">Czeka na ${lvlLabel(a,nextK)}, aby wysłał środki.</span>`):(y.received?`<span class="hint">Wszystkie środki odebrane przez aplikanta.</span>`:(ownerOK?`<button class="btn ok" onclick="confirmReceipt('${a.nr}',${yi})">✔ Potwierdź odbiór środków (aplikant)</button>`:`<span class="hint">Wszystkie szczeble wysłały — czeka na potwierdzenie odbioru przez aplikanta.</span>`))}</div></div>`;
+  } else if(y.status==='Raportowanie'){
+    const ownerOK=can('pastor')&&a.owner===CUR.id;
+    h=`<div class="card"><h2 style="margin-top:0">Raport — rok ${y.y}</h2>
+      <div class="row"><div class="col field"><label class="f">Data otrzymania środków</label><input type="text" value="2025-10-01"></div>
+      <div class="col field"><label class="f">Status raportu</label><input type="text" value="${y.rep}" disabled></div></div>
+      <div class="field"><label class="f">Opis realizacji (PL)</label><textarea>Przeprowadzono zaplanowane działania...</textarea>
+        <div class="en-box"><div class="lbl">🌐 (EN) — automatycznie <button class="btn sm sec" onclick="toast('Wygenerowano EN (demo)')">Generuj EN</button></div><textarea placeholder="auto"></textarea></div></div>
+      <div class="field"><label class="f">Rezultaty / wskaźniki</label><textarea placeholder="liczba uczestników, chrztów, nowych grup..."></textarea></div>
+      <div class="field"><label class="f">Jedna historia (wymóg TED)</label><textarea></textarea></div>
+      <table><thead><tr><th>Pozycja</th><th>Plan</th><th>Wykonanie</th></tr></thead><tbody>
+        ${(a.data.budget||[]).slice(0,3).map(b=>`<tr><td>${b.pl}</td><td>${money(b.kwota)}</td><td><input type="number" value="${b.kwota}" style="width:110px"></td></tr>`).join('')}
+      </tbody></table>
+      <div style="margin-top:12px">
+      ${ownerOK?`<button class="btn ok" onclick="setRep('${a.nr}',${yi},'Złożony','Raport złożony')">✔ Złóż raport</button>`:''}
+      ${(can('diecezja')&&a.diec===CUR.diec)||can('zarzad')?`<button class="btn ok" onclick="actYear('${a.nr}',${yi},'Zakończony','Raport zaakceptowany — rok ${y.y} zakończony')">✔ Zaakceptuj raport i zakończ rok</button>`:''}
+      </div></div>`;
+  } else if(y.status==='Zakończony'){
+    h=`<div class="card"><div class="note info" style="margin:0">✔ Rok ${y.y} zakończony (raport zaakceptowany).${a.years[yi+1]?' Kolejny rok jest dostępny w zakładkach powyżej.':''}</div></div>`;
+  } else if(y.status==='Szkic'&&can('pastor')&&a.owner===CUR.id){
+    h=`<div class="card"><h2 style="margin-top:0">Wniosek do poprawy</h2><p class="sub">Po naniesieniu poprawek złóż ponownie.</p>
+      <button class="btn ok" onclick="actYear('${a.nr}',${yi},'Złożony','Złożono ponownie')">✔ Złóż ponownie</button></div>`;
+  }
+  return h;
+}
+function actYear(nr,yi,to,msg){const a=APPS.find(x=>x.nr===nr);if(!a)return;a.years[yi].status=to;a.years[yi].sdate='2026-06-23';a.upd='2026-06-23';
+  if(to==='Transfer środków'){a.years[yi].xfer=0;a.years[yi].received=false;}
+  if(to==='Raportowanie')a.years[yi].rep='Szkic';
+  if(to==='Zakończony'&&a.years[yi+1]&&a.years[yi+1].status==='Planowany'){a.years[yi+1].status='Złożony';a.years[yi+1].sdate='2026-06-23';}
+  toast('✔ '+msg);render();}
+function confirmXfer(nr,yi){const a=APPS.find(x=>x.nr===nr);if(!a)return;a.years[yi].xfer=(a.years[yi].xfer||0)+1;a.years[yi].sdate='2026-06-23';a.upd='2026-06-23';toast('✔ Środki wysłane o poziom niżej');render();}
+function confirmReceipt(nr,yi){const a=APPS.find(x=>x.nr===nr);if(!a)return;a.years[yi].received=true;a.years[yi].status='Raportowanie';a.years[yi].rep='Szkic';a.years[yi].sdate='2026-06-23';a.upd='2026-06-23';toast('✔ Aplikant potwierdził odbiór — rozpoczęto raportowanie');render();}
+function setRep(nr,yi,to,msg){const a=APPS.find(x=>x.nr===nr);if(a)a.years[yi].rep=to;toast('✔ '+msg);render();}
+
+/* --- KOLEJKA ZATWIERDZANIA --- */
+function scrQueue(){
+  const want = CUR.role==='diecezja' ? 'Złożony' : 'Zatwierdzony — diecezja';
+  const list=visibleApps().map(a=>({a,yi:curYear(a)})).filter(o=>o.a.years[o.yi].status===want);
+  let rows=list.map(o=>{const y=o.a.years[o.yi];return `<tr class="clk" onclick="openApp('${o.a.nr}')"><td><b>${o.a.nr}</b></td><td>${o.a.data.title_pl}</td><td><span class="fund-tag">${fundLabel(o.a.fund)}</span></td><td>${submitterCode(o.a)}</td><td>${o.a.dur>1?'Rok '+y.y+'/'+o.a.dur:''}</td><td>${badge(y.status,o.a.diec,y.rep)}</td><td>${sdate(o.a,y)}</td><td>${nextActor(o.a,y)}</td><td style="text-align:right">${money(y.ted)} ${o.a.data.waluta}</td><td>${fundsSquares(o.a,y)}</td></tr>`}).join('');
+  return `<h1>Do zatwierdzenia</h1><p class="sub">Wnioski oczekujące na Twoją decyzję (${CUR.role==='diecezja'?CUR.diec:'poziom Zarządu'}).</p>
+  <div class="card">${list.length?`<table><thead><tr><th>Nr</th><th>Tytuł</th><th>Fundusz</th><th>Składający</th><th>Rok</th><th>Status</th><th>Data</th><th>Następne</th><th style="text-align:right">TED</th><th>FUNDS</th></tr></thead><tbody>${rows}</tbody></table>`:'<p>Brak wniosków oczekujących na tym poziomie. 🎉</p>'}</div>`;
+}
+
+/* --- RAPORTY (lata w trakcie raportowania) --- */
+function scrReport(){
+  const list=visibleApps().map(a=>({a,yi:curYear(a)})).filter(o=>o.a.years[o.yi].status==='Raportowanie');
+  let rows=list.map(o=>{const y=o.a.years[o.yi];return `<tr class="clk" onclick="openApp('${o.a.nr}')"><td><b>${o.a.nr}</b></td><td>${o.a.data.title_pl}</td><td>Rok ${y.y}${o.a.dur>1?'/'+o.a.dur:''}</td><td>${pill(y.rep==='—'?'Szkic':y.rep)}</td><td style="text-align:right">${money(y.ted)} ${o.a.data.waluta}</td></tr>`}).join('');
+  return `<h1>Raporty</h1><p class="sub">Lata wymagające raportu (12-miesięcznego). Każdy rok projektu wieloletniego ma własny raport.</p>
+  <div class="card">${list.length?`<table><thead><tr><th>Nr</th><th>Projekt</th><th>Rok</th><th>Raport</th><th style="text-align:right">Kwota</th></tr></thead><tbody>${rows}</tbody></table>`:'<p>Brak otwartych raportów.</p>'}</div>
+  <div class="note info">Otwórz pozycję, aby wypełnić raport w cyklu danego roku (zakładka roku w szczegółach projektu).</div>`;
+}
+
+/* --- ADMINISTRACJA --- */
+function scrAdmin(){
+  let urows=[
+    ["Dyrektor Misji","misja@adwent.pl","Zarząd (admin)","—","M365"],
+    ["Skarbnik Kościoła","skarbnik@adwent.pl","Zarząd (admin)","—","M365"],
+    ["Jan Kowalski","j.kowalski@adwent.pl","Zatwierdzający","Diecezja Zachodnia","M365"],
+    ["Ewa Lewandowska","e.lewandowska@adwent.pl","Zatwierdzający","Diecezja Wschodnia","M365"],
+    ["Anna Nowak","a.nowak@adwent.pl","Składający (pastor)","Diecezja Zachodnia","magic link"],
+    ["Piotr Wiśniewski","p.wisniewski@adwent.pl","Składający (pastor)","Diecezja Wschodnia","magic link"]
+  ];
+  return `<h1>Administracja</h1><p class="sub">Zarządzanie dostępem. Administratorzy/zatwierdzający przez M365; składający przez magic link (link logujący na e-mail).</p>
+  <div class="card"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><h2 style="margin:0">Użytkownicy</h2><button class="btn sm" onclick="toast('Konto/zaproszenie utworzone (demo)')">＋ Dodaj użytkownika</button></div>
+  <table><thead><tr><th>Imię i nazwisko</th><th>Login / e-mail</th><th>Rola</th><th>Diecezja</th><th>Logowanie</th><th></th></tr></thead><tbody>
+  ${urows.map(u=>`<tr><td>${u[0]}</td><td>${u[1]}</td><td>${u[2]}</td><td>${u[3]}</td><td><span class="fund-tag">${u[4]}</span></td><td><button class="btn ghost sm" onclick="toast('Link logujący wysłany (demo)')">Wyślij link</button></td></tr>`).join('')}
+  </tbody></table></div>
+  <div class="note">🔒 Brak publicznego formularza — żeby cokolwiek złożyć, trzeba mieć konto. Pastor widzi tylko swoje wnioski, diecezja tylko swoją diecezję. Dane w chmurze UE, szyfrowane, z kopiami. Przekazanie do TED objęte klauzulą RODO.</div>`;
+}
+
+/* --- EKSPORT FORMULARZA TED --- */
+function tedFormHTML(a,y){y=y||a.years[curYear(a)];const d=a.data;
+  const bud=(d.budget||[]).reduce((s,b)=>s+(+b.kwota||0),0);const cur=d.waluta||'PLN';
+  const rows=(d.budget||[]).map((b,i)=>`<tr><td>Item ${i+1}: ${b.en||b.pl||''}</td><td style="text-align:right">${(+b.kwota||0).toLocaleString('en-US')}</td></tr>`).join('');
+  return `<div class="ted-form">
+    <div style="color:#1b4f72;font-weight:700">TRANS-EUROPEAN DIVISION${a.dur>1?' — Year '+y.y+' of '+a.dur:''}</div>
+    <h2>APPLICATION — ${FUNDS[a.fund].name} (${FUNDS[a.fund].code})</h2>
+    <div class="hd">Step 1: Basic information</div>
+    <table>
+      <tr><td>Year of the outreach</td><td>${d.rok||''}</td><td>Country</td><td>${d.kraj||''}</td></tr>
+      <tr><td>Project title</td><td>${d.title_en||d.title_pl||''}</td><td>City/Town</td><td>${d.miasto||''}</td></tr>
+      <tr><td>Project Director</td><td>${d.dyr||''}</td><td>People Group</td><td>${d.grupa_en||d.grupa_pl||''}</td></tr>
+      <tr><td>Director email</td><td>${d.email||''}</td><td>Est. population</td><td>${d.pop||''}</td></tr>
+      <tr><td>Organisation responsible</td><td>${d.org||''}</td><td>Est. SDA presence</td><td>${d.ads||''}</td></tr>
+    </table>
+    <div class="hd">Step 2: Project Description (EN)</div>
+    <p>${[d.prep_en,d.con_en,d.fup_en].filter(Boolean).join(' ')||'—'}</p>
+    <div class="hd">Step 3: Budget request — ${cur}</div>
+    <table>${rows}<tr><td><b>Total</b></td><td style="text-align:right"><b>${bud.toLocaleString('en-US')}</b></td></tr></table>
+    <div class="hd">Step 4: Project Funding — ${cur}</div>
+    <table>
+      <tr><td>Local church</td><td style="text-align:right">${(+d.f_zbor||0).toLocaleString('en-US')}</td></tr>
+      <tr><td>Conference/Mission</td><td style="text-align:right">${(+d.f_diec||0).toLocaleString('en-US')}</td></tr>
+      <tr><td>Union</td><td style="text-align:right">${(+d.f_unia||0).toLocaleString('en-US')}</td></tr>
+      <tr><td>Division funding requested</td><td style="text-align:right">${(+y.ted||0).toLocaleString('en-US')}</td></tr>
+    </table>
+    <p style="margin-top:20px;font-size:11px;color:#666">Wygenerowano z Systemu Wniosków Misyjnych PL → TED (prototyp). Wersja EN do skopiowania/wysłania do TED.</p>
+  </div>`;}
+function exportTED(nr){const a=APPS.find(x=>x.nr===nr);document.getElementById('printArea').innerHTML=tedFormHTML(a,a.years[SELYEAR]||a.years[0]);toast('Otwieram podgląd wydruku — wybierz „Zapisz jako PDF"');setTimeout(()=>window.print(),400);}
+function buildPrint(nrs){document.getElementById('printArea').innerHTML=nrs.map(nr=>tedFormHTML(APPS.find(a=>a.nr===nr))).join('<div style="page-break-after:always"></div>');}
+function downloadFile(name,content,mime){const b=new Blob([content],{type:mime});const u=URL.createObjectURL(b);const el=document.createElement('a');el.href=u;el.download=name;document.body.appendChild(el);el.click();document.body.removeChild(el);setTimeout(()=>URL.revokeObjectURL(u),1500);}
+function exportExcel(){let nrs=selectedNrs();if(!nrs.length)nrs=visibleApps().map(a=>a.nr);
+  const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const head=['Nr','Tytuł','Fundusz','Składający','Rok','Status','Następne','Waluta','Wniosek do TED'];
+  const body=nrs.map(nr=>{const a=APPS.find(x=>x.nr===nr);const yi=curYear(a);const y=a.years[yi];return '<tr>'+[a.nr,a.data.title_pl,fundLabel(a.fund),submitterCode(a),(a.dur>1?'Rok '+y.y+'/'+a.dur:'1'),shortStatus(y.status,a.diec),nextActor(a,y),a.data.waluta,y.ted].map(c=>'<td>'+esc(c)+'</td>').join('')+'</tr>';}).join('');
+  const html='<html><head><meta charset="UTF-8"></head><body><table border="1"><tr>'+head.map(h=>'<th>'+h+'</th>').join('')+'</tr>'+body+'</table></body></html>';
+  downloadFile('Wnioski-TED.xls',html,'application/vnd.ms-excel');toast('⬇ Wyeksportowano do Excela ('+nrs.length+' wniosków)');}
+
+/* --- POMOCNICZE --- */
+let toastT;
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600)}
+
+fillUserSel();render();
+</script>
+</body>
+</html>
