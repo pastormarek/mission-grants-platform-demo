@@ -12,7 +12,7 @@
        background:#f3f2f1;color:#252423;font-size:14px}
   /* ---- Power Apps player chrome ---- */
   .player{height:48px;background:#fff;border-bottom:1px solid #e1dfdd;display:flex;align-items:center;
-          padding:0 12px;gap:12px;position:sticky;top:0;z-index:20}
+          padding:0 12px;gap:12px;position:sticky;top:0;z-index:30}
   .waffle{font-size:18px;color:#605e5c;cursor:pointer;padding:4px 6px;border-radius:3px}
   .waffle:hover{background:#f3f2f1}
   .padiamond{width:18px;height:18px;background:linear-gradient(135deg,#b14ad6,#742774);transform:rotate(45deg);
@@ -20,7 +20,9 @@
   .brand{font-weight:600;color:#742774;font-size:14px}
   .sep{width:1px;height:22px;background:#e1dfdd}
   .appname{font-weight:600;color:#252423}
-  .player .right{margin-left:auto;display:flex;align-items:center;gap:6px}
+  .player .right{margin-left:auto;display:flex;align-items:center;gap:8px}
+  .player .right label{font-size:11px;color:#605e5c}
+  .player select{font-family:inherit;font-size:12px;border:1px solid #8a8886;border-radius:2px;padding:4px 6px}
   .icbtn{width:32px;height:32px;border-radius:3px;display:flex;align-items:center;justify-content:center;
          color:#605e5c;cursor:pointer;font-size:15px}
   .icbtn:hover{background:#f3f2f1}
@@ -52,6 +54,8 @@
   .btn:hover{background:#f3f2f1}
   .btn.pri{background:#0f6cbd;border-color:#0f6cbd;color:#fff}
   .btn.pri:hover{background:#115ea3}
+  .btn.danger{border-color:#a4262c;color:#a4262c}
+  .btn.danger:hover{background:#fdf3f4}
   .btn.sm{padding:5px 10px;font-size:12px}
   /* ---- gallery ---- */
   .gallery{padding:6px 0}
@@ -70,6 +74,8 @@
   .p-diec{background:#deecf9;color:#0b5394}
   .p-ted{background:#dff6dd;color:#0b6a0b}
   .p-xfer{background:#ead1f7;color:#6b2b8a}
+  .p-rep{background:#fde7e9;color:#a4262c}
+  .p-done{background:#d2d0ce;color:#323130}
   /* ---- SharePoint list ---- */
   .spcmd{display:flex;align-items:center;gap:2px;padding:6px 16px;background:#fff;border-bottom:1px solid #edebe9;font-size:13px;flex-wrap:wrap}
   .spcmd .c{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:2px;cursor:pointer;color:#252423}
@@ -96,15 +102,52 @@
   .dc textarea{min-height:64px;resize:vertical}
   .sectit{padding:14px 20px 4px;font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:#0f6cbd;font-weight:700}
   .formact{padding:16px 20px 0;display:flex;gap:10px;border-top:1px solid #f3f2f1;margin-top:8px}
-  /* ---- approvals ---- */
-  .appr{max-width:680px;margin:18px auto;display:flex;flex-direction:column;gap:14px}
-  .acard{background:#fff;border:1px solid #e1dfdd;border-radius:2px;overflow:hidden}
-  .acard .ah{padding:12px 18px;border-bottom:1px solid #f3f2f1;display:flex;align-items:center;gap:10px}
-  .acard .ah .ai{width:28px;height:28px;border-radius:50%;background:#deecf9;color:#0b5394;display:flex;align-items:center;justify-content:center}
-  .acard .ab{padding:14px 18px;display:grid;grid-template-columns:130px 1fr;gap:6px 16px;font-size:13px}
-  .acard .ab .k{color:#605e5c}
-  .acard .af{padding:0 18px 16px;display:flex;gap:10px}
-  /* ---- reports / chart ---- */
+  /* ---- detail screen ---- */
+  .dtopbar{display:flex;align-items:center;gap:10px;padding:10px 20px;background:#fff;border-bottom:1px solid #edebe9;
+           position:sticky;top:0;z-index:10;flex-wrap:wrap}
+  .back{cursor:pointer;color:#0f6cbd;font-weight:600;display:flex;align-items:center;gap:5px}
+  .crumb{color:#605e5c;font-size:13px}
+  .dact{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  .dhero{padding:18px 24px;background:#fff;border-bottom:1px solid #edebe9}
+  .dhero h2{margin:0 0 4px;font-size:19px}
+  .dhero .facts{display:flex;flex-wrap:wrap;gap:18px;margin-top:12px;font-size:13px}
+  .dhero .facts .k{color:#605e5c;font-size:11px;text-transform:uppercase;letter-spacing:.3px}
+  .dhero .facts .v{font-weight:600}
+  .tabs{display:flex;gap:2px;padding:0 16px;background:#fff;border-bottom:1px solid #e1dfdd;overflow-x:auto}
+  .tab{padding:11px 14px;cursor:pointer;font-size:13px;color:#605e5c;border-bottom:2px solid transparent;white-space:nowrap}
+  .tab:hover{background:#f3f2f1}
+  .tab.act{color:#0f6cbd;border-bottom-color:#0f6cbd;font-weight:600}
+  .tabbody{padding:20px 24px;max-width:820px}
+  .kv{display:grid;grid-template-columns:170px 1fr;gap:8px 18px;font-size:13.5px}
+  .kv .k{color:#605e5c}
+  table.mini{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+  table.mini th{text-align:left;padding:8px 10px;border-bottom:1px solid #e1dfdd;color:#605e5c;font-size:12px}
+  table.mini td{padding:8px 10px;border-bottom:1px solid #f3f2f1}
+  table.mini td.r,table.mini th.r{text-align:right}
+  .tot{font-weight:700}
+  /* timeline */
+  .tl{list-style:none;margin:0;padding:0}
+  .tl li{position:relative;padding:0 0 18px 26px;border-left:2px solid #e1dfdd;margin-left:6px}
+  .tl li:last-child{border-left-color:transparent}
+  .tl li .dot{position:absolute;left:-7px;top:2px;width:12px;height:12px;border-radius:50%;background:#0f6cbd;border:2px solid #fff}
+  .tl li .w{font-size:12px;color:#a19f9d}
+  .tl li b{font-size:13.5px}
+  .tl li .who{font-size:12.5px;color:#605e5c}
+  /* attachments / comments */
+  .filerow{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid #edebe9;border-radius:2px;margin-bottom:8px;background:#fff}
+  .filerow .fi{color:#0f6cbd}
+  .filerow .fn{flex:1}
+  .filerow .fs{font-size:12px;color:#a19f9d}
+  .cmt{display:flex;gap:10px;margin-bottom:14px}
+  .cmt .ca{width:30px;height:30px;border-radius:50%;background:#deecf9;color:#0b5394;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+  .cmt .cb{flex:1}
+  .cmt .cb .cm{font-size:12px;color:#605e5c;margin-bottom:2px}
+  .cmt .cb .ct{font-size:13.5px}
+  .cbox{display:flex;gap:10px;margin-top:8px}
+  .cbox textarea{flex:1;border:1px solid #8a8886;border-radius:2px;padding:8px;font-family:inherit;font-size:13px;min-height:42px}
+  .note{margin:0;background:#fff4ce;border:1px solid #f7e9a0;color:#6b5a00;padding:10px 16px;font-size:12.5px}
+  .foot{padding:10px 18px;font-size:11px;color:#a19f9d;text-align:center}
+  /* reports */
   .rwrap{padding:22px}
   .tile{background:#fff;border:1px solid #e1dfdd;border-radius:2px;padding:16px 20px;max-width:560px}
   .chart{display:flex;align-items:flex-end;gap:26px;height:200px;padding:14px 6px 0;border-bottom:2px solid #e1dfdd}
@@ -112,8 +155,10 @@
   .bar span{position:absolute;top:-20px;left:0;right:0;text-align:center;font-size:12px;color:#252423}
   .barlbl{display:flex;gap:26px;padding:8px 6px 0}
   .barlbl div{width:46px;text-align:center;font-size:11px;color:#605e5c}
-  .note{margin:0;background:#fff4ce;border:1px solid #f7e9a0;color:#6b5a00;padding:10px 16px;font-size:12.5px}
-  .foot{padding:10px 18px;font-size:11px;color:#a19f9d;text-align:center}
+  /* toast */
+  #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#323130;color:#fff;padding:11px 18px;
+         border-radius:3px;font-size:13px;box-shadow:0 4px 14px rgba(0,0,0,.25);opacity:0;transition:.2s;z-index:50;pointer-events:none}
+  #toast.show{opacity:1}
 </style>
 </head>
 <body>
@@ -125,11 +170,14 @@
   <span class="sep"></span>
   <span class="appname">Wnioski misyjne — PUC</span>
   <div class="right">
-    <span class="icbtn" title="Odtwórz">▷</span>
-    <span class="icbtn" title="Udostępnij">↗</span>
-    <span class="icbtn" title="Ustawienia">⚙</span>
+    <label>Zalogowano jako:</label>
+    <select id="role" onchange="onRole()">
+      <option value="zarzad">Zarząd Kościoła</option>
+      <option value="diecezja">Diecezja</option>
+      <option value="pastor">Składający (pastor)</option>
+    </select>
     <span class="icbtn" title="Pomoc">?</span>
-    <span class="avatar">MM</span>
+    <span class="avatar" id="av">ZK</span>
   </div>
 </div>
 
@@ -147,7 +195,7 @@
 
   <div class="main">
 
-    <!-- ===== HOME (canvas gallery) ===== -->
+    <!-- ===== HOME ===== -->
     <div class="screen show" id="s-home">
       <div class="apphdr">
         <div class="logobox">PUC</div>
@@ -156,11 +204,14 @@
       <div class="toolbar">
         <input class="search" placeholder="🔍 Szukaj wniosku...">
         <button class="btn pri" onclick="show('form')">+ Nowy wniosek</button>
-        <button class="btn">Odśwież</button>
+        <button class="btn" onclick="toast('Odświeżono z listy SharePoint')">Odśwież</button>
       </div>
       <div class="gallery" id="gal"></div>
-      <div class="foot">Galeria Power Apps (kontrolka Gallery) podłączona do listy SharePoint „Wnioski".</div>
+      <div class="foot">Kliknij wniosek, aby otworzyć szczegóły. Galeria Power Apps podłączona do listy SharePoint „Wnioski".</div>
     </div>
+
+    <!-- ===== DETAIL ===== -->
+    <div class="screen" id="s-detail"></div>
 
     <!-- ===== FORM ===== -->
     <div class="screen" id="s-form">
@@ -178,36 +229,18 @@
         <div class="dc"><label>Opis projektu <span class="req">*</span></label><textarea placeholder="Przygotowanie, przebieg, follow-up..."></textarea></div>
         <div class="sectit">Krok 3 — Budżet</div>
         <div class="dc"><label>Wnioskowana kwota (PLN) <span class="req">*</span></label><input placeholder="0,00"></div>
-        <div class="formact"><button class="btn pri">💾 Zapisz</button><button class="btn" onclick="show('home')">Anuluj</button></div>
+        <div class="formact"><button class="btn pri" onclick="toast('Zapisano wniosek (lista SharePoint)');show('home')">💾 Zapisz</button><button class="btn" onclick="show('home')">Anuluj</button></div>
       </div>
-      <div class="foot">Formularz Power Apps (Edit form) generowany z kolumn listy SharePoint — układ pól „z pudełka".</div>
+      <div class="foot">Formularz Power Apps (Edit form) generowany z kolumn listy SharePoint.</div>
     </div>
 
     <!-- ===== APPROVALS ===== -->
     <div class="screen" id="s-appr">
-      <div class="appr">
-        <div class="note">Powiadomienia o zatwierdzeniu przychodzą mailem i w Teams (Power Automate – Approvals). Poniżej widok w aplikacji.</div>
-        <div class="acard">
-          <div class="ah"><span class="ai">📥</span><b>PL-2026-004 · Festiwal Zdrowia</b><span class="pill p-diec" style="margin-left:auto">Oczekuje: Zarząd</span></div>
-          <div class="ab">
-            <span class="k">Fundusz</span><span>TED Mission Board Projects</span>
-            <span class="k">Diecezja</span><span>Diecezja Zachodnia (zatwierdziła)</span>
-            <span class="k">Kwota</span><span>12 000,00 PLN</span>
-            <span class="k">Komentarz</span><span><textarea style="width:100%;border:1px solid #8a8886;border-radius:2px;min-height:48px" placeholder="Opcjonalny komentarz..."></textarea></span>
-          </div>
-          <div class="af"><button class="btn pri">✔ Zatwierdź</button><button class="btn" style="border-color:#a4262c;color:#a4262c">✖ Odrzuć</button></div>
-        </div>
-        <div class="acard">
-          <div class="ah"><span class="ai">📥</span><b>PL-2026-005 · Centrum Wpływu Kraków</b><span class="pill p-sub" style="margin-left:auto">Oczekuje: Diecezja</span></div>
-          <div class="ab">
-            <span class="k">Fundusz</span><span>CIOF</span>
-            <span class="k">Diecezja</span><span>Diecezja Południowa</span>
-            <span class="k">Kwota</span><span>9 000,00 PLN</span>
-          </div>
-          <div class="af"><button class="btn pri">✔ Zatwierdź</button><button class="btn" style="border-color:#a4262c;color:#a4262c">✖ Odrzuć</button></div>
-        </div>
+      <div class="rwrap">
+        <div class="note" style="max-width:680px;margin-bottom:14px">Powiadomienia o zatwierdzeniu przychodzą mailem i w Teams (Power Automate – Approvals). Poniżej kolejka w aplikacji.</div>
+        <div id="apprlist"></div>
       </div>
-      <div class="foot">Standardowy mechanizm zatwierdzeń Power Automate (Approvals) — działa, ale wygląd jest „systemowy".</div>
+      <div class="foot">Standardowy mechanizm zatwierdzeń Power Automate (Approvals).</div>
     </div>
 
     <!-- ===== REPORTS ===== -->
@@ -223,22 +256,22 @@
           </div>
           <div class="barlbl"><div>Szkic</div><div>Złożony</div><div>U diecezji</div><div>W TED</div></div>
         </div>
-        <p class="foot" style="text-align:left;max-width:560px">Wykres z kontrolki Power Apps / Power BI tile. Eksport danych: przycisk „Eksportuj do Excela" na liście SharePoint.</p>
+        <p class="foot" style="text-align:left;max-width:560px">Wykres z kontrolki Power Apps / Power BI. Eksport: „Eksportuj do Excela" na liście SharePoint.</p>
       </div>
     </div>
 
     <!-- ===== SHAREPOINT LIST ===== -->
     <div class="screen" id="s-list">
       <div class="spcmd">
-        <div class="c"><span class="i">＋</span> Nowy</div>
-        <div class="c"><span class="i">▦</span> Edytuj w widoku siatki</div>
-        <div class="c"><span class="i">↗</span> Udostępnij</div>
-        <div class="c"><span class="i">⤓</span> Eksportuj ⌄</div>
-        <div class="c"><span class="i">⚡</span> Zautomatyzuj ⌄</div>
+        <div class="c" onclick="show('form')"><span class="i">＋</span> Nowy</div>
+        <div class="c" onclick="toast('Tryb edycji w siatce (jak Excel)')"><span class="i">▦</span> Edytuj w widoku siatki</div>
+        <div class="c" onclick="toast('Udostępnianie SharePoint')"><span class="i">↗</span> Udostępnij</div>
+        <div class="c" onclick="toast('Eksport do Excela (.xlsx)')"><span class="i">⤓</span> Eksportuj ⌄</div>
+        <div class="c" onclick="toast('Power Automate: utwórz przepływ')"><span class="i">⚡</span> Zautomatyzuj ⌄</div>
         <div class="c"><span class="i">⋯</span></div>
         <div class="right">Wszystkie elementy ⌄</div>
       </div>
-      <table class="splist" id="splist">
+      <table class="splist">
         <thead><tr>
           <th class="selcol"></th>
           <th>Numer <span class="car">▾</span></th>
@@ -251,27 +284,77 @@
         </tr></thead>
         <tbody id="splbody"></tbody>
       </table>
-      <div class="foot">To jest natywna lista SharePoint — „baza danych" aplikacji. Tak wygląda zarządzanie danymi w M365 z pudełka.</div>
+      <div class="foot">Natywna lista SharePoint — „baza danych" aplikacji. Kliknij tytuł, aby otworzyć szczegóły.</div>
     </div>
 
   </div>
 </div>
 
+<div id="toast"></div>
+
 <script>
+const STAT={
+  'Szkic':'p-draft','Złożony':'p-sub','Zatw. — diecezja':'p-diec','Zatw. — Zarząd':'p-diec',
+  'Wysłany do TED':'p-ted','Transfer środków':'p-xfer','Raportowanie':'p-rep','Zakończony':'p-done'
+};
 const ROWS=[
-  {nr:"PL-2026-001",ti:"Audiobooki Nadziei",fund:"TED Mission Board Projects",diec:"Diecezja Zachodnia",st:"Złożony",cls:"p-sub",amt:"18 000",mod:"2 dni temu"},
-  {nr:"PL-2026-002",ti:"Sauna Misyjna",fund:"CIOF",diec:"Diecezja Wschodnia",st:"Wysłany do TED",cls:"p-ted",amt:"22 000",mod:"wczoraj"},
-  {nr:"PL-2026-003",ti:"Pomocna Dłoń",fund:"GC Mission Impact",diec:"Diecezja Południowa",st:"Transfer środków",cls:"p-xfer",amt:"30 000",mod:"5 godz. temu"},
-  {nr:"PL-2026-004",ti:"Festiwal Zdrowia",fund:"TED Mission Board Projects",diec:"Diecezja Zachodnia",st:"Zatw. — diecezja",cls:"p-diec",amt:"12 000",mod:"3 dni temu"},
-  {nr:"PL-2026-005",ti:"Centrum Wpływu Kraków",fund:"CIOF",diec:"Diecezja Południowa",st:"Szkic",cls:"p-draft",amt:"9 000",mod:"6 dni temu"},
+  {nr:"PL-2026-001",ti:"Audiobooki Nadziei",fund:"TED Mission Board Projects",diec:"Diecezja Zachodnia",
+   st:"Złożony",amt:18000,dir:"Jan Kowalski",email:"jan.kowalski@adwent.pl",city:"Wrocław",year:2026,mod:"2 dni temu",
+   desc:"Nagranie i dystrybucja audiobooków z literaturą nadziei dla osób niewidomych i seniorów; promocja w lokalnych mediach i kościołach.",
+   budget:[["Produkcja nagrań",11000],["Honorarium lektora",4000],["Promocja i dystrybucja",3000]],
+   contrib:{zbor:1000,diec:2000,unia:2000,ted:13000},report:"—",
+   act:[["Utworzono wniosek","Jan Kowalski","6 dni temu"],["Złożono do diecezji","Jan Kowalski","2 dni temu"]],
+   files:[["Opis_projektu.pdf","240 KB"]],comments:[]},
+  {nr:"PL-2026-002",ti:"Sauna Misyjna",fund:"CIOF",diec:"Diecezja Wschodnia",
+   st:"Wysłany do TED",amt:22000,dir:"Piotr Nowak",email:"piotr.nowak@adwent.pl",city:"Białystok",year:2026,mod:"wczoraj",
+   desc:"Mobilna sauna jako narzędzie ewangelizacji zdrowia na wschodzie Polski; spotkania, rozmowy, materiały.",
+   budget:[["Zakup i montaż sauny",15000],["Transport i obsługa",4000],["Materiały",3000]],
+   contrib:{zbor:2000,diec:3000,unia:4000,ted:13000},report:"—",
+   act:[["Utworzono wniosek","Piotr Nowak","3 tyg. temu"],["Złożono do diecezji","Piotr Nowak","2 tyg. temu"],
+        ["Zatwierdzono — Diecezja Wschodnia","ks. A. Lis","10 dni temu"],["Zatwierdzono — Zarząd","Skarbnik Kościoła","6 dni temu"],
+        ["Wysłano do TED","Dyrektor Misji","wczoraj"]],
+   files:[["Budzet.xlsx","31 KB"],["Zdjecia_sauny.pdf","1,2 MB"]],comments:[["Dyrektor Misji","6 dni temu","Projekt był prowadzony przez Zarząd Kościoła — priorytet."]]},
+  {nr:"PL-2026-003",ti:"Pomocna Dłoń",fund:"GC Mission Impact",diec:"Diecezja Południowa",
+   st:"Transfer środków",amt:30000,dir:"Maria Wiśniewska",email:"maria.wisniewska@adwent.pl",city:"Kraków",year:2026,mod:"5 godz. temu",
+   desc:"Program pomocy społecznej i duchowej dla rodzin w kryzysie; punkt pomocy, wolontariat, follow-up.",
+   budget:[["Wynajem i adaptacja lokalu",14000],["Wyposażenie i pomoc rzeczowa",10000],["Koordynacja",6000]],
+   contrib:{zbor:3000,diec:5000,unia:7000,ted:15000},report:"—",
+   act:[["Złożono","Maria Wiśniewska","2 mies. temu"],["Zatwierdzono — Diecezja Południowa","ks. M. Bąk","7 tyg. temu"],
+        ["Zatwierdzono — Zarząd","Skarbnik Kościoła","6 tyg. temu"],["Wysłano do TED","Dyrektor Misji","5 tyg. temu"],
+        ["TED przekazał środki do Zarządu","TED","1 tydz. temu"],["Transfer Zarząd → diecezja","Skarbnik Kościoła","5 godz. temu"]],
+   files:[["Umowa_najmu.pdf","410 KB"]],comments:[]},
+  {nr:"PL-2026-004",ti:"Festiwal Zdrowia",fund:"TED Mission Board Projects",diec:"Diecezja Zachodnia",
+   st:"Zatw. — diecezja",amt:12000,dir:"Tomasz Zięba",email:"tomasz.zieba@adwent.pl",city:"Zielona Góra",year:2026,mod:"3 dni temu",
+   desc:"Dwudniowy festiwal zdrowia: badania, warsztaty, wykłady, punkt modlitwy.",
+   budget:[["Wynajem sali i sprzętu",6000],["Materiały i badania",4000],["Promocja",2000]],
+   contrib:{zbor:1000,diec:2000,unia:2000,ted:7000},report:"—",
+   act:[["Złożono","Tomasz Zięba","8 dni temu"],["Zatwierdzono — Diecezja Zachodnia","ks. R. Kos","3 dni temu"]],
+   files:[],comments:[]},
+  {nr:"PL-2026-005",ti:"Centrum Wpływu Kraków",fund:"CIOF",diec:"Diecezja Południowa",
+   st:"Szkic",amt:9000,dir:"Anna Lewandowska",email:"anna.lewandowska@adwent.pl",city:"Kraków",year:2026,mod:"6 dni temu",
+   desc:"Kawiarnia-centrum wpływu: spotkania, kursy, budowanie relacji ze środowiskiem lokalnym.",
+   budget:[["Adaptacja przestrzeni",5000],["Wyposażenie",2500],["Wydarzenia",1500]],
+   contrib:{zbor:1000,diec:1000,unia:1000,ted:6000},report:"—",
+   act:[["Utworzono wniosek (szkic)","Anna Lewandowska","6 dni temu"]],
+   files:[],comments:[]},
 ];
+let ROLE="zarzad", CURRENT=null, DTAB="szcz";
+const ROLELBL={zarzad:"Zarząd Kościoła",diecezja:"Diecezja",pastor:"Składający"};
+const ROLEAV={zarzad:"ZK",diecezja:"DP",pastor:"PA"};
+function money(n){return n.toLocaleString('pl-PL')+" zł";}
+function pill(st){return `<span class="pill ${STAT[st]||'p-draft'}">${st}</span>`;}
+function find(nr){return ROWS.find(r=>r.nr===nr);}
+
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(window._tt);window._tt=setTimeout(()=>t.classList.remove('show'),2200);}
+function onRole(){ROLE=document.getElementById('role').value;document.getElementById('av').textContent=ROLEAV[ROLE];if(CURRENT)renderDetail();renderAppr();toast('Zmieniono rolę: '+ROLELBL[ROLE]);}
+
 function renderGallery(){
   document.getElementById('gal').innerHTML = ROWS.map(r=>`
-    <div class="gitem" onclick="show('list')">
+    <div class="gitem" onclick="openItem('${r.nr}')">
       <span class="num">${r.nr}</span>
       <div class="ti"><b>${r.ti}</b><div class="meta">${r.fund} · ${r.diec}</div></div>
-      <span class="pill ${r.cls}">${r.st}</span>
-      <span class="amt">${r.amt} zł</span>
+      ${pill(r.st)}
+      <span class="amt">${money(r.amt)}</span>
       <span class="chev">›</span>
     </div>`).join('');
 }
@@ -280,22 +363,142 @@ function renderList(){
     <tr>
       <td class="selcol"><span class="selcircle"></span></td>
       <td>${r.nr}</td>
-      <td><span class="lnk">${r.ti}</span></td>
+      <td><span class="lnk" onclick="openItem('${r.nr}')">${r.ti}</span></td>
       <td>${r.fund}</td>
       <td>${r.diec}</td>
-      <td><span class="pill ${r.cls}">${r.st}</span></td>
-      <td>${r.amt}</td>
+      <td>${pill(r.st)}</td>
+      <td>${r.amt.toLocaleString('pl-PL')}</td>
       <td>${r.mod}</td>
     </tr>`).join('');
 }
-function show(s){
-  ['home','form','appr','rep','list'].forEach(x=>{
-    document.getElementById('s-'+x).classList.toggle('show',x===s);
-    document.getElementById('nv-'+x).classList.toggle('act',x===s);
+function renderAppr(){
+  let pend=[];
+  ROWS.forEach(r=>{
+    if(ROLE==='diecezja'&&r.st==='Złożony')pend.push(r);
+    if(ROLE==='zarzad'&&r.st==='Zatw. — diecezja')pend.push(r);
   });
+  const box=document.getElementById('apprlist');
+  if(!pend.length){box.innerHTML='<div class="tile" style="max-width:680px">Brak elementów oczekujących na Twoją decyzję ('+ROLELBL[ROLE]+'). 🎉</div>';return;}
+  box.innerHTML=pend.map(r=>`
+    <div class="tile" style="max-width:680px;margin-bottom:14px">
+      <div style="display:flex;align-items:center;gap:10px"><b>${r.nr} · ${r.ti}</b>${pill(r.st)}</div>
+      <div class="kv" style="margin-top:12px">
+        <span class="k">Fundusz</span><span>${r.fund}</span>
+        <span class="k">Diecezja</span><span>${r.diec}</span>
+        <span class="k">Kwota</span><span>${money(r.amt)}</span>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:14px">
+        <button class="btn pri" onclick="approve('${r.nr}')">✔ Zatwierdź</button>
+        <button class="btn danger" onclick="reject('${r.nr}')">✖ Odrzuć</button>
+        <button class="btn" onclick="openItem('${r.nr}')">Otwórz szczegóły</button>
+      </div>
+    </div>`).join('');
+}
+
+/* ---- actions ---- */
+function setStatus(nr,st,msg,actLine,who){const r=find(nr);if(!r)return;r.st=st;r.mod="przed chwilą";
+  if(actLine)r.act.push([actLine,who||ROLELBL[ROLE],"przed chwilą"]);
+  renderGallery();renderList();renderAppr();if(CURRENT===nr){DTAB='akt';renderDetail();}toast(msg);}
+function approve(nr){const r=find(nr);if(!r)return;
+  if(r.st==='Złożony')setStatus(nr,'Zatw. — diecezja','Zatwierdzono na poziomie diecezji','Zatwierdzono — '+r.diec);
+  else if(r.st==='Zatw. — diecezja')setStatus(nr,'Zatw. — Zarząd','Zatwierdzono przez Zarząd','Zatwierdzono — Zarząd');}
+function reject(nr){setStatus(nr,'Szkic','Odesłano do poprawy','Odesłano do poprawy (do poprawy)');}
+function sendTED(nr){setStatus(nr,'Wysłany do TED','Wysłano do TED','Wysłano do TED');}
+function startXfer(nr){setStatus(nr,'Transfer środków','Rozpoczęto transfer środków','Rozpoczęto transfer środków');}
+function startRep(nr){setStatus(nr,'Raportowanie','Rozpoczęto raportowanie','Rozpoczęto raportowanie');}
+function submitDraft(nr){setStatus(nr,'Złożony','Wniosek złożony','Złożono do diecezji');}
+function addFile(nr){const r=find(nr);if(!r)return;const n=r.files.length+1;r.files.push(["Zalacznik_"+n+".pdf",(120+n*30)+" KB"]);DTAB='zal';renderDetail();toast('Dodano załącznik (biblioteka SharePoint)');}
+function addComment(nr){const r=find(nr);if(!r)return;const ta=document.getElementById('cinput');const v=(ta&&ta.value||'').trim();if(!v){toast('Wpisz treść komentarza');return;}
+  r.comments.push([ROLELBL[ROLE],"przed chwilą",v]);DTAB='kom';renderDetail();toast('Dodano komentarz');}
+
+/* ---- detail ---- */
+function actionsFor(r){
+  let b=[];
+  const canDiec=ROLE==='diecezja', canZK=ROLE==='zarzad', canApp=ROLE==='pastor';
+  if(canApp&&r.st==='Szkic'){b.push(`<button class="btn pri" onclick="submitDraft('${r.nr}')">📨 Złóż wniosek</button>`);}
+  if(canDiec&&r.st==='Złożony'){b.push(`<button class="btn pri" onclick="approve('${r.nr}')">✔ Zatwierdź</button>`);b.push(`<button class="btn danger" onclick="reject('${r.nr}')">✖ Odrzuć</button>`);}
+  if(canZK&&r.st==='Zatw. — diecezja'){b.push(`<button class="btn pri" onclick="approve('${r.nr}')">✔ Zatwierdź (Zarząd)</button>`);b.push(`<button class="btn danger" onclick="reject('${r.nr}')">✖ Odrzuć</button>`);}
+  if(canZK&&r.st==='Zatw. — Zarząd'){b.push(`<button class="btn pri" onclick="sendTED('${r.nr}')">📤 Wyślij do TED</button>`);}
+  if(canZK&&r.st==='Wysłany do TED'){b.push(`<button class="btn pri" onclick="startXfer('${r.nr}')">💰 Rejestruj transfer</button>`);}
+  if(canZK&&r.st==='Transfer środków'){b.push(`<button class="btn pri" onclick="startRep('${r.nr}')">📑 Rozpocznij raport</button>`);}
+  b.push(`<button class="btn" onclick="show('form')">✏ Edytuj</button>`);
+  b.push(`<button class="btn" onclick="addFile('${r.nr}')">📎 Załącznik</button>`);
+  b.push(`<button class="btn" onclick="toast('Otwarto historię wersji (SharePoint)')">🕘 Historia wersji</button>`);
+  b.push(`<button class="btn" onclick="window.print()">🖨 Drukuj / PDF</button>`);
+  b.push(`<button class="btn" onclick="toast('Włączono powiadomienia o zmianach')">🔔 Obserwuj</button>`);
+  return b.join('');
+}
+function tabBody(r){
+  if(DTAB==='szcz')return `<div class="kv">
+    <span class="k">Numer</span><span>${r.nr}</span>
+    <span class="k">Fundusz</span><span>${r.fund}</span>
+    <span class="k">Diecezja</span><span>${r.diec}</span>
+    <span class="k">Dyrektor projektu</span><span>${r.dir}</span>
+    <span class="k">E-mail</span><span>${r.email}</span>
+    <span class="k">Miasto</span><span>${r.city}</span>
+    <span class="k">Rok</span><span>${r.year}</span>
+    <span class="k">Status</span><span>${pill(r.st)}</span>
+    <span class="k">Opis</span><span>${r.desc}</span></div>`;
+  if(DTAB==='budz'){const tot=r.budget.reduce((s,x)=>s+x[1],0);
+    return `<table class="mini"><thead><tr><th>Pozycja</th><th class="r">Kwota</th></tr></thead><tbody>
+      ${r.budget.map(x=>`<tr><td>${x[0]}</td><td class="r">${money(x[1])}</td></tr>`).join('')}
+      <tr><td class="tot">Razem</td><td class="r tot">${money(tot)}</td></tr></tbody></table>`;}
+  if(DTAB==='fin'){const c=r.contrib;const tot=c.zbor+c.diec+c.unia+c.ted;
+    return `<table class="mini"><thead><tr><th>Źródło</th><th class="r">Kwota</th></tr></thead><tbody>
+      <tr><td>Zbór lokalny</td><td class="r">${money(c.zbor)}</td></tr>
+      <tr><td>Diecezja</td><td class="r">${money(c.diec)}</td></tr>
+      <tr><td>Unia (PUC)</td><td class="r">${money(c.unia)}</td></tr>
+      <tr><td>Wnioskowane z TED</td><td class="r">${money(c.ted)}</td></tr>
+      <tr><td class="tot">Razem</td><td class="r tot">${money(tot)}</td></tr></tbody></table>`;}
+  if(DTAB==='rap')return `<div class="kv"><span class="k">Status raportu</span><span>${r.report==='—'?'Brak (jeszcze nie rozpoczęto)':r.report}</span>
+    <span class="k">Termin</span><span>12 miesięcy od otrzymania środków</span></div>
+    <p style="color:#605e5c;font-size:13px;margin-top:14px">Raport (opis realizacji, rezultaty, historia, wydatki rzeczywiste) wypełnia się po otrzymaniu środków.</p>`;
+  if(DTAB==='akt')return `<ul class="tl">${r.act.slice().reverse().map(a=>`<li><span class="dot"></span><b>${a[0]}</b><div class="who">${a[1]}</div><div class="w">${a[2]}</div></li>`).join('')}</ul>
+    <p class="foot" style="text-align:left">Historia kroków = przepływy Power Automate + historia wersji listy SharePoint.</p>`;
+  if(DTAB==='zal')return `${r.files.length?r.files.map(f=>`<div class="filerow"><span class="fi">📄</span><span class="fn">${f[0]}</span><span class="fs">${f[1]}</span></div>`).join(''):'<p style="color:#605e5c">Brak załączników.</p>'}
+    <button class="btn" style="margin-top:6px" onclick="addFile('${r.nr}')">＋ Dodaj załącznik</button>
+    <p class="foot" style="text-align:left">Załączniki przechowywane natywnie w bibliotece SharePoint.</p>`;
+  if(DTAB==='kom')return `${r.comments.length?r.comments.map(c=>`<div class="cmt"><div class="ca">${(c[0][0]||'?')}</div><div class="cb"><div class="cm">${c[0]} · ${c[1]}</div><div class="ct">${c[2]}</div></div></div>`).join(''):'<p style="color:#605e5c">Brak komentarzy.</p>'}
+    <div class="cbox"><textarea id="cinput" placeholder="Dodaj komentarz..."></textarea><button class="btn pri" onclick="addComment('${r.nr}')">Opublikuj</button></div>
+    <p class="foot" style="text-align:left">Komentarze to natywna funkcja listy SharePoint.</p>`;
+  return '';
+}
+function renderDetail(){
+  const r=find(CURRENT);if(!r)return;
+  const tabs=[['szcz','Szczegóły'],['budz','Budżet'],['fin','Finansowanie'],['rap','Raport'],['akt','Aktywność'],['zal',`Załączniki (${r.files.length})`],['kom',`Komentarze (${r.comments.length})`]];
+  document.getElementById('s-detail').innerHTML=`
+    <div class="dtopbar">
+      <span class="back" onclick="show('home')">‹ Wstecz</span>
+      <span class="crumb">Wnioski › ${r.nr}</span>
+      <div class="dact">${actionsFor(r)}</div>
+    </div>
+    <div class="dhero">
+      <h2>${r.ti}</h2>
+      <div>${pill(r.st)} <span style="color:#605e5c;font-size:13px;margin-left:6px">${r.fund}</span></div>
+      <div class="facts">
+        <div><div class="k">Numer</div><div class="v">${r.nr}</div></div>
+        <div><div class="k">Diecezja</div><div class="v">${r.diec}</div></div>
+        <div><div class="k">Dyrektor</div><div class="v">${r.dir}</div></div>
+        <div><div class="k">Miasto</div><div class="v">${r.city}</div></div>
+        <div><div class="k">Kwota</div><div class="v">${money(r.amt)}</div></div>
+      </div>
+    </div>
+    <div class="tabs">${tabs.map(t=>`<div class="tab ${DTAB===t[0]?'act':''}" onclick="DTAB='${t[0]}';renderDetail()">${t[1]}</div>`).join('')}</div>
+    <div class="tabbody">${tabBody(r)}</div>
+    <div class="foot">Ekran szczegółów (Power Apps Display form). Akcje zależą od roli i statusu (uprawnienia SharePoint + Power Automate).</div>`;
+}
+function openItem(nr){CURRENT=nr;DTAB='szcz';show('detail');}
+
+function show(s){
+  ['home','detail','form','appr','rep','list'].forEach(x=>{
+    const el=document.getElementById('s-'+x);if(el)el.classList.toggle('show',x===s);
+    const nv=document.getElementById('nv-'+x);if(nv)nv.classList.toggle('act',x===s);
+  });
+  if(s==='detail')renderDetail();
+  if(s==='appr')renderAppr();
   document.querySelector('.main').scrollTop=0;
 }
-renderGallery();renderList();
+renderGallery();renderList();renderAppr();
 </script>
 </body>
 </html>
