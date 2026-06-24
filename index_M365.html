@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Wersja M365 (Power Apps / SharePoint) — podgląd</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{font-family:"Segoe UI","Segoe UI Web (West European)",-apple-system,Roboto,Arial,sans-serif;
+       background:#f3f2f1;color:#252423;font-size:14px}
+  /* ---- Power Apps player chrome ---- */
+  .player{height:48px;background:#fff;border-bottom:1px solid #e1dfdd;display:flex;align-items:center;
+          padding:0 12px;gap:12px;position:sticky;top:0;z-index:20}
+  .waffle{font-size:18px;color:#605e5c;cursor:pointer;padding:4px 6px;border-radius:3px}
+  .waffle:hover{background:#f3f2f1}
+  .padiamond{width:18px;height:18px;background:linear-gradient(135deg,#b14ad6,#742774);transform:rotate(45deg);
+             border-radius:3px;display:inline-block}
+  .brand{font-weight:600;color:#742774;font-size:14px}
+  .sep{width:1px;height:22px;background:#e1dfdd}
+  .appname{font-weight:600;color:#252423}
+  .player .right{margin-left:auto;display:flex;align-items:center;gap:6px}
+  .icbtn{width:32px;height:32px;border-radius:3px;display:flex;align-items:center;justify-content:center;
+         color:#605e5c;cursor:pointer;font-size:15px}
+  .icbtn:hover{background:#f3f2f1}
+  .avatar{width:30px;height:30px;border-radius:50%;background:#742774;color:#fff;display:flex;align-items:center;
+          justify-content:center;font-size:12px;font-weight:600}
+  /* ---- layout ---- */
+  .frame{display:flex;height:calc(100vh - 48px)}
+  .nav{width:230px;background:#fff;border-right:1px solid #e1dfdd;padding:8px 0;flex-shrink:0}
+  .navitem{display:flex;align-items:center;gap:12px;padding:11px 18px;cursor:pointer;color:#252423;font-size:14px;
+           border-left:3px solid transparent}
+  .navitem .i{width:18px;text-align:center;color:#605e5c}
+  .navitem:hover{background:#f3f2f1}
+  .navitem.act{background:#f3f2f1;border-left-color:#0f6cbd;font-weight:600}
+  .navitem.act .i{color:#0f6cbd}
+  .navhead{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:#a19f9d;padding:14px 18px 4px}
+  .main{flex:1;overflow:auto;background:#faf9f8}
+  .screen{display:none}
+  .screen.show{display:block}
+  /* ---- canvas app header ---- */
+  .apphdr{background:#0f6cbd;color:#fff;padding:14px 22px;display:flex;align-items:center;gap:14px}
+  .logobox{width:34px;height:34px;border-radius:4px;background:rgba(255,255,255,.2);display:flex;align-items:center;
+           justify-content:center;font-weight:700;font-size:12px}
+  .apphdr h1{font-size:17px;margin:0;font-weight:600}
+  .apphdr .sub{font-size:12px;opacity:.85}
+  .toolbar{display:flex;align-items:center;gap:10px;padding:12px 22px;background:#fff;border-bottom:1px solid #edebe9}
+  .search{flex:1;max-width:340px;border:1px solid #8a8886;border-radius:2px;padding:6px 10px;font-size:13px}
+  .btn{border:1px solid #8a8886;background:#fff;color:#252423;padding:7px 14px;border-radius:2px;cursor:pointer;
+       font-size:13px;font-family:inherit}
+  .btn:hover{background:#f3f2f1}
+  .btn.pri{background:#0f6cbd;border-color:#0f6cbd;color:#fff}
+  .btn.pri:hover{background:#115ea3}
+  .btn.sm{padding:5px 10px;font-size:12px}
+  /* ---- gallery ---- */
+  .gallery{padding:6px 0}
+  .gitem{display:flex;align-items:center;gap:14px;padding:13px 22px;background:#fff;border-bottom:1px solid #edebe9;cursor:pointer}
+  .gitem:hover{background:#f3f2f1}
+  .gitem .num{font-size:12px;color:#605e5c;width:96px;flex-shrink:0}
+  .gitem .ti{flex:1}
+  .gitem .ti b{font-size:14px}
+  .gitem .ti .meta{font-size:12px;color:#605e5c;margin-top:2px}
+  .gitem .amt{font-size:13px;color:#252423;width:90px;text-align:right}
+  .chev{color:#a19f9d;font-size:16px}
+  /* ---- choice pills (SharePoint style) ---- */
+  .pill{display:inline-block;padding:3px 9px;border-radius:12px;font-size:11px;font-weight:600;white-space:nowrap}
+  .p-draft{background:#edebe9;color:#605e5c}
+  .p-sub{background:#fff4ce;color:#8a6d00}
+  .p-diec{background:#deecf9;color:#0b5394}
+  .p-ted{background:#dff6dd;color:#0b6a0b}
+  .p-xfer{background:#ead1f7;color:#6b2b8a}
+  /* ---- SharePoint list ---- */
+  .spcmd{display:flex;align-items:center;gap:2px;padding:6px 16px;background:#fff;border-bottom:1px solid #edebe9;font-size:13px;flex-wrap:wrap}
+  .spcmd .c{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:2px;cursor:pointer;color:#252423}
+  .spcmd .c:hover{background:#f3f2f1}
+  .spcmd .c .i{color:#0f6cbd}
+  .spcmd .right{margin-left:auto;color:#605e5c}
+  table.splist{width:100%;border-collapse:collapse;background:#fff;font-size:13px}
+  table.splist th{ text-align:left;padding:9px 14px;border-bottom:1px solid #e1dfdd;color:#323130;font-weight:600;
+                   font-size:12px;white-space:nowrap;cursor:pointer;user-select:none}
+  table.splist th .car{color:#a19f9d;font-size:9px;margin-left:3px}
+  table.splist td{padding:9px 14px;border-bottom:1px solid #f3f2f1;color:#252423}
+  table.splist tr:hover td{background:#f3f2f1}
+  .lnk{color:#0f6cbd;cursor:pointer}
+  .lnk:hover{text-decoration:underline}
+  .selcol{width:26px}
+  .selcircle{width:16px;height:16px;border:1px solid #8a8886;border-radius:50%;display:inline-block}
+  /* ---- form ---- */
+  .formwrap{max-width:660px;margin:18px auto;background:#fff;border:1px solid #e1dfdd;border-radius:2px;padding:0 0 18px}
+  .formhdr{background:#f3f2f1;padding:12px 20px;border-bottom:1px solid #e1dfdd;font-weight:600}
+  .dc{padding:10px 20px}
+  .dc label{display:block;font-size:12px;color:#605e5c;margin-bottom:4px}
+  .dc label .req{color:#a4262c}
+  .dc input,.dc select,.dc textarea{width:100%;border:1px solid #8a8886;border-radius:2px;padding:7px 9px;font-size:13px;font-family:inherit}
+  .dc textarea{min-height:64px;resize:vertical}
+  .sectit{padding:14px 20px 4px;font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:#0f6cbd;font-weight:700}
+  .formact{padding:16px 20px 0;display:flex;gap:10px;border-top:1px solid #f3f2f1;margin-top:8px}
+  /* ---- approvals ---- */
+  .appr{max-width:680px;margin:18px auto;display:flex;flex-direction:column;gap:14px}
+  .acard{background:#fff;border:1px solid #e1dfdd;border-radius:2px;overflow:hidden}
+  .acard .ah{padding:12px 18px;border-bottom:1px solid #f3f2f1;display:flex;align-items:center;gap:10px}
+  .acard .ah .ai{width:28px;height:28px;border-radius:50%;background:#deecf9;color:#0b5394;display:flex;align-items:center;justify-content:center}
+  .acard .ab{padding:14px 18px;display:grid;grid-template-columns:130px 1fr;gap:6px 16px;font-size:13px}
+  .acard .ab .k{color:#605e5c}
+  .acard .af{padding:0 18px 16px;display:flex;gap:10px}
+  /* ---- reports / chart ---- */
+  .rwrap{padding:22px}
+  .tile{background:#fff;border:1px solid #e1dfdd;border-radius:2px;padding:16px 20px;max-width:560px}
+  .chart{display:flex;align-items:flex-end;gap:26px;height:200px;padding:14px 6px 0;border-bottom:2px solid #e1dfdd}
+  .bar{width:46px;background:#0f6cbd;border-radius:2px 2px 0 0;position:relative}
+  .bar span{position:absolute;top:-20px;left:0;right:0;text-align:center;font-size:12px;color:#252423}
+  .barlbl{display:flex;gap:26px;padding:8px 6px 0}
+  .barlbl div{width:46px;text-align:center;font-size:11px;color:#605e5c}
+  .note{margin:0;background:#fff4ce;border:1px solid #f7e9a0;color:#6b5a00;padding:10px 16px;font-size:12.5px}
+  .foot{padding:10px 18px;font-size:11px;color:#a19f9d;text-align:center}
+</style>
+</head>
+<body>
+
+<!-- Power Apps player chrome -->
+<div class="player">
+  <span class="waffle" title="Aplikacje Microsoft 365">⠿</span>
+  <span class="padiamond"></span><span class="brand">Power Apps</span>
+  <span class="sep"></span>
+  <span class="appname">Wnioski misyjne — PUC</span>
+  <div class="right">
+    <span class="icbtn" title="Odtwórz">▷</span>
+    <span class="icbtn" title="Udostępnij">↗</span>
+    <span class="icbtn" title="Ustawienia">⚙</span>
+    <span class="icbtn" title="Pomoc">?</span>
+    <span class="avatar">MM</span>
+  </div>
+</div>
+
+<div class="frame">
+  <!-- left nav -->
+  <div class="nav">
+    <div class="navhead">Aplikacja</div>
+    <div class="navitem act" id="nv-home" onclick="show('home')"><span class="i">🏠</span> Strona główna</div>
+    <div class="navitem" id="nv-form" onclick="show('form')"><span class="i">➕</span> Nowy wniosek</div>
+    <div class="navitem" id="nv-appr" onclick="show('appr')"><span class="i">✅</span> Zatwierdzenia</div>
+    <div class="navitem" id="nv-rep" onclick="show('rep')"><span class="i">📊</span> Raporty</div>
+    <div class="navhead">Dane (SharePoint)</div>
+    <div class="navitem" id="nv-list" onclick="show('list')"><span class="i">🗂</span> Lista: Wnioski</div>
+  </div>
+
+  <div class="main">
+
+    <!-- ===== HOME (canvas gallery) ===== -->
+    <div class="screen show" id="s-home">
+      <div class="apphdr">
+        <div class="logobox">PUC</div>
+        <div><h1>Wnioski misyjne</h1><div class="sub">Polish Union Conference · cykl 2026</div></div>
+      </div>
+      <div class="toolbar">
+        <input class="search" placeholder="🔍 Szukaj wniosku...">
+        <button class="btn pri" onclick="show('form')">+ Nowy wniosek</button>
+        <button class="btn">Odśwież</button>
+      </div>
+      <div class="gallery" id="gal"></div>
+      <div class="foot">Galeria Power Apps (kontrolka Gallery) podłączona do listy SharePoint „Wnioski".</div>
+    </div>
+
+    <!-- ===== FORM ===== -->
+    <div class="screen" id="s-form">
+      <div class="formwrap">
+        <div class="formhdr">Nowy wniosek · Wnioski</div>
+        <div class="sectit">Krok 1 — Podstawowe informacje</div>
+        <div class="dc"><label>Tytuł projektu <span class="req">*</span></label><input placeholder="Wpisz tytuł"></div>
+        <div class="dc"><label>Fundusz <span class="req">*</span></label>
+          <select><option>— wybierz —</option><option>TED Mission Board Projects</option><option>CIOF</option><option>GC Mission Impact</option></select></div>
+        <div class="dc"><label>Diecezja <span class="req">*</span></label>
+          <select><option>— wybierz —</option><option>Diecezja Zachodnia</option><option>Diecezja Wschodnia</option><option>Diecezja Południowa</option></select></div>
+        <div class="dc"><label>Dyrektor projektu (e-mail) <span class="req">*</span></label><input placeholder="imie.nazwisko@adwent.pl"></div>
+        <div class="dc"><label>Miasto</label><input placeholder="np. Kraków"></div>
+        <div class="sectit">Krok 2 — Opis</div>
+        <div class="dc"><label>Opis projektu <span class="req">*</span></label><textarea placeholder="Przygotowanie, przebieg, follow-up..."></textarea></div>
+        <div class="sectit">Krok 3 — Budżet</div>
+        <div class="dc"><label>Wnioskowana kwota (PLN) <span class="req">*</span></label><input placeholder="0,00"></div>
+        <div class="formact"><button class="btn pri">💾 Zapisz</button><button class="btn" onclick="show('home')">Anuluj</button></div>
+      </div>
+      <div class="foot">Formularz Power Apps (Edit form) generowany z kolumn listy SharePoint — układ pól „z pudełka".</div>
+    </div>
+
+    <!-- ===== APPROVALS ===== -->
+    <div class="screen" id="s-appr">
+      <div class="appr">
+        <div class="note">Powiadomienia o zatwierdzeniu przychodzą mailem i w Teams (Power Automate – Approvals). Poniżej widok w aplikacji.</div>
+        <div class="acard">
+          <div class="ah"><span class="ai">📥</span><b>PL-2026-004 · Festiwal Zdrowia</b><span class="pill p-diec" style="margin-left:auto">Oczekuje: Zarząd</span></div>
+          <div class="ab">
+            <span class="k">Fundusz</span><span>TED Mission Board Projects</span>
+            <span class="k">Diecezja</span><span>Diecezja Zachodnia (zatwierdziła)</span>
+            <span class="k">Kwota</span><span>12 000,00 PLN</span>
+            <span class="k">Komentarz</span><span><textarea style="width:100%;border:1px solid #8a8886;border-radius:2px;min-height:48px" placeholder="Opcjonalny komentarz..."></textarea></span>
+          </div>
+          <div class="af"><button class="btn pri">✔ Zatwierdź</button><button class="btn" style="border-color:#a4262c;color:#a4262c">✖ Odrzuć</button></div>
+        </div>
+        <div class="acard">
+          <div class="ah"><span class="ai">📥</span><b>PL-2026-005 · Centrum Wpływu Kraków</b><span class="pill p-sub" style="margin-left:auto">Oczekuje: Diecezja</span></div>
+          <div class="ab">
+            <span class="k">Fundusz</span><span>CIOF</span>
+            <span class="k">Diecezja</span><span>Diecezja Południowa</span>
+            <span class="k">Kwota</span><span>9 000,00 PLN</span>
+          </div>
+          <div class="af"><button class="btn pri">✔ Zatwierdź</button><button class="btn" style="border-color:#a4262c;color:#a4262c">✖ Odrzuć</button></div>
+        </div>
+      </div>
+      <div class="foot">Standardowy mechanizm zatwierdzeń Power Automate (Approvals) — działa, ale wygląd jest „systemowy".</div>
+    </div>
+
+    <!-- ===== REPORTS ===== -->
+    <div class="screen" id="s-rep">
+      <div class="rwrap">
+        <div class="tile">
+          <b>Wnioski wg statusu (2026)</b>
+          <div class="chart">
+            <div class="bar" style="height:40px"><span>1</span></div>
+            <div class="bar" style="height:80px"><span>2</span></div>
+            <div class="bar" style="height:40px"><span>1</span></div>
+            <div class="bar" style="height:40px"><span>1</span></div>
+          </div>
+          <div class="barlbl"><div>Szkic</div><div>Złożony</div><div>U diecezji</div><div>W TED</div></div>
+        </div>
+        <p class="foot" style="text-align:left;max-width:560px">Wykres z kontrolki Power Apps / Power BI tile. Eksport danych: przycisk „Eksportuj do Excela" na liście SharePoint.</p>
+      </div>
+    </div>
+
+    <!-- ===== SHAREPOINT LIST ===== -->
+    <div class="screen" id="s-list">
+      <div class="spcmd">
+        <div class="c"><span class="i">＋</span> Nowy</div>
+        <div class="c"><span class="i">▦</span> Edytuj w widoku siatki</div>
+        <div class="c"><span class="i">↗</span> Udostępnij</div>
+        <div class="c"><span class="i">⤓</span> Eksportuj ⌄</div>
+        <div class="c"><span class="i">⚡</span> Zautomatyzuj ⌄</div>
+        <div class="c"><span class="i">⋯</span></div>
+        <div class="right">Wszystkie elementy ⌄</div>
+      </div>
+      <table class="splist" id="splist">
+        <thead><tr>
+          <th class="selcol"></th>
+          <th>Numer <span class="car">▾</span></th>
+          <th>Tytuł <span class="car">▾</span></th>
+          <th>Fundusz <span class="car">▾</span></th>
+          <th>Diecezja <span class="car">▾</span></th>
+          <th>Status <span class="car">▾</span></th>
+          <th>Kwota (PLN) <span class="car">▾</span></th>
+          <th>Zmodyfikowano <span class="car">▾</span></th>
+        </tr></thead>
+        <tbody id="splbody"></tbody>
+      </table>
+      <div class="foot">To jest natywna lista SharePoint — „baza danych" aplikacji. Tak wygląda zarządzanie danymi w M365 z pudełka.</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const ROWS=[
+  {nr:"PL-2026-001",ti:"Audiobooki Nadziei",fund:"TED Mission Board Projects",diec:"Diecezja Zachodnia",st:"Złożony",cls:"p-sub",amt:"18 000",mod:"2 dni temu"},
+  {nr:"PL-2026-002",ti:"Sauna Misyjna",fund:"CIOF",diec:"Diecezja Wschodnia",st:"Wysłany do TED",cls:"p-ted",amt:"22 000",mod:"wczoraj"},
+  {nr:"PL-2026-003",ti:"Pomocna Dłoń",fund:"GC Mission Impact",diec:"Diecezja Południowa",st:"Transfer środków",cls:"p-xfer",amt:"30 000",mod:"5 godz. temu"},
+  {nr:"PL-2026-004",ti:"Festiwal Zdrowia",fund:"TED Mission Board Projects",diec:"Diecezja Zachodnia",st:"Zatw. — diecezja",cls:"p-diec",amt:"12 000",mod:"3 dni temu"},
+  {nr:"PL-2026-005",ti:"Centrum Wpływu Kraków",fund:"CIOF",diec:"Diecezja Południowa",st:"Szkic",cls:"p-draft",amt:"9 000",mod:"6 dni temu"},
+];
+function renderGallery(){
+  document.getElementById('gal').innerHTML = ROWS.map(r=>`
+    <div class="gitem" onclick="show('list')">
+      <span class="num">${r.nr}</span>
+      <div class="ti"><b>${r.ti}</b><div class="meta">${r.fund} · ${r.diec}</div></div>
+      <span class="pill ${r.cls}">${r.st}</span>
+      <span class="amt">${r.amt} zł</span>
+      <span class="chev">›</span>
+    </div>`).join('');
+}
+function renderList(){
+  document.getElementById('splbody').innerHTML = ROWS.map(r=>`
+    <tr>
+      <td class="selcol"><span class="selcircle"></span></td>
+      <td>${r.nr}</td>
+      <td><span class="lnk">${r.ti}</span></td>
+      <td>${r.fund}</td>
+      <td>${r.diec}</td>
+      <td><span class="pill ${r.cls}">${r.st}</span></td>
+      <td>${r.amt}</td>
+      <td>${r.mod}</td>
+    </tr>`).join('');
+}
+function show(s){
+  ['home','form','appr','rep','list'].forEach(x=>{
+    document.getElementById('s-'+x).classList.toggle('show',x===s);
+    document.getElementById('nv-'+x).classList.toggle('act',x===s);
+  });
+  document.querySelector('.main').scrollTop=0;
+}
+renderGallery();renderList();
+</script>
+</body>
+</html>
