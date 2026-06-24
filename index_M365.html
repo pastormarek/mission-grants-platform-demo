@@ -149,12 +149,12 @@
   .foot{padding:10px 18px;font-size:11px;color:#a19f9d;text-align:center}
   /* reports */
   .rwrap{padding:22px}
-  .tile{background:#fff;border:1px solid #e1dfdd;border-radius:2px;padding:16px 20px;max-width:560px}
-  .chart{display:flex;align-items:flex-end;gap:26px;height:200px;padding:14px 6px 0;border-bottom:2px solid #e1dfdd}
-  .bar{width:46px;background:#0f6cbd;border-radius:2px 2px 0 0;position:relative}
-  .bar span{position:absolute;top:-20px;left:0;right:0;text-align:center;font-size:12px;color:#252423}
-  .barlbl{display:flex;gap:26px;padding:8px 6px 0}
-  .barlbl div{width:46px;text-align:center;font-size:11px;color:#605e5c}
+  .tile{background:#fff;border:1px solid #e1dfdd;border-radius:2px;padding:16px 20px;max-width:660px}
+  .chart{display:flex;align-items:flex-end;gap:14px;height:190px;padding:22px 6px 0;border-bottom:2px solid #e1dfdd}
+  .bar{width:48px;background:#0f6cbd;border-radius:2px 2px 0 0;position:relative}
+  .bar span{position:absolute;top:-20px;left:0;right:0;text-align:center;font-size:12px;color:#252423;font-weight:600}
+  .barlbl{display:flex;gap:14px;padding:8px 6px 0}
+  .barlbl div{width:48px;text-align:center;font-size:10px;line-height:1.15;color:#605e5c}
   /* toast */
   #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#323130;color:#fff;padding:11px 18px;
          border-radius:3px;font-size:13px;box-shadow:0 4px 14px rgba(0,0,0,.25);opacity:0;transition:.2s;z-index:50;pointer-events:none}
@@ -248,13 +248,7 @@
       <div class="rwrap">
         <div class="tile">
           <b>Wnioski wg statusu (2026)</b>
-          <div class="chart">
-            <div class="bar" style="height:40px"><span>1</span></div>
-            <div class="bar" style="height:80px"><span>2</span></div>
-            <div class="bar" style="height:40px"><span>1</span></div>
-            <div class="bar" style="height:40px"><span>1</span></div>
-          </div>
-          <div class="barlbl"><div>Szkic</div><div>Złożony</div><div>U diecezji</div><div>W TED</div></div>
+          <div id="chartarea"></div>
         </div>
         <p class="foot" style="text-align:left;max-width:560px">Wykres z kontrolki Power Apps / Power BI. Eksport: „Eksportuj do Excela" na liście SharePoint.</p>
       </div>
@@ -337,6 +331,41 @@ const ROWS=[
    contrib:{zbor:1000,diec:1000,unia:1000,ted:6000},report:"—",
    act:[["Utworzono wniosek (szkic)","Anna Lewandowska","6 dni temu"]],
    files:[],comments:[]},
+  {nr:"PL-2026-006",ti:"Klub Dobrej Nowiny",fund:"CIOF",diec:"Diecezja Wschodnia",
+   st:"Zatw. — Zarząd",amt:14000,dir:"Grzegorz Mazur",email:"grzegorz.mazur@adwent.pl",city:"Lublin",year:2026,mod:"4 dni temu",
+   desc:"Cotygodniowy klub dla dzieci i młodzieży: zajęcia, wartości, relacje z lokalnymi rodzinami.",
+   budget:[["Wyposażenie sali",7000],["Materiały i zajęcia",4500],["Wolontariat i szkolenia",2500]],
+   contrib:{zbor:1000,diec:2000,unia:3000,ted:8000},report:"—",
+   act:[["Złożono","Grzegorz Mazur","3 tyg. temu"],["Zatwierdzono — Diecezja Wschodnia","ks. A. Lis","10 dni temu"],["Zatwierdzono — Zarząd","Skarbnik Kościoła","4 dni temu"]],
+   files:[["Plan_zajec.pdf","180 KB"]],comments:[]},
+  {nr:"PL-2026-007",ti:"Radio Nadzieja Online",fund:"TED Mission Board Projects",diec:"Diecezja Zachodnia",
+   st:"Raportowanie",amt:25000,dir:"Ewa Krawczyk",email:"ewa.krawczyk@adwent.pl",city:"Poznań",year:2026,mod:"wczoraj",
+   desc:"Uruchomienie internetowego radia z programami ewangelizacyjnymi i zdrowotnymi; produkcja i promocja.",
+   budget:[["Sprzęt studyjny",13000],["Produkcja programów",8000],["Hosting i promocja",4000]],
+   contrib:{zbor:2000,diec:3000,unia:5000,ted:15000},report:"Szkic",
+   act:[["Złożono","Ewa Krawczyk","4 mies. temu"],["Zatwierdzono — Diecezja Zachodnia","ks. R. Kos","3 mies. temu"],["Zatwierdzono — Zarząd","Skarbnik Kościoła","3 mies. temu"],["Wysłano do TED","Dyrektor Misji","2 mies. temu"],["Środki przekazane do aplikanta","Skarbnik Kościoła","5 tyg. temu"],["Rozpoczęto raportowanie","Ewa Krawczyk","5 tyg. temu"]],
+   files:[["Ramowka.pdf","90 KB"],["Faktury_sprzet.pdf","620 KB"]],comments:[["Dyrektor Misji","3 tyg. temu","Proszę dołączyć jedną historię (wymóg TED) do raportu."]]},
+  {nr:"PL-2026-008",ti:"Obóz Misyjny Mazury",fund:"GC Mission Impact",diec:"Diecezja Wschodnia",
+   st:"Zakończony",amt:20000,dir:"Paweł Adamczyk",email:"pawel.adamczyk@adwent.pl",city:"Giżycko",year:2026,mod:"2 tyg. temu",
+   desc:"Letni obóz misyjny dla młodzieży: ewangelizacja, służba lokalna, integracja.",
+   budget:[["Zakwaterowanie i wyżywienie",12000],["Transport",4000],["Program i materiały",4000]],
+   contrib:{zbor:3000,diec:4000,unia:5000,ted:8000},report:"Zaakceptowany",
+   act:[["Złożono","Paweł Adamczyk","8 mies. temu"],["Zatwierdzono — Diecezja Wschodnia","ks. A. Lis","7 mies. temu"],["Zatwierdzono — Zarząd","Skarbnik Kościoła","7 mies. temu"],["Wysłano do TED","Dyrektor Misji","6 mies. temu"],["Środki przekazane","Skarbnik Kościoła","5 mies. temu"],["Raport złożony","Paweł Adamczyk","3 mies. temu"],["Raport zaakceptowany — zakończono","Dyrektor Misji","2 tyg. temu"]],
+   files:[["Raport_koncowy.pdf","1,1 MB"],["Galeria.pdf","2,4 MB"]],comments:[]},
+  {nr:"PL-2026-009",ti:"Warsztaty Rodzinne",fund:"CIOF",diec:"Diecezja Południowa",
+   st:"Złożony",amt:8000,dir:"Katarzyna Dudek",email:"katarzyna.dudek@adwent.pl",city:"Katowice",year:2026,mod:"1 dzień temu",
+   desc:"Cykl warsztatów dla rodzin: komunikacja, wychowanie, wiara w codzienności.",
+   budget:[["Prowadzący",4000],["Materiały",2500],["Catering",1500]],
+   contrib:{zbor:1000,diec:1000,unia:1000,ted:5000},report:"—",
+   act:[["Utworzono wniosek","Katarzyna Dudek","5 dni temu"],["Złożono do diecezji","Katarzyna Dudek","1 dzień temu"]],
+   files:[],comments:[]},
+  {nr:"PL-2026-010",ti:"Punkt Pomocy Uchodźcom",fund:"TED Mission Board Projects",diec:"Diecezja Wschodnia",
+   st:"Transfer środków",amt:28000,dir:"Marek Sikora",email:"marek.sikora@adwent.pl",city:"Lublin",year:2026,mod:"3 godz. temu",
+   desc:"Stały punkt pomocy dla uchodźców: żywność, odzież, wsparcie prawne i duchowe.",
+   budget:[["Magazyn i wyposażenie",12000],["Pomoc rzeczowa",11000],["Koordynacja",5000]],
+   contrib:{zbor:2000,diec:4000,unia:6000,ted:16000},report:"—",
+   act:[["Złożono","Marek Sikora","2 mies. temu"],["Zatwierdzono — Diecezja Wschodnia","ks. A. Lis","6 tyg. temu"],["Zatwierdzono — Zarząd","Skarbnik Kościoła","5 tyg. temu"],["Wysłano do TED","Dyrektor Misji","1 mies. temu"],["TED przekazał środki do Zarządu","TED","1 tydz. temu"],["Transfer Zarząd → diecezja","Skarbnik Kościoła","3 godz. temu"]],
+   files:[["Kosztorys.xlsx","42 KB"]],comments:[]},
 ];
 let ROLE="zarzad", CURRENT=null, DTAB="szcz";
 const ROLELBL={zarzad:"Zarząd Kościoła",diecezja:"Diecezja",pastor:"Składający"};
@@ -489,6 +518,15 @@ function renderDetail(){
 }
 function openItem(nr){CURRENT=nr;DTAB='szcz';show('detail');}
 
+function renderChart(){
+  const order=['Szkic','Złożony','Zatw. — diecezja','Zatw. — Zarząd','Wysłany do TED','Transfer środków','Raportowanie','Zakończony'];
+  const short={'Szkic':'Szkic','Złożony':'Złożony','Zatw. — diecezja':'Zatw. diecezja','Zatw. — Zarząd':'Zatw. Zarząd','Wysłany do TED':'Wysłany do TED','Transfer środków':'Transfer','Raportowanie':'Raport','Zakończony':'Zakończony'};
+  const counts=order.map(s=>ROWS.filter(r=>r.st===s).length);
+  const max=Math.max(1,...counts);
+  document.getElementById('chartarea').innerHTML=
+    `<div class="chart">${order.map((s,i)=>`<div class="bar" style="height:${counts[i]?Math.round(14+counts[i]/max*140):3}px"><span>${counts[i]}</span></div>`).join('')}</div>`+
+    `<div class="barlbl">${order.map(s=>`<div>${short[s]}</div>`).join('')}</div>`;
+}
 function show(s){
   ['home','detail','form','appr','rep','list'].forEach(x=>{
     const el=document.getElementById('s-'+x);if(el)el.classList.toggle('show',x===s);
@@ -496,9 +534,10 @@ function show(s){
   });
   if(s==='detail')renderDetail();
   if(s==='appr')renderAppr();
+  if(s==='rep')renderChart();
   document.querySelector('.main').scrollTop=0;
 }
-renderGallery();renderList();renderAppr();
+renderGallery();renderList();renderAppr();renderChart();
 </script>
 </body>
 </html>
