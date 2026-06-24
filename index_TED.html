@@ -263,7 +263,7 @@ let APPS = [
 ];
 
 /* ---------------- STATE ---------------- */
-let CUR=USERS.find(u=>u.id==='ted_dir')||USERS[0], ROLE=CUR.role, SCREEN="dash", WZSTEP=0, WZ=blankWizard(), CURRENT=null, SELYEAR=0, SHOWARCH=false, SORTKEY='nr', SORTDIR=1, SELSET={}, ATTED=false, YEARS=[], ARCHOPEN=false;
+let CUR=USERS.find(u=>u.id==='ted_dir')||USERS[0], ROLE=CUR.role, SCREEN="dash", WZSTEP=0, WZ=blankWizard(), CURRENT=null, SELYEAR=0, SHOWARCH=false, SORTKEY='nr', SORTDIR=1, SELSET={}, ATTED=true, YEARS=[], ARCHOPEN=false;
 function blankWizard(){return{fund:null,un:null,toGC:false,dur:1,year:"",country:"",city:"",title:"",director:"",email:"",org:"",peopleGroup:"",population:"",sdaPresence:"",prep:"",conduct:"",followup:"",budget:[{desc:"",amount:0}],currency:"EUR",f_local:0,f_field:0,f_union:0,f_ted:0};}
 
 /* ---------------- VISIBILITY / SORT ---------------- */
@@ -296,7 +296,7 @@ function archiveSel(){const nrs=selectedNrs();nrs.forEach(nr=>{const a=APPS.find
 
 /* ---------------- NAV ---------------- */
 function fillUserSel(){document.getElementById('userSel').innerHTML=USERS.map(u=>`<option value="${u.id}">${u.name}</option>`).join('');document.getElementById('userSel').value=CUR.id;}
-function setUser(id){CUR=USERS.find(u=>u.id===id);ROLE=CUR.role;ATTED=false;YEARS=[];ARCHOPEN=false;if(SCREEN==='admin'&&ROLE!=='ted')SCREEN='dash';if(SCREEN==='queue'&&ROLE==='applicant')SCREEN='dash';render();}
+function setUser(id){CUR=USERS.find(u=>u.id===id);ROLE=CUR.role;ATTED=(ROLE==='ted');YEARS=[];ARCHOPEN=false;if(SCREEN==='admin'&&ROLE!=='ted')SCREEN='dash';if(SCREEN==='queue'&&ROLE==='applicant')SCREEN='dash';render();}
 function nav(s){SCREEN=s;if(s==='wizard'){WZ=blankWizard();WZ.un=(CUR.role==='ted')?'':CUR.un;WZSTEP=0;}window.scrollTo(0,0);render();}
 function openApp(nr){CURRENT=nr;const a=APPS.find(x=>x.nr===nr);SELYEAR=a?curYear(a):0;SCREEN='detail';window.scrollTo(0,0);render();}
 function selYear(i){SELYEAR=i;render();}
