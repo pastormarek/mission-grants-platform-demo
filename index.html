@@ -9,17 +9,22 @@
   *{box-sizing:border-box}
   body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#eef2f6;color:#1d2733;
        min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-  .wrap{max-width:760px;width:100%;background:#fff;border-radius:18px;box-shadow:0 18px 50px rgba(20,40,70,.14);padding:34px 38px}
+  .wrap{max-width:900px;width:100%;background:#fff;border-radius:18px;box-shadow:0 18px 50px rgba(20,40,70,.14);padding:34px 38px}
   h1{font-size:21px;margin:0 0 4px}
   .sub{color:#64748b;font-size:14px;margin:0 0 22px}
-  .cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:16px}
   @media(max-width:560px){.cards{grid-template-columns:1fr}}
-  a.card{display:block;text-decoration:none;color:inherit;border:1px solid #dbe3ec;border-radius:14px;padding:20px 22px;
-         transition:.15s;background:#fafcfe}
+  a.card{display:flex;flex-direction:column;text-decoration:none;color:inherit;border:1px solid #dbe3ec;border-radius:14px;
+         padding:20px 22px;transition:.15s;background:#fafcfe}
   a.card:hover{border-color:#2e6da4;box-shadow:0 8px 22px rgba(46,109,164,.16);transform:translateY(-2px)}
+  a.card:focus-visible{outline:2px solid #2e6da4;outline-offset:3px}
+  a.card.main{border-color:#2e6da4;background:#fff}
   .flag{font-size:26px}
   .ttl{font-weight:700;font-size:16px;margin:8px 0 3px}
   .desc{font-size:13px;color:#5b6b7c;line-height:1.45}
+  .tag{display:inline-block;align-self:flex-start;font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;
+       padding:2px 8px;border-radius:4px;background:#eef2f6;color:#64748b;margin-top:10px}
+  .tag.now{background:#e8f6f0;color:#0e6b52}
   .go{display:inline-block;margin-top:12px;font-size:13px;font-weight:600;color:#2e6da4}
   .foot{margin-top:24px;font-size:12px;color:#8090a0;line-height:1.5;border-top:1px solid #eef2f6;padding-top:16px}
 </style>
@@ -29,16 +34,27 @@
     <h1>Mission Grants Platform — clickable prototype</h1>
     <p class="sub">Platforma wniosków misyjnych — klikalny prototyp · demo data only</p>
     <div class="cards">
+      <a class="card main" href="platforma-zk.html">
+        <div class="flag">🇵🇱</div>
+        <div class="ttl">Wnioski do Zarządu Kościoła</div>
+        <div class="desc">Wyznawca → pastor → diecezja → Zarząd: składanie, zatwierdzanie, korekty,
+          wypłaty środków, raporty miesięczne i końcowe. Sześć ról do przełączania. Dane przykładowe.</div>
+        <span class="tag now">wersja aktualna</span>
+        <span class="go">Otwórz prototyp →</span>
+      </a>
       <a class="card" href="index_TED.html">
         <div class="flag">🇬🇧</div>
         <div class="ttl">English version (TED)</div>
         <div class="desc">Unions → TED → GC workflow: submit, approve, fund transfers, reporting. Sample data.</div>
+        <span class="tag">TED branch</span>
         <span class="go">Open prototype →</span>
       </a>
       <a class="card" href="index_ZK.html">
         <div class="flag">🇵🇱</div>
-        <div class="ttl">Wersja polska (Zarząd Kościoła)</div>
-        <div class="desc">Pastor → diecezja → Zarząd → TED: składanie, zatwierdzanie, transfery, raportowanie. Dane przykładowe.</div>
+        <div class="ttl">Wersja polska PL → TED</div>
+        <div class="desc">Pastor → diecezja → Zarząd → TED: składanie, zatwierdzanie, transfery, raportowanie.
+          Poprzednie podejście, zanim eksport do TED wyszedł poza zakres. Dane przykładowe.</div>
+        <span class="tag">wersja wcześniejsza</span>
         <span class="go">Otwórz prototyp →</span>
       </a>
     </div>

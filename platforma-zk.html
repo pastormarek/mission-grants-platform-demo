@@ -1,0 +1,3223 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Wnioski do Zarządu Kościoła</title>
+<style>
+  :root{
+    /* makieta celowo trzyma jeden, jasny wygląd: odwzorowuje interfejs Microsoft 365,
+       na którym docelowo stanie system. color-scheme wymusza jasne kontrolki formularzy
+       także u osób z ciemnym motywem systemu */
+    color-scheme: light;
+    --blue:#1b4f72; --blue2:#2e6da4; --blue-l:#eaf1f8; --accent:#138d75;
+    --bg:#f4f6f9; --card:#fff; --line:#dde3ea; --txt:#1f2a36;
+    --muted:#6b7785; --warn:#b9770e; --ok:#1e8449; --red:#c0392b; --gold:#d4ac0d;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--txt);font-size:15px}
+  header.top{background:var(--blue);color:#fff;display:flex;align-items:center;gap:14px;padding:10px 18px;position:sticky;top:0;z-index:30;flex-wrap:wrap}
+  header.top .brand{font-weight:700;font-size:16px}
+  header.top .brand small{display:block;font-weight:400;font-size:11px;opacity:.85}
+  header.top .spacer{flex:1}
+  header.top select{background:#fff;border:0;border-radius:6px;padding:6px 8px;font-size:13px;color:var(--txt)}
+  header.top label{font-size:12px;opacity:.9}
+  .badge-demo{background:var(--gold);color:#3a2e00;font-weight:700;border-radius:4px;padding:2px 8px;font-size:11px}
+  .app{display:flex;min-height:calc(100vh - 52px)}
+  nav.side{width:236px;background:#13384f;color:#cfdbe6;padding:10px 0;flex-shrink:0}
+  nav.side a{display:flex;align-items:center;gap:10px;padding:11px 18px;color:#cfdbe6;text-decoration:none;cursor:pointer;font-size:14px;border-left:3px solid transparent}
+  nav.side a:hover{background:#17435e;color:#fff}
+  nav.side a.active{background:#0f2e42;color:#fff;border-left-color:var(--gold);font-weight:600}
+  nav.side a .ic{width:18px;text-align:center}
+  nav.side a .cnt{margin-left:auto;background:var(--gold);color:#3a2e00;border-radius:10px;font-size:11px;font-weight:700;padding:1px 7px}
+  nav.side .grp{padding:14px 18px 6px;font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:#7d97ab}
+  nav.side .who{padding:10px 18px;font-size:12px;color:#9fb6c8;border-top:1px solid #20455c;margin-top:10px;line-height:1.5}
+  main{flex:1;padding:24px 30px;overflow:auto}
+  main.pub{max-width:920px;margin:0 auto}
+  h1{font-size:22px;margin:0 0 4px}
+  h2{font-size:17px;margin:22px 0 10px;color:var(--blue)}
+  h3{font-size:14px;margin:0 0 8px;color:var(--blue)}
+  .sub{color:var(--muted);margin:0 0 18px;font-size:13px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px;margin-bottom:18px;box-shadow:0 1px 2px rgba(20,40,60,.04)}
+  .row{display:flex;gap:18px;flex-wrap:wrap}
+  .col{flex:1;min-width:230px}
+  label.f{display:block;font-size:12.5px;font-weight:600;color:#3a4756;margin:0 0 4px}
+  label.f .req{color:var(--red)}
+  input[type=text],input[type=email],input[type=number],input[type=date],select,textarea{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:7px;font-size:14px;font-family:inherit;background:#fff;color:var(--txt)}
+  a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,
+  .tile.klik:focus-visible,.okno.klik:focus-visible,.ogn:focus-visible{outline:2px solid var(--blue2);outline-offset:2px}
+  textarea{min-height:78px;resize:vertical}
+  .hint{font-size:11.5px;color:var(--muted);margin-top:3px}
+  .field{margin-bottom:14px}
+  button{cursor:pointer;font-family:inherit}
+  .btn{background:var(--blue);color:#fff;border:0;border-radius:7px;padding:10px 16px;font-size:14px;font-weight:600}
+  .btn:hover{background:var(--blue2)}
+  .btn.sec{background:#fff;color:var(--blue);border:1px solid var(--blue)}
+  .btn.sec:hover{background:var(--blue-l)}
+  .btn.ok{background:var(--ok)}
+  .btn.warn{background:var(--warn)}
+  .btn.red{background:var(--red)}
+  .btn.sm{padding:7px 12px;font-size:12.5px}
+  .btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;color:#5b6b7b;background:#f7f9fb}
+  tr.clk:hover{background:#f3f8fd;cursor:pointer}
+  .pill{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11.5px;font-weight:600;white-space:nowrap}
+  .s1{background:#ffc83d;color:#4d3a00}
+  .s2{background:#f0922b;color:#3d2600}
+  .s3{background:#e67e22;color:#fff}
+  .s4{background:#1e8449;color:#fff}
+  .s5{background:#8e44ad;color:#fff}
+  .s6{background:#e74c3c;color:#fff}
+  .sR{background:#8a939c;color:#fff}
+  .sZ{background:#2c3e50;color:#fff}
+  .arch{opacity:.72}
+  .archbar{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;background:#f2f4f7;border:1px solid var(--line);
+           border-radius:8px;padding:11px 13px;font-size:13px;color:#4a5764;margin-bottom:12px}
+  .archlista{display:flex;flex-direction:column;gap:5px;margin-top:8px}
+  .archi{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);
+         border-radius:6px;padding:5px 9px;font-size:12.5px;cursor:pointer;color:var(--txt)}
+  .archi:hover{border-color:var(--blue2);background:var(--blue-l)}
+  .archi .nr{color:var(--muted);font-size:11.5px}
+  .archsel{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+  .archrow{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:8px;
+           padding:10px 12px;cursor:pointer;background:#fafcfe}
+  .archrow:hover{border-color:var(--blue2)}
+  .archrow input{width:auto;margin-top:3px}
+  .archrow b{display:block;font-size:13.5px;margin-bottom:3px}
+  .archrow .m{display:block;font-size:11.5px;color:var(--muted);line-height:1.5}
+  .lnk{cursor:pointer}
+  .lnk:hover{color:var(--blue2);text-decoration:underline}
+  .tile.klik{cursor:pointer;transition:.15s}
+  .tile.klik:hover{border-color:var(--blue2);box-shadow:0 3px 10px rgba(20,60,100,.1);transform:translateY(-1px)}
+  .rap{background:#fff;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;
+       padding:12px 14px;margin-bottom:9px}
+  .rap.fin{border-left-color:var(--blue);background:#fbfdff}
+  .rap .hd{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:11.5px;color:var(--muted);margin-bottom:6px}
+  .rap .hd .kw{margin-left:auto;font-weight:700;color:var(--txt);font-size:12.5px}
+  .rap .bd{font-size:13px;line-height:1.55;color:#3a4756;white-space:pre-line}
+  .msg.rapmsg{border-left-color:var(--accent);background:#fbfefd}
+  .msg.rapmsg.fin{border-left-color:var(--blue)}
+  .msg .zn.k{background:#e8f6f0;color:#0e6b52}
+  .rap .zn{font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;padding:1px 7px;border-radius:4px;
+           background:#e8f6f0;color:#0e6b52;font-weight:700}
+  .rap .zn.k{background:var(--blue-l);color:var(--blue)}
+  .fbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--blue-l);border:1px solid #bcdcf3;
+        border-radius:8px;padding:9px 13px;font-size:13px;color:#1f5577;margin-bottom:12px}
+  .paski{display:flex;flex-direction:column;gap:7px}
+  .pasek{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .pasek .pl{min-width:170px;font-size:12.5px;color:var(--muted)}
+  .pasek .pw{flex:1;min-width:120px;background:#eef2f5;border-radius:6px;height:18px;overflow:hidden}
+  .pasek .pb{height:100%;border-radius:6px}
+  .pasek .pk{min-width:95px;text-align:right;font-size:14px;font-weight:700}
+  .msg.przelew{border-left-color:var(--ok);background:#fafdfb}
+  .msg .zn.p{background:#d4efdf;color:#14663f}
+  .okna{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-top:14px}
+  .okno{border:1px solid var(--line);border-radius:10px;padding:13px;background:#fff;display:flex;
+        flex-direction:column;gap:5px}
+  .okno .ot{font-weight:700;font-size:14px;color:var(--txt)}
+  .okno .op{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+  .okno .ozl{font-size:12.5px;color:var(--ok);font-weight:700;margin-top:3px}
+  .okno .okw{font-size:17px;font-weight:700;color:var(--txt)}
+  .okno .otr{font-size:12px;color:#5b6b7b;line-height:1.5;margin:2px 0 6px}
+  .okno .ocz{font-size:12.5px;color:var(--muted);margin:3px 0 8px}
+  .okno .ozal{font-size:12.5px;color:var(--red);font-weight:700;margin:3px 0 8px}
+  .okno button{align-self:flex-start;margin-top:auto}
+  .okno.ok{border-color:#a9dfbf;background:#f8fdfa}
+  .okno.open{border-color:var(--blue2);background:#fff;box-shadow:0 2px 8px rgba(30,90,140,.08)}
+  .okno.late{border-color:#f5b7b1;background:#fffafa}
+  .okno.soon{background:#f7f9fb;color:var(--muted)}
+  .okno.soon .ot{color:#8a939c}
+  .okno.klik{cursor:pointer;transition:.15s}
+  .okno.klik:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 5px 14px rgba(20,60,100,.12)}
+  .tag{display:inline-block;font-size:11px;padding:2px 7px;border-radius:4px;background:var(--blue-l);color:var(--blue);font-weight:600}
+  .tag.g{background:#e8f6f0;color:var(--accent)}
+  .stepper{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+  .stepper .st{flex:1;min-width:120px;text-align:center;font-size:11.5px;padding:9px 4px;border-radius:6px;background:#eef2f5;color:#7a8a99}
+  .stepper .st.done{background:#d4efdf;color:#1e8449;font-weight:600}
+  .stepper .st.cur{background:var(--blue);color:#fff;font-weight:700}
+  .stepper .st.bad{background:#fadbd8;color:var(--red);font-weight:600}
+  .tiles{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+  .tile{flex:1;min-width:180px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px}
+  .tile .n{font-size:28px;font-weight:700;color:var(--blue);line-height:1.1}
+  .tile .l{font-size:12px;color:var(--muted);margin-top:4px}
+  .tile.acc{border-color:var(--gold);background:#fffdf3}
+  .tile.acc .n{color:var(--warn)}
+  .tile.bad{border-color:#f5b7b1;background:#fffafa}
+  .tile.bad .n{color:var(--red)}
+  .tile.pom{border-color:#f5cba7;background:#fffcf6}
+  .tile.pom .n{color:#e67e22}
+  .kcard.late{border-color:#f5b7b1;background:#fffafa}
+  .kcard.soon{border-color:#f5cba7;background:#fffcf6}
+  .ogn{display:flex;align-items:center;gap:12px;margin-bottom:8px;padding:4px 6px;border-radius:7px;cursor:pointer;flex-wrap:wrap}
+  .ogn:hover{background:#f3f8fd}
+  .ogn .ognn{min-width:160px;font-size:13px;font-weight:600;color:#3a4756}
+  .ogn .ognb{flex:1;min-width:120px;background:#eef2f5;border-radius:6px;height:22px;overflow:hidden}
+  .ogn .ognb div{height:100%;border-radius:6px}
+  .ogn .ognl{font-size:13px;min-width:110px;color:var(--muted)}
+  .ogn .ognd{font-size:12.5px;min-width:130px}
+  .msg{background:#fff;border:1px solid var(--line);border-left:4px solid var(--blue2);border-radius:8px;padding:13px 15px;font-size:13px;margin-bottom:10px}
+  .msg.reczna{border-left-color:var(--gold);background:#fffdf5}
+  .msg .hd{font-size:11.5px;color:var(--muted);margin-bottom:5px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .msg .sj{font-weight:700;margin-bottom:5px}
+  .msg .bd{line-height:1.55;color:#3a4756;white-space:pre-line}
+  .msg .zn{font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;padding:1px 7px;border-radius:4px;background:#eef2f5;color:#5b6b7b;font-weight:700}
+  .msg .zn.r{background:#fdf3d7;color:#7a5c00}
+  .msg .zn.z{background:#e8f6f0;color:#0e6b52}
+  .msg.zmiana{border-left-color:var(--accent);background:#fbfefd}
+  .msg.zdarz{border-left-color:#b7c3ce;background:#fafbfc}
+  .zmt{width:100%;margin-top:8px;font-size:12.5px;border-collapse:collapse}
+  .zmt td{border-bottom:1px dashed var(--line);padding:6px 8px;vertical-align:top}
+  .zmt td.p{color:var(--muted);width:34%}
+  .zmt td.s{color:#8a939c;text-decoration:line-through;width:28%}
+  .zmt td.a{color:var(--accent);width:18px;text-align:center;font-weight:700}
+  .zmt td.n{color:var(--txt);font-weight:600}
+  .odb{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+  .odb label{display:flex;gap:7px;align-items:flex-start;font-size:13px;background:#f7f9fb;border:1px solid var(--line);border-radius:7px;padding:9px 12px;cursor:pointer;flex:1;min-width:200px}
+  .odb label:hover{border-color:var(--blue2);background:var(--blue-l)}
+  .odb input{width:auto;margin-top:2px}
+  .odb .who{font-weight:600}
+  .odb .mail{font-size:11.5px;color:var(--muted);background:none;border:0;padding:0;margin:0}
+  .kanban{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px}
+  .kcol{min-width:230px;flex:1;background:#eef2f5;border-radius:9px;padding:10px}
+  .kcol h4{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:#5b6b7b}
+  .kcard{background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px;margin-bottom:8px;cursor:pointer;font-size:12.5px}
+  .kcard:hover{border-color:var(--blue2)}
+  .kcard b{display:block;font-size:13px;margin-bottom:3px}
+  .kcard .m{color:var(--muted);font-size:11.5px}
+  .kv{display:grid;grid-template-columns:190px 1fr;gap:7px 14px;font-size:14px}
+  .kv .k{color:var(--muted)}
+  .note{background:#fffbe6;border:1px solid #f1d77a;border-radius:8px;padding:11px 13px;font-size:12.5px;color:#6b5800;margin-bottom:16px;line-height:1.5}
+  .note.info{background:#eef6fc;border-color:#bcdcf3;color:#1f5577}
+  .note.ok{background:#eafaf1;border-color:#a9dfbf;color:#145a32}
+  .note.bad{background:#fdedec;border-color:#f5b7b1;color:#922b21}
+  .dec{border-left:3px solid var(--line);padding:2px 0 2px 14px;margin-bottom:14px}
+  .dec.ok{border-left-color:var(--ok)}
+  .dec.bad{border-left-color:var(--red)}
+  .dec.wait{border-left-color:var(--line)}
+  .dec .h{font-weight:700;font-size:13.5px}
+  .dec .m{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .dec .u{font-size:13px;margin-top:6px;background:#f7f9fb;border-radius:6px;padding:8px 10px}
+  .ov{position:fixed;inset:0;background:rgba(15,30,45,.55);display:flex;align-items:center;justify-content:center;z-index:80;padding:20px}
+  .ov .box{background:#fff;border-radius:12px;max-width:620px;width:100%;padding:26px;box-shadow:0 12px 40px rgba(0,0,0,.3);max-height:90vh;overflow:auto}
+  .ov h2{margin-top:0}
+  .toast{position:fixed;bottom:22px;right:22px;background:#13384f;color:#fff;padding:12px 18px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.25);z-index:90;font-size:14px;opacity:0;transform:translateY(10px);transition:.25s;max-width:420px}
+  .toast.show{opacity:1;transform:none}
+  .hidden{display:none!important}
+  .pubtop{background:var(--blue);color:#fff;padding:22px 26px;border-radius:10px;margin-bottom:18px}
+  .pubtop h1{margin:0 0 6px;font-size:21px}
+  .pubtop p{margin:0;font-size:13.5px;opacity:.92;line-height:1.55}
+  .mail{background:#fff;border:1px solid var(--line);border-left:4px solid var(--blue2);border-radius:8px;padding:14px 16px;font-size:13px;margin-bottom:12px}
+  .mail .hd{font-size:11.5px;color:var(--muted);margin-bottom:6px}
+  .mail .sj{font-weight:700;margin-bottom:6px}
+  .mail .bd{line-height:1.55;color:#3a4756}
+  .att{display:inline-flex;align-items:center;gap:6px;background:#f1f5f8;border:1px solid var(--line);border-radius:6px;padding:5px 10px;font-size:12.5px;margin:0 6px 6px 0}
+  .drop{border:2px dashed #bcc9d6;border-radius:9px;padding:18px;text-align:center;color:var(--muted);font-size:13px;background:#fafcfe;cursor:pointer}
+  .drop:hover{border-color:var(--blue2);background:var(--blue-l)}
+  .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;align-items:flex-end}
+  .filters .fx{min-width:150px}
+  .filters .fx label{display:block;font-size:11.5px;color:var(--muted);margin-bottom:3px}
+  .lata{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{background:#fff;border:1px solid var(--line);border-radius:20px;padding:7px 14px;font-size:13px;color:#4a5764}
+  .chip:hover{border-color:var(--blue2);background:var(--blue-l)}
+  .chip.on{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="ov" id="intro">
+  <div class="box">
+    <h2>Prototyp: wnioski o dofinansowanie do Zarządu Kościoła</h2>
+    <p style="font-size:14px;line-height:1.6">To <b>klikalna makieta</b>, nie działająca aplikacja.
+    Pokazuje wygląd i przebieg sprawy: kto składa, kto zatwierdza, co widzi Zarząd.</p>
+    <ul style="font-size:13.5px;line-height:1.7;color:#445">
+      <li>Zasada nadrzędna: <b>każdy wniosek przechodzi przez pastora zboru</b>. Nie ma wniosków niezależnych.</li>
+      <li>Przełącznik <b>„Widok"</b> u góry pokazuje ten sam system oczami różnych osób.</li>
+      <li>Wszystko dzieje się <b>lokalnie w przeglądarce</b>. Nic nie jest wysyłane ani zapisywane.</li>
+      <li>Dane wpisane w makiecie znikają po odświeżeniu strony.</li>
+    </ul>
+    <div class="note info" style="margin-top:14px">Docelowo stoi to na Microsoft 365, który kościół
+    już opłaca: lista SharePoint jako baza, Microsoft Forms jako formularz, Power Automate jako
+    obieg zatwierdzania. Koszt dodatkowy: zero.</div>
+
+    <div class="note" style="margin-top:12px">
+      <b>Od czego zacząć, jeśli oglądasz to pierwszy raz:</b>
+      <ol style="margin:8px 0 0;padding-left:18px;line-height:1.75">
+        <li><b>Pulpit Zarządu</b>: kafelki są klikalne, każdy prowadzi do odpowiedniej listy.</li>
+        <li>Otwórz wniosek <b>ZK-2026-015</b>, żeby zobaczyć pełny cykl: decyzje, przelew, raporty miesięczne.</li>
+        <li>Przełącz <b>Widok</b> u góry na <b>Składający: Joanna Malinowska</b>. Tak wygląda strona,
+            którą wyznawca otwiera z linku w mailu, z okienkami raportów do wypełnienia.</li>
+        <li>Wróć na Zarząd i sprawdź zakładkę <b>Raporty z realizacji</b> oraz <b>Zestawienie kwot</b>.</li>
+      </ol>
+    </div>
+
+    <div style="text-align:right;margin-top:16px"><button class="btn" onclick="document.getElementById('intro').classList.add('hidden')">Wejdź do makiety</button></div>
+  </div>
+</div>
+
+<div class="ov hidden" id="modal"><div class="box" id="modalBox"></div></div>
+
+<header class="top">
+  <div class="brand">Wnioski o dofinansowanie <small>Zarząd Kościoła Adwentystów Dnia Siódmego w RP</small></div>
+  <span class="badge-demo">PROTOTYP</span>
+  <div class="spacer"></div>
+  <label>Widok:&nbsp;</label>
+  <select id="userSel" onchange="setUser(this.value)"></select>
+</header>
+
+<div class="app">
+  <nav class="side" id="nav"></nav>
+  <main id="view"></main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ SŁOWNIKI ============ */
+const DIECEZJE = ['Południowa','Zachodnia','Wschodnia'];
+const RODZAJE  = ['Ewangelizacja','Praca z młodzieżą','Wydawnictwo i media','Pomoc społeczna',
+                  'Remont i wyposażenie','Szkolenie i konferencja','Inne'];
+
+const ST = {
+  zlozony:  {l:'Złożony',            c:'s1', krok:1},
+  pastor:   {l:'Zatw. pastor',       c:'s2', krok:2},
+  diecezja: {l:'Zatw. diecezja',     c:'s3', krok:3},
+  zarzad:   {l:'Zatwierdzony',       c:'s4', krok:4},
+  zakonczony:{l:'Zakończony',        c:'sZ', krok:6},
+  poprawa:  {l:'Do poprawy',         c:'s6', krok:0},
+  odrzucony:{l:'Odrzucony',          c:'sR', krok:0},
+  sprawdz:  {l:'Do sprawdzenia',     c:'s5', krok:1}
+};
+
+/* statusy spraw zamkniętych: tylko takie wnioski da się przenieść do archiwum */
+const ZAMKNIETE = ['zakonczony','odrzucony'];
+
+const USERS = [
+  {id:'wyznawca', n:'Wyznawca ze zboru',       o:'bez logowania, formularz publiczny', rola:'wyznawca'},
+  {id:'skladajacy', n:'Składający: Joanna Malinowska', o:'podgląd własnej sprawy z linku w mailu, bez logowania',
+   rola:'skladajacy', email:'j.malinowska@gmail.com'},
+  {id:'pastor',   n:'pastor Jan Nowak',        o:'Zbór Warszawa Centrum, Diecezja Wschodnia', rola:'pastor',
+   email:'jan.nowak@adwent.pl', zbor:'Warszawa Centrum', diecezja:'Wschodnia'},
+  {id:'diec',     n:'Diecezja Wschodnia',      o:'Piotr Zieliński, sekretarz', rola:'diecezja', diecezja:'Wschodnia'},
+  {id:'zarzad',   n:'Zarząd: Dyrektor Misji',  o:'Marek Micyk, pełny wgląd', rola:'zarzad'},
+  {id:'skarb',    n:'Zarząd: Skarbnik',        o:'pełny wgląd', rola:'zarzad'}
+];
+
+/* ============ DANE PRZYKŁADOWE ============ */
+let SEQ = 18;
+const DZIS = '2026-08-12';
+let APPS = [
+  {id:'ZK-2026-001', zrodlo:'Wyznawca', imie:'Anna Kowalska', email:'anna.kowalska@gmail.com', tel:'601 234 567',
+   zbor:'Warszawa Centrum', pastorEmail:'jan.nowak@adwent.pl', diecezja:'Wschodnia',
+   tytul:'Kurs biblijny dla studentów', rodzaj:'Ewangelizacja',
+   cel:'Dotarcie do studentów warszawskich uczelni z cyklem otwartych spotkań biblijnych.',
+   plan:'Dwanaście spotkań w wynajętej sali w centrum, raz w tygodniu, plus grupa online dla osób spoza Warszawy.',
+   rezultaty:'Oczekujemy 40 uczestników, z tego 15 kontynuujących indywidualne studium.',
+   od:'2026-09-15', do:'2026-12-20', kwota:8500, wklad:1500,
+   budzet:'Wynajem sali 12 x 350 zł = 4200 zł. Materiały drukowane 2000 zł. Promocja w internecie 1500 zł. Poczęstunek 800 zł.',
+   zal:['kosztorys-kurs.pdf','uchwala-zboru.pdf'], zgoda:true, data:'2026-05-28',
+   dec:{pastor:{d:'Zatwierdzam',kto:'pastor Jan Nowak',data:'2026-05-30',uw:'Anna prowadzi już grupę domową, ma doświadczenie. Popieram w pełni.',kwota:null},
+        diecezja:{d:'Zatwierdzam',kto:'Piotr Zieliński',data:'2026-06-25',uw:'Projekt spójny ze strategią diecezji na 2026. Opiniujemy pozytywnie kwotę pełną.',kwota:8500},
+        zarzad:null},
+   status:'diecezja', dataStatusu:'2026-06-25',
+   log:[{data:'2026-06-24', kto:'Piotr Zieliński', rola:'diecezja', typ:'korekta',
+         powod:'Sala w centrum okazała się droższa niż w kosztorysie. Po rozmowie z Anną podnieśliśmy pozycję wynajmu, reszta bez zmian. Nie ma sensu odsyłać całego wniosku.',
+         zm:[{pole:'Kwota wnioskowana', przed:'8 200 zł', po:'8 500 zł'},
+             {pole:'Pozycje kosztowe', przed:'Wynajem sali 12 x 320 zł = 3840 zł. Materiały drukowane 2000 zł. Promocja w internecie 1500 zł. Poczęstunek 800 zł.',
+              po:'Wynajem sali 12 x 350 zł = 4200 zł. Materiały drukowane 2000 zł. Promocja w internecie 1500 zł. Poczęstunek 800 zł.'}]}],
+   kor:[]},
+
+  {id:'ZK-2026-002', zrodlo:'Pastor', imie:'pastor Jan Nowak', email:'jan.nowak@adwent.pl', tel:'602 111 222',
+   zbor:'Warszawa Centrum', pastorEmail:'jan.nowak@adwent.pl', diecezja:'Wschodnia',
+   tytul:'Doposażenie sali zborowej w sprzęt do transmisji', rodzaj:'Remont i wyposażenie',
+   cel:'Umożliwienie transmisji nabożeństw dla osób chorych i starszych, które nie mogą dojechać.',
+   plan:'Zakup kamery, mikrofonów i miksera, montaż przez firmę zewnętrzną, szkolenie dwóch wolontariuszy.',
+   rezultaty:'Stała transmisja co tydzień, szacunkowo 60 osób oglądających.',
+   od:'2026-09-01', do:'2026-10-31', kwota:14000, wklad:4000,
+   budzet:'Kamera 6000 zł. Mikrofony bezprzewodowe 3500 zł. Mikser 2500 zł. Montaż i okablowanie 2000 zł.',
+   zal:['oferta-sprzet.pdf'], zgoda:true, data:'2026-07-20',
+   dec:{pastor:{d:'Zatwierdzam',kto:'pastor Jan Nowak',data:'2026-07-20',uw:'Wniosek własny zboru.',kwota:null},
+        diecezja:{d:'Zatwierdzam',kto:'Piotr Zieliński',data:'2026-07-25',uw:'Popieramy, zbór ma duży udział własny.',kwota:12000},
+        zarzad:{d:'Zatwierdzam',kto:'Zarząd Kościoła',data:'2026-08-08',uw:'Przyznano 10 000 zł. Reszta z rezerwy diecezji.',kwota:10000}},
+   status:'zarzad', dataStatusu:'2026-08-08', raporty:[], przedluzenia:[], wyplaty:[], kor:[]},
+
+  {id:'ZK-2026-010', zrodlo:'Wyznawca', imie:'Joanna Malinowska', email:'j.malinowska@gmail.com', tel:'606 141 515',
+   zbor:'Szczecin', pastorEmail:'l.witkowski@adwent.pl', diecezja:'Zachodnia',
+   tytul:'Świetlica dla dzieci z osiedla', rodzaj:'Pomoc społeczna',
+   cel:'Popołudniowa opieka i pomoc w lekcjach dla dzieci z rodzin w trudnej sytuacji.',
+   plan:'Trzy popołudnia w tygodniu w sali zborowej, dwie wolontariuszki, podwieczorek i pomoc w nauce.',
+   rezultaty:'Stała grupa 15 dzieci, kontakt z rodzicami, dwa spotkania rodzinne w roku.',
+   od:'2026-03-01', do:'2026-06-30', kwota:9600, wklad:1600,
+   budzet:'Materiały plastyczne i szkolne 2400 zł. Podwieczorki 4200 zł. Wyposażenie kącika 3000 zł.',
+   zal:['kosztorys-swietlica.pdf'], zgoda:true, data:'2026-01-08',
+   dec:{pastor:{d:'Zatwierdzam',kto:'pastor Łukasz Witkowski',data:'2026-01-12',uw:'Zbór ma wolontariuszki gotowe do pracy.',kwota:null},
+        diecezja:{d:'Zatwierdzam',kto:'Diecezja Zachodnia',data:'2026-01-27',uw:'Opiniujemy pozytywnie.',kwota:9600},
+        zarzad:{d:'Zatwierdzam',kto:'Zarząd Kościoła',data:'2026-02-10',uw:'Przyznano 8 000 zł.',kwota:8000}},
+   status:'zarzad', dataStatusu:'2026-02-10',
+   raporty:[
+     {data:'2026-04-08', okres:'2026-03', typ:'okresowy', kto:'Joanna Malinowska', wydano:1450,
+      tresc:'Ruszyliśmy 4 marca. Na pierwsze zajęcia przyszło 9 dzieci, na ostatnie w miesiącu już 14. Kupiłyśmy materiały plastyczne i zeszyty. Największym zaskoczeniem jest zainteresowanie rodziców, dwie mamy zostają i pomagają.'},
+     {data:'2026-05-07', okres:'2026-04', typ:'okresowy', kto:'Joanna Malinowska', wydano:1720,
+      tresc:'Stała grupa 15 dzieci. Doszła pomoc w matematyce, bo tego było najwięcej. Wydatki głównie na podwieczorki. W kwietniu zorganizowałyśmy pierwsze spotkanie z rodzicami, przyszło osiem osób.'},
+     {data:'2026-06-09', okres:'2026-05', typ:'okresowy', kto:'Joanna Malinowska', wydano:1610,
+      tresc:'Bez zmian w frekwencji. Doposażyłyśmy kącik w regał i pufy. Jedna z wolontariuszek zachorowała, przez dwa tygodnie prowadziłam sama, ale nie odwołałyśmy żadnych zajęć.'}],
+   przedluzenia:[],
+   wyplaty:[{data:'2026-02-20', typ:'przelew', kwota:8000, kto:'Zarząd Kościoła, skarbnik',
+             tytul:'ZK-2026-010 dofinansowanie, całość', uw:'Przelew na konto zboru Szczecin.'}],
+   kor:[]},
+
+  {id:'ZK-2026-011', zrodlo:'Pastor', imie:'pastor Piotr Kaczmarek', email:'p.kaczmarek@adwent.pl', tel:'605 313 414',
+   zbor:'Katowice', pastorEmail:'p.kaczmarek@adwent.pl', diecezja:'Południowa',
+   tytul:'Cykl spotkań o zdrowiu dla mieszkańców', rodzaj:'Ewangelizacja',
+   cel:'Otwarcie zboru na sąsiedztwo przez tematykę zdrowia i profilaktyki.',
+   plan:'Osiem spotkań z dietetykiem i lekarzem, pomiary ciśnienia, warsztaty kulinarne.',
+   rezultaty:'60 uczestników spoza kościoła, z tego 15 kontynuujących kontakt.',
+   od:'2026-05-01', do:'2026-08-31', kwota:11000, wklad:2500,
+   budzet:'Honoraria prelegentów 4000 zł. Produkty na warsztaty 3500 zł. Druk zaproszeń 2000 zł. Sprzęt do pomiarów 1500 zł.',
+   zal:['program-spotkan.pdf'], zgoda:true, data:'2026-03-12',
+   dec:{pastor:{d:'Zatwierdzam',kto:'pastor Piotr Kaczmarek',data:'2026-03-12',uw:'Wniosek własny zboru.',kwota:null},
+        diecezja:{d:'Zatwierdzam',kto:'Diecezja Południowa',data:'2026-03-30',uw:'Format sprawdzony w innych zborach.',kwota:11000},
+        zarzad:{d:'Zatwierdzam',kto:'Zarząd Kościoła',data:'2026-04-15',uw:'Przyznano 9 000 zł.',kwota:9000}},
+   status:'zarzad', dataStatusu:'2026-04-15',
+   raporty:[
+     {data:'2026-06-05', okres:'2026-05', typ:'okresowy', kto:'pastor Piotr Kaczmarek', wydano:2100,
+      tresc:'Dwa pierwsze spotkania za nami, po 40 osób, w tym połowa spoza kościoła. Zaproszenia rozniesione po trzech osiedlach. Koszty zgodnie z planem.'},
+     {data:'2026-07-06', okres:'2026-06', typ:'okresowy', kto:'pastor Piotr Kaczmarek', wydano:2650,
+      tresc:'Trzy spotkania, warsztaty kulinarne cieszą się największym powodzeniem. Musieliśmy dokupić sprzęt do pomiarów, bo jeden ciśnieniomierz się zepsuł.'}],
+   przedluzenia:[{data:'2026-08-03', kto:'pastor Piotr Kaczmarek', staryDo:'2026-08-31', nowyDo:'2026-11-30',
+                  powod:'Wakacje wyraźnie obniżyły frekwencję, dwa spotkania przełożyliśmy na wrzesień i październik. Prosimy o przesunięcie terminu zakończenia o trzy miesiące, budżet bez zmian.',
+                  status:'zlozony', decyzja:null}],
+   wyplaty:[{data:'2026-04-22', typ:'przelew', kwota:5000, kto:'Zarząd Kościoła, skarbnik',
+             tytul:'ZK-2026-011 pierwsza transza', uw:'Druga transza po raporcie za czerwiec.'}],
+   kor:[]},
+
+  {id:'ZK-2026-003', zrodlo:'Wyznawca', imie:'Marcin Wróbel', email:'m.wrobel@wp.pl', tel:'605 888 999',
+   zbor:'Kraków Wschód', pastorEmail:'a.lewandowski@adwent.pl', diecezja:'Południowa',
+   tytul:'Obóz rowerowy dla młodzieży', rodzaj:'Praca z młodzieżą',
+   cel:'Integracja młodzieży z trzech zborów Krakowa i zaproszenie kolegów spoza kościoła.',
+   plan:'Siedmiodniowy obóz rowerowy w Beskidach, 25 uczestników, wieczorne spotkania tematyczne.',
+   rezultaty:'25 uczestników, w tym 8 osób spoza kościoła.',
+   od:'2026-07-01', do:'2026-07-07', kwota:6200, wklad:2200,
+   budzet:'Noclegi 3500 zł. Wyżywienie 1800 zł. Transport bagażu 500 zł. Ubezpieczenie 400 zł.',
+   zal:[], zgoda:true, data:'2026-08-06',
+   dec:{pastor:null, diecezja:null, zarzad:null},
+   status:'zlozony', dataStatusu:'2026-08-06',
+   log:[{data:'2026-08-07', kto:'pastor Adam Lewandowski', rola:'pastor zboru', typ:'korekta',
+         powod:'Marcin wpisał złą datę zakończenia, obóz trwa siedem dni, nie osiem. Poprawione za jego zgodą.',
+         zm:[{pole:'Termin do', przed:'08.07.2026', po:'07.07.2026'}]}],
+   kor:[]},
+
+  {id:'ZK-2026-004', zrodlo:'Wyznawca', imie:'Ewa Sikora', email:'ewa.sikora@onet.pl', tel:'607 333 444',
+   zbor:'Wrocław Południe', pastorEmail:'t.mazur@adwent.pl', diecezja:'Zachodnia',
+   tytul:'Punkt pomocy dla rodzin w kryzysie', rodzaj:'Pomoc społeczna',
+   cel:'Uruchomienie stałego punktu wydawania żywności i odzieży przy zborze.',
+   plan:'Adaptacja pomieszczenia, zakup regałów i zamrażarki, dyżury wolontariuszy dwa razy w tygodniu.',
+   rezultaty:'Wsparcie dla około 30 rodzin miesięcznie.',
+   od:'2026-10-01', do:'2027-09-30', kwota:11500, wklad:1000,
+   budzet:'Zamrażarka 3000 zł. Regały 2500 zł. Adaptacja pomieszczenia 4000 zł. Zapas startowy 2000 zł.',
+   zal:['zdjecia-pomieszczenia.pdf'], zgoda:true, data:'2026-05-02',
+   dec:{pastor:{d:'Zatwierdzam',kto:'pastor Tomasz Mazur',data:'2026-05-08',uw:'Bardzo potrzebna inicjatywa, zbór deklaruje wolontariuszy. Popieram gorąco.',kwota:null},
+        diecezja:null, zarzad:null},
+   status:'pastor', dataStatusu:'2026-05-08', kor:[]},
+
+  {id:'ZK-2026-005', zrodlo:'Wyznawca', imie:'Robert Adamczyk', email:'r.adamczyk@interia.pl', tel:'609 777 111',
+   zbor:'Lublin', pastorEmail:'k.szymanski@adwent.pl', diecezja:'Wschodnia',
+   tytul:'Wydanie tomiku poezji religijnej', rodzaj:'Wydawnictwo i media',
+   cel:'Wydanie zbioru wierszy o tematyce duchowej autorstwa członka zboru.',
+   plan:'Skład, korekta i druk 500 egzemplarzy.',
+   rezultaty:'500 egzemplarzy do rozdania podczas ewangelizacji.',
+   od:'2026-09-01', do:'2026-11-30', kwota:9000, wklad:0,
+   budzet:'Druk 500 egz. 7000 zł. Skład i korekta 2000 zł.',
+   zal:[], zgoda:true, data:'2026-07-15',
+   dec:{pastor:{d:'Do poprawy',kto:'pastor Krzysztof Szymański',data:'2026-07-18',uw:'Proszę uzupełnić: kto odbierze nakład, gdzie będzie magazynowany i jaki jest plan dystrybucji. Brakuje też jakiegokolwiek wkładu własnego, poproszę o rozmowę z radą zboru.',kwota:null},
+        diecezja:null, zarzad:null},
+   status:'poprawa', dataStatusu:'2026-07-18',
+   kor:[{data:'2026-08-05', od:'Marek Micyk, Dyrektor Misji',
+         do:['r.adamczyk@interia.pl','k.szymanski@adwent.pl'],
+         temat:'[ZK-2026-005] Wydanie tomiku poezji religijnej',
+         tresc:'Dzień dobry,\n\nwidzę, że wniosek czeka na uzupełnienie od trzech tygodni. Sprawa nie jest zamknięta, wystarczy odpowiedzieć na uwagi pastora i wniosek ruszy dalej.\n\nJeśli trudność polega na wkładzie własnym, proszę o kontakt, poszukamy rozwiązania.\n\nZ pozdrowieniami\nMarek Micyk\nDyrektor Misji'}]},
+
+  {id:'ZK-2026-006', zrodlo:'Wyznawca', imie:'Katarzyna Dąbrowska', email:'k.dabrowska@gmail.com', tel:'604 222 333',
+   zbor:'Katowice', pastorEmail:'p.kaczmarek@adwent.pl', diecezja:'Południowa',
+   tytul:'Chór dziecięcy przy zborze', rodzaj:'Praca z młodzieżą',
+   cel:'Utworzenie chóru dla dzieci z zboru i z sąsiedztwa, jako naturalny sposób zapraszania rodzin.',
+   plan:'Cotygodniowe próby, zakup instrumentu i strojów, dwa koncerty otwarte w roku.',
+   rezultaty:'Chór 20 dzieci, z tego połowa z rodzin spoza kościoła. Dwa koncerty z udziałem rodziców.',
+   od:'2026-09-01', do:'2027-06-30', kwota:7800, wklad:2000,
+   budzet:'Pianino cyfrowe 4500 zł. Stroje 1800 zł. Nuty i materiały 900 zł. Wynajem sali na koncerty 600 zł.',
+   zal:[], zgoda:true, data:'2026-06-20',
+   dec:{pastor:null, diecezja:null, zarzad:null},
+   status:'zlozony', dataStatusu:'2026-06-20', kor:[]},
+
+  {id:'ZK-2026-012', zrodlo:'Wyznawca', imie:'Barbara Krawczyk', email:'b.krawczyk@gmail.com', tel:'603 717 828',
+   zbor:'Nowy Sącz', pastorEmail:'pastor.nowysacz@gmail.com', diecezja:'Południowa',
+   tytul:'Warsztaty rękodzieła dla seniorów', rodzaj:'Pomoc społeczna',
+   cel:'Cotygodniowe spotkania dla starszych osób z osiedla, przeciw samotności i wykluczeniu.',
+   plan:'Zajęcia raz w tygodniu w sali zborowej, materiały do szycia i haftu, kawa i rozmowa. Kiermasz przedświąteczny.',
+   rezultaty:'Grupa 18 osób, z tego 12 spoza kościoła. Kiermasz z dochodem na cele charytatywne.',
+   od:'2026-09-15', do:'2027-06-15', kwota:4300, wklad:700,
+   budzet:'Materiały do rękodzieła 2200 zł. Maszyna do szycia 1200 zł. Poczęstunek 900 zł.',
+   zal:[], zgoda:true, data:'2026-08-05',
+   dec:{pastor:null, diecezja:null, zarzad:null},
+   status:'sprawdz', dataStatusu:'2026-08-05', kor:[]},
+
+  {id:'ZK-2026-013', zrodlo:'Wyznawca', imie:'Tomasz Baran', email:'t.baran@gmail.com', tel:'607 505 606',
+   zbor:'Białystok', pastorEmail:'m.olszewski@adwent.pl', diecezja:'Wschodnia',
+   tytul:'Wakacyjny klub biblijny dla dzieci', rodzaj:'Praca z młodzieżą',
+   cel:'Tygodniowe półkolonie dla dzieci z osiedla, z zajęciami biblijnymi, sportem i plastyką.',
+   plan:'Pięć dni po sześć godzin, trzy grupy wiekowe, ośmioro wolontariuszy po szkoleniu.',
+   rezultaty:'50 dzieci, z tego 30 spoza kościoła. Kontynuacja w klubie sobotnim.',
+   od:'2027-07-05', do:'2027-07-11', kwota:5600, wklad:1200,
+   budzet:'Wyżywienie 2600 zł. Materiały plastyczne 1200 zł. Sprzęt sportowy 900 zł. Ubezpieczenie 900 zł.',
+   zal:['program-poldnia.pdf'], zgoda:true, data:'2026-07-28',
+   dec:{pastor:{d:'Zatwierdzam',kto:'pastor Marek Olszewski',data:'2026-08-02',
+                uw:'Tomasz prowadził już klub sobotni, ma zespół wolontariuszy. Popieram bez zastrzeżeń.',kwota:null},
+        diecezja:null, zarzad:null},
+   status:'pastor', dataStatusu:'2026-08-02', kor:[]},
+
+  {id:'ZK-2026-014', zrodlo:'Wyznawca', imie:'Renata Sobczak', email:'r.sobczak@op.pl', tel:'602 818 929',
+   zbor:'Częstochowa', pastorEmail:'d.pietrzak@adwent.pl', diecezja:'Południowa',
+   tytul:'Zakup namiotu ewangelizacyjnego', rodzaj:'Ewangelizacja',
+   cel:'Własny namiot na 150 osób do wykorzystania przez zbory całej diecezji.',
+   plan:'Zakup namiotu z podłogą i oświetleniem, przyczepa do transportu, kalendarz wypożyczeń prowadzony przez diecezję.',
+   rezultaty:'Cztery serie spotkań rocznie w różnych miastach, około 600 uczestników.',
+   od:'2026-10-01', do:'2027-09-30', kwota:18500, wklad:4000,
+   budzet:'Namiot 12 000 zł. Oświetlenie i nagłośnienie 3500 zł. Przyczepa transportowa 3000 zł.',
+   zal:['oferta-namiot.pdf','zdjecia-referencyjne.pdf'], zgoda:true, data:'2026-06-25',
+   dec:{pastor:{d:'Zatwierdzam',kto:'pastor Damian Pietrzak',data:'2026-07-08',
+                uw:'Namiot służyłby całej diecezji, nie tylko naszemu zborowi. Warto rozważyć współfinansowanie z diecezją.',kwota:null},
+        diecezja:null, zarzad:null},
+   status:'pastor', dataStatusu:'2026-07-08', kor:[]},
+
+  {id:'ZK-2026-015', zrodlo:'Wyznawca', imie:'Andrzej Nowicki', email:'a.nowicki@gmail.com', tel:'604 616 717',
+   zbor:'Olsztyn', pastorEmail:'w.sikorski@adwent.pl', diecezja:'Wschodnia',
+   tytul:'Kawiarnia sąsiedzka przy zborze', rodzaj:'Ewangelizacja',
+   cel:'Otwarcie parteru zboru jako zwykłej kawiarni, żeby sąsiedzi mieli powód wejść do środka.',
+   plan:'Adaptacja pomieszczenia, ekspres i wyposażenie, dyżury wolontariuszy w soboty wieczorem i w niedziele.',
+   rezultaty:'Około 40 gości tygodniowo, w tym stali bywalcy spoza kościoła.',
+   od:'2026-04-01', do:'2026-12-31', kwota:12000, wklad:3500,
+   budzet:'Ekspres i sprzęt 4500 zł. Meble 3500 zł. Adaptacja 2500 zł. Zapas towaru 1500 zł.',
+   zal:['kosztorys-kawiarnia.pdf','projekt-wnetrza.pdf'], zgoda:true, data:'2026-02-14',
+   dec:{pastor:{d:'Zatwierdzam',kto:'pastor Wojciech Sikorski',data:'2026-03-02',uw:'Zbór stoi przy ruchliwej ulicy, lokalizacja idealna.',kwota:null},
+        diecezja:{d:'Zatwierdzam',kto:'Piotr Zieliński',data:'2026-03-14',uw:'Ciekawy format, chcemy go obserwować i ewentualnie powtórzyć.',kwota:12000},
+        zarzad:{d:'Zatwierdzam',kto:'Zarząd Kościoła',data:'2026-03-25',uw:'Przyznano 10 000 zł. Prosimy o rzetelne raporty, format może trafić do innych zborów.',kwota:10000}},
+   status:'zarzad', dataStatusu:'2026-03-25',
+   wyplaty:[{data:'2026-04-03', typ:'przelew', kwota:10000, kto:'Zarząd Kościoła, skarbnik',
+             tytul:'ZK-2026-015 kawiarnia sąsiedzka', uw:'Całość jednym przelewem, zgodnie z prośbą zboru.'}],
+   raporty:[
+     {data:'2026-05-06', okres:'2026-04', typ:'okresowy', kto:'Andrzej Nowicki', wydano:6200,
+      tresc:'Kwiecień poszedł na remont i zakupy. Ekspres, meble i lada gotowe, otwarcie 25 kwietnia. Na pierwszy weekend przyszło 30 osób, w tym sporo sąsiadów, którzy nigdy u nas nie byli.'},
+     {data:'2026-06-04', okres:'2026-05', typ:'okresowy', kto:'Andrzej Nowicki', wydano:900,
+      tresc:'Pierwszy pełny miesiąc. Średnio 35 gości tygodniowo. Wydatki już tylko na towar. Zawiązała się grupa czterech stałych bywalców, którzy przychodzą co sobotę i zostają na rozmowy.'},
+     {data:'2026-07-07', okres:'2026-06', typ:'okresowy', kto:'Andrzej Nowicki', wydano:850,
+      tresc:'Czerwiec spokojniejszy, część osób wyjechała. Dwa razy zrobiliśmy wieczór z muzyką na żywo, wtedy komplet. Jedna z sąsiadek zapytała o studium biblijne.'},
+     {data:'2026-08-05', okres:'2026-07', typ:'okresowy', kto:'Andrzej Nowicki', wydano:950,
+      tresc:'Lipiec wakacyjny, ale kawiarnia działała bez przerwy. Wolontariusze dobrze się zgrali, mamy grafik na wrzesień. Zaczęliśmy sprzedawać ciasta od pań ze zboru, dochód idzie na towar.'}],
+   przedluzenia:[], kor:[]},
+
+  {id:'ZK-2026-016', zrodlo:'Wyznawca', imie:'Jacek Rutkowski', email:'j.rutkowski@wp.pl', tel:'609 212 323',
+   zbor:'Radom', pastorEmail:'z.kowalczyk@adwent.pl', diecezja:'Wschodnia',
+   tytul:'Wyjazd delegacji zboru na kongres do Hiszpanii', rodzaj:'Szkolenie i konferencja',
+   cel:'Udział ośmiu osób z zboru w europejskim kongresie młodzieżowym.',
+   plan:'Przelot, zakwaterowanie i opłata kongresowa dla ośmiu uczestników.',
+   rezultaty:'Ośmioro przeszkolonych liderów młodzieżowych.',
+   od:'2026-08-20', do:'2026-08-27', kwota:22000, wklad:0,
+   budzet:'Przeloty 11 200 zł. Zakwaterowanie 6400 zł. Opłata kongresowa 4400 zł.',
+   zal:[], zgoda:true, data:'2026-06-30',
+   dec:{pastor:{d:'Zatwierdzam',kto:'pastor Zbigniew Kowalczyk',data:'2026-07-03',uw:'Młodzież bardzo zaangażowana, przekazuję dalej.',kwota:null},
+        diecezja:{d:'Odrzucam',kto:'Piotr Zieliński',data:'2026-07-21',
+                  uw:'Fundusz projektowy nie finansuje wyjazdów zagranicznych dla delegacji. Zero wkładu własnego przy kwocie 22 000 zł również nie do przyjęcia. Sugerujemy zbiórkę w zborze i wniosek na projekt, który zostanie w Polsce.',kwota:null},
+        zarzad:null},
+   status:'odrzucony', dataStatusu:'2026-07-21', kor:[]},
+
+  {id:'ZK-2026-017', zrodlo:'Diecezja', imie:'Diecezja Zachodnia', email:'diecezja.zachodnia@adwent.pl', tel:'',
+   zbor:'Diecezja Zachodnia', pastorEmail:'diecezja.zachodnia@adwent.pl', diecezja:'Zachodnia',
+   tytul:'Kampania medialna w regionie', rodzaj:'Wydawnictwo i media',
+   cel:'Dotarcie z zaproszeniem na spotkania biblijne do mieszkańców trzech województw.',
+   plan:'Spoty w radiu regionalnym, kampania w mediach społecznościowych, strona z zapisami, koordynacja z pięcioma zborami.',
+   rezultaty:'Około 400 zapisów, z tego 120 osób na spotkaniach stacjonarnych.',
+   od:'2026-10-01', do:'2027-03-31', kwota:45000, wklad:12000,
+   budzet:'Produkcja spotów 12 000 zł. Emisja radiowa 18 000 zł. Kampania internetowa 11 000 zł. Strona i obsługa zapisów 4000 zł.',
+   zal:['plan-kampanii.pdf','wycena-agencji.pdf'], zgoda:true, data:'2026-07-30',
+   dec:{pastor:{d:'Zatwierdzam',kto:'pominięte, wniosek diecezji',data:'2026-07-30',uw:'',kwota:null},
+        diecezja:{d:'Zatwierdzam',kto:'Diecezja Zachodnia',data:'2026-07-30',
+                  uw:'Wniosek własny diecezji. Pięć zborów zadeklarowało obsługę spotkań, wkład własny z rezerwy diecezji.',kwota:45000},
+        zarzad:null},
+   status:'diecezja', dataStatusu:'2026-07-30', kor:[]},
+
+  {id:'ZK-2026-007', zrodlo:'Wyznawca', imie:'Grzegorz Pawlak', email:'g.pawlak@gmail.com', tel:'606 555 121',
+   zbor:'Poznań', pastorEmail:'m.wisniewski@adwent.pl', diecezja:'Zachodnia',
+   tytul:'Weekend ewangelizacyjny w Poznaniu', rodzaj:'Ewangelizacja',
+   cel:'Trzydniowe spotkania otwarte z wykładami o zdrowiu i nadziei, z zaproszeniem mieszkańców osiedla.',
+   plan:'Wynajem sali w domu kultury, druk zaproszeń, prelegent z diecezji, muzyka na żywo.',
+   rezultaty:'Około 70 uczestników, z tego 20 spoza kościoła.',
+   od:'2026-03-06', do:'2026-03-08', kwota:5000, wklad:1500,
+   budzet:'Wynajem sali 1800 zł. Druk zaproszeń 1200 zł. Zwrot kosztów prelegenta 1000 zł. Poczęstunek 1000 zł.',
+   zal:['kosztorys-weekend.pdf','rozliczenie-weekend.pdf'], zgoda:true, data:'2026-01-12',
+   dec:{pastor:{d:'Zatwierdzam',kto:'pastor Michał Wiśniewski',data:'2026-01-15',uw:'Zbór gotowy do obsługi wydarzenia.',kwota:null},
+        diecezja:{d:'Zatwierdzam',kto:'Diecezja Zachodnia',data:'2026-01-22',uw:'Wspieramy, termin poza sezonem obozowym.',kwota:5000},
+        zarzad:{d:'Zatwierdzam',kto:'Zarząd Kościoła',data:'2026-02-02',uw:'Przyznano 4 500 zł.',kwota:4500},
+        zamkniecie:{d:'Zakończony',kto:'Marek Micyk, Dyrektor Misji',data:'2026-04-20',
+                    uw:'Rozliczenie przyjęte. Frekwencja 82 osoby, 24 spoza kościoła. Zwrócono 300 zł niewykorzystanej dotacji.',kwota:null}},
+   status:'zakonczony', dataStatusu:'2026-04-20', arch:false,
+   wyplaty:[{data:'2026-02-06', typ:'przelew', kwota:4500, kto:'Zarząd Kościoła, skarbnik',
+             tytul:'ZK-2026-007 dofinansowanie', uw:''},
+            {data:'2026-04-24', typ:'zwrot', kwota:300, kto:'Zarząd Kościoła, skarbnik',
+             tytul:'Zwrot niewykorzystanej dotacji', uw:'Zbór oddał różnicę po rozliczeniu weekendu.'}],
+   kor:[]},
+
+  {id:'ZK-2026-008', zrodlo:'Wyznawca', imie:'Damian Wolski', email:'d.wolski@o2.pl', tel:'608 121 434',
+   zbor:'Gdańsk', pastorEmail:'r.borowski@adwent.pl', diecezja:'Zachodnia',
+   tytul:'Zakup samochodu dla wolontariuszy', rodzaj:'Inne',
+   cel:'Zakup używanego samochodu do przewożenia darów i osób starszych na nabożeństwa.',
+   plan:'Zakup auta z rynku wtórnego, ubezpieczenie na rok, przegląd.',
+   rezultaty:'Stały transport dla kilku osób starszych.',
+   od:'2026-04-01', do:'2026-04-30', kwota:38000, wklad:0,
+   budzet:'Samochód 34 000 zł. Ubezpieczenie 2500 zł. Przegląd i naprawy 1500 zł.',
+   zal:[], zgoda:true, data:'2026-03-02',
+   dec:{pastor:{d:'Zatwierdzam',kto:'pastor Rafał Borowski',data:'2026-03-05',uw:'Potrzeba realna, choć kwota wysoka.',kwota:null},
+        diecezja:{d:'Zatwierdzam',kto:'Diecezja Zachodnia',data:'2026-03-18',uw:'Popieramy co do celu, kwota do rozważenia przez Zarząd.',kwota:30000},
+        zarzad:{d:'Odrzucam',kto:'Zarząd Kościoła',data:'2026-04-06',
+                uw:'Zakup środka trwałego tej wielkości nie mieści się w funduszu projektowym. Proponujemy wniosek o refundację kosztów przejazdów albo leasing na poziomie diecezji.',kwota:null}},
+   status:'odrzucony', dataStatusu:'2026-04-06', arch:true, dataArch:'2026-05-11', ktoArch:'Marek Micyk, Dyrektor Misji', kor:[]},
+
+  {id:'ZK-2025-014', zrodlo:'Pastor', imie:'pastor Krzysztof Szymański', email:'k.szymanski@adwent.pl', tel:'603 909 808',
+   zbor:'Lublin', pastorEmail:'k.szymanski@adwent.pl', diecezja:'Wschodnia',
+   tytul:'Kurs Alfa dla dorosłych', rodzaj:'Szkolenie i konferencja',
+   cel:'Cykl spotkań dla osób szukających, prowadzony przez przeszkolony zespół zboru.',
+   plan:'Dziesięć spotkań z kolacją i rozmową w małych grupach.',
+   rezultaty:'30 uczestników, 12 osób spoza kościoła.',
+   od:'2026-01-10', do:'2026-03-21', kwota:4200, wklad:1400,
+   budzet:'Materiały 1200 zł. Kolacje 2400 zł. Szkolenie prowadzących 600 zł.',
+   zal:['rozliczenie-alfa.pdf'], zgoda:true, data:'2025-11-18',
+   dec:{pastor:{d:'Zatwierdzam',kto:'pastor Krzysztof Szymański',data:'2025-11-18',uw:'Wniosek własny zboru.',kwota:null},
+        diecezja:{d:'Zatwierdzam',kto:'Piotr Zieliński',data:'2025-11-26',uw:'Sprawdzony format, popieramy.',kwota:4200},
+        zarzad:{d:'Zatwierdzam',kto:'Zarząd Kościoła',data:'2025-12-08',uw:'Przyznano w całości.',kwota:4200},
+        zamkniecie:{d:'Zakończony',kto:'Marek Micyk, Dyrektor Misji',data:'2026-04-14',
+                    uw:'Rozliczone w terminie. Kurs powtórzony jesienią ze środków własnych zboru.',kwota:null}},
+   status:'zakonczony', dataStatusu:'2026-04-14', arch:true, dataArch:'2026-05-11', ktoArch:'Marek Micyk, Dyrektor Misji',
+   wyplaty:[{data:'2025-12-18', typ:'przelew', kwota:4200, kto:'Zarząd Kościoła, skarbnik',
+             tytul:'ZK-2025-014 kurs Alfa', uw:''}], kor:[]},
+
+  {id:'ZK-2025-008', zrodlo:'Wyznawca', imie:'Halina Zawadzka', email:'h.zawadzka@gmail.com', tel:'602 404 505',
+   zbor:'Bielsko-Biała', pastorEmail:'j.kubica@adwent.pl', diecezja:'Południowa',
+   tytul:'Remont dachu kaplicy', rodzaj:'Remont i wyposażenie',
+   cel:'Usunięcie przecieków zagrażających konstrukcji budynku kaplicy.',
+   plan:'Wymiana pokrycia dachowego i obróbek blacharskich przez firmę dekarską.',
+   rezultaty:'Szczelny dach, koniec zalewania sali.',
+   od:'2025-06-01', do:'2025-08-31', kwota:26000, wklad:9000,
+   budzet:'Materiał 14 000 zł. Robocizna 10 000 zł. Rusztowanie 2000 zł.',
+   zal:['kosztorys-dach.pdf','rozliczenie-dach.pdf'], zgoda:true, data:'2025-03-04',
+   dec:{pastor:{d:'Zatwierdzam',kto:'pastor Jerzy Kubica',data:'2025-03-07',uw:'Sprawa pilna, dach przecieka od zimy.',kwota:null},
+        diecezja:{d:'Zatwierdzam',kto:'Diecezja Południowa',data:'2025-03-19',uw:'Popieramy, zbór zebrał znaczny wkład własny.',kwota:26000},
+        zarzad:{d:'Zatwierdzam',kto:'Zarząd Kościoła',data:'2025-04-08',uw:'Przyznano 20 000 zł.',kwota:20000},
+        zamkniecie:{d:'Zakończony',kto:'Marek Micyk, Dyrektor Misji',data:'2025-10-06',
+                    uw:'Prace odebrane, rozliczenie kompletne.',kwota:null}},
+   status:'zakonczony', dataStatusu:'2025-10-06', arch:true, dataArch:'2025-11-04', ktoArch:'Marek Micyk, Dyrektor Misji',
+   wyplaty:[{data:'2025-04-15', typ:'przelew', kwota:20000, kto:'Zarząd Kościoła, skarbnik',
+             tytul:'ZK-2025-008 remont dachu', uw:''}], kor:[]},
+
+  {id:'ZK-2025-021', zrodlo:'Diecezja', imie:'Diecezja Zachodnia', email:'diecezja.zachodnia@adwent.pl', tel:'',
+   zbor:'Diecezja Zachodnia', pastorEmail:'diecezja.zachodnia@adwent.pl', diecezja:'Zachodnia',
+   tytul:'Szkolenie skarbników zborowych', rodzaj:'Szkolenie i konferencja',
+   cel:'Ujednolicenie sprawozdawczości finansowej w zborach diecezji.',
+   plan:'Dwudniowe szkolenie dla 40 osób, materiały i wykładowca z Zarządu.',
+   rezultaty:'40 przeszkolonych skarbników, wspólny wzór sprawozdania.',
+   od:'2025-09-20', do:'2025-09-21', kwota:12000, wklad:3000,
+   budzet:'Noclegi i wyżywienie 8000 zł. Materiały 2000 zł. Sala 2000 zł.',
+   zal:['rozliczenie-szkolenie.pdf'], zgoda:true, data:'2025-06-11',
+   dec:{pastor:{d:'Zatwierdzam',kto:'pominięte, wniosek diecezji',data:'2025-06-11',uw:'',kwota:null},
+        diecezja:{d:'Zatwierdzam',kto:'Diecezja Zachodnia',data:'2025-06-11',uw:'Wniosek własny diecezji.',kwota:12000},
+        zarzad:{d:'Zatwierdzam',kto:'Zarząd Kościoła',data:'2025-07-02',uw:'Przyznano w całości, temat priorytetowy.',kwota:12000},
+        zamkniecie:{d:'Zakończony',kto:'Marek Micyk, Dyrektor Misji',data:'2025-11-14',
+                    uw:'Frekwencja 38 osób. Wzór sprawozdania wdrożony od stycznia.',kwota:null}},
+   status:'zakonczony', dataStatusu:'2025-11-14', arch:true, dataArch:'2025-12-02', ktoArch:'Marek Micyk, Dyrektor Misji',
+   wyplaty:[{data:'2025-07-10', typ:'przelew', kwota:12000, kto:'Zarząd Kościoła, skarbnik',
+             tytul:'ZK-2025-021 szkolenie skarbników', uw:''}], kor:[]}
+];
+
+/* ============ STAN ============ */
+let CUR = 'zarzad';
+let VIEW = 'pulpit';
+let SEL = null;
+let SKL_ID = null;      /* sprawa oglądana oczami składającego */
+let POWROT = null;      /* dokąd wrócić po podglądzie */
+let FILTR = {status:'', diecezja:'', szukaj:'', grupa:'', zarch:false};
+const PUSTY_FILTR = () => ({status:'', diecezja:'', szukaj:'', grupa:'', zarch:false});
+
+function u(){ return USERS.find(x=>x.id===CUR); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function zl(n){ return (n==null||n==='')?'brak':Number(n).toLocaleString('pl-PL')+' zł'; }
+function dt(s){ return s?s.split('-').reverse().join('.'):'brak'; }
+
+/* ile dni wniosek czeka na obecnym etapie */
+function dni(a){
+  const d1 = new Date(a.dataStatusu||a.data), d2 = new Date(DZIS);
+  return Math.max(0, Math.round((d2-d1)/86400000));
+}
+function wObiegu(a){ return ['zlozony','pastor','diecezja','sprawdz'].includes(a.status); }
+/* progi oczekiwania: pomarańczowy po 30 dniach, czerwony po 60 */
+const PROG_UWAGA = 30, PROG_ZALEG = 60;
+/* 0 = w normie, 1 = warto przypilnować, 2 = zaległe */
+function pilnosc(a){
+  if(!wObiegu(a)) return 0;
+  const d = dni(a);
+  return d>=PROG_ZALEG ? 2 : (d>=PROG_UWAGA ? 1 : 0);
+}
+function dniTxt(a){
+  if(!wObiegu(a)) return '<span style="color:var(--muted)">nie czeka</span>';
+  const d = dni(a), p = pilnosc(a);
+  const kol = p===2?'var(--red)':(p===1?'var(--warn)':'var(--muted)');
+  const wag = p?'700':'400';
+  return '<span style="color:'+kol+';font-weight:'+wag+'">'+d+' dni</span>';
+}
+
+/* kto ma teraz wykonać ruch w sprawie */
+function dzialanie(a){
+  if(a.status==='zlozony')   return 'Pastor ('+a.pastorEmail+')';
+  if(a.status==='pastor')    return 'Diecezja '+a.diecezja;
+  if(a.status==='diecezja')  return 'Zarząd Kościoła';
+  if(a.status==='poprawa')   return 'Składający';
+  if(a.status==='sprawdz')   return 'Zarząd Kościoła, weryfikacja adresu';
+  if(a.status==='zarzad'){
+    const s = stanRaportu(a);
+    if(s && s.k==='spozniony')      return 'Składający, zaległy raport końcowy';
+    if(s && s.k==='oczekiwany')     return 'Składający, raport końcowy';
+    if(s && s.k==='brakOkresowych') return 'Składający, zaległy raport miesięczny';
+    if(s && s.k==='komplet')        return 'Zarząd, zamknięcie sprawy';
+    return 'Składający, realizacja i raporty miesięczne';
+  }
+  if(a.status==='zakonczony')return 'nic, sprawa zamknięta';
+  if(a.status==='odrzucony') return 'nic, sprawa zamknięta';
+  return 'brak';
+}
+
+/* ============ RAPORTOWANIE ============ */
+/* raport końcowy oczekiwany miesiąc po zakończeniu projektu */
+const RAPORT_PO = 1;          /* miesiące */
+const RAPORT_DZIEN = 10;      /* do którego dnia miesiąca ma wpłynąć raport za miesiąc poprzedni */
+
+function dodajMiesiac(iso, n){
+  if(!iso) return '';
+  const [r,m,d] = iso.split('-').map(Number);
+  const cel = new Date(Date.UTC(r, m-1+n, 1));
+  const ostatni = new Date(Date.UTC(cel.getUTCFullYear(), cel.getUTCMonth()+1, 0)).getUTCDate();
+  cel.setUTCDate(Math.min(d, ostatni));
+  return cel.toISOString().slice(0,10);
+}
+function dniMiedzy(od, doo){ return Math.round((new Date(doo)-new Date(od))/86400000); }
+const MIES = ['styczeń','luty','marzec','kwiecień','maj','czerwiec','lipiec','sierpień',
+              'wrzesień','październik','listopad','grudzień'];
+function miesiacTxt(okres){
+  const [r,m] = okres.split('-').map(Number);
+  return MIES[m-1]+' '+r;
+}
+/* lista miesięcy od pierwszego do ostatniego włącznie, w formacie RRRR-MM */
+function miesiace(od, doo){
+  const out = [];
+  let [r,m] = od.split('-').map(Number);
+  const [r2,m2] = doo.split('-').map(Number);
+  let bezpiecznik = 0;
+  while((r<r2 || (r===r2 && m<=m2)) && bezpiecznik++ < 120){
+    out.push(r+'-'+String(m).padStart(2,'0'));
+    m++; if(m>12){ m=1; r++; }
+  }
+  return out;
+}
+
+/* raportowanie startuje z chwilą, gdy są i środki, i rozpoczęty projekt */
+function startRealizacji(a){
+  const dz = (a.dec.zarzad && a.dec.zarzad.data) || '';
+  const od = a.od || '';
+  if(dz && od) return dz > od ? dz : od;
+  return dz || od || a.data;
+}
+/* termin raportu końcowego: data zakończenia projektu plus miesiąc */
+function terminRaportu(a){ return a.do ? dodajMiesiac(a.do, RAPORT_PO) : ''; }
+/* czy wniosek jest na etapie realizacji i raportowania */
+function wRealizacji(a){ return a.status==='zarzad'; }
+
+/* okresy miesięczne, za które raport już powinien wpłynąć */
+function okresyNalezne(a){
+  const start = startRealizacji(a);
+  if(!start || !a.do) return [];
+  const koniec = a.do < DZIS ? a.do : DZIS;
+  return miesiace(start.slice(0,7), koniec.slice(0,7))
+    .filter(o => DZIS >= terminOkresu(o));
+}
+/* raport za dany miesiąc ma wpłynąć do RAPORT_DZIEN następnego miesiąca */
+function terminOkresu(okres){
+  const [r,m] = okres.split('-').map(Number);
+  const n = new Date(Date.UTC(r, m, RAPORT_DZIEN));
+  return n.toISOString().slice(0,10);
+}
+function maRaport(a, okres){ return (a.raporty||[]).some(x=>x.okres===okres); }
+function raportKoncowy(a){ return (a.raporty||[]).find(x=>x.typ==='koncowy') || null; }
+function zalegleOkresy(a){ return okresyNalezne(a).filter(o=>!maRaport(a,o)); }
+function wydanoWgRaportow(a){ return (a.raporty||[]).reduce((s,r)=>s+(Number(r.wydano)||0),0); }
+function przyznano(a){ return (a.dec.zarzad && a.dec.zarzad.kwota) || 0; }
+function przedluzenieOczekuje(a){ return (a.przedluzenia||[]).find(p=>p.status==='zlozony') || null; }
+
+/* stan raportowania: 0 w normie, 1 do przypilnowania, 2 zaległe */
+function stanRaportu(a){
+  if(!wRealizacji(a)) return null;
+  if(!a.do) return {k:'brakDaty', t:'Brak daty zakończenia, nie da się wyznaczyć terminu raportu', p:2};
+  const term = terminRaportu(a);
+  if(raportKoncowy(a))
+    return {k:'komplet', t:'Raport końcowy złożony '+dt(raportKoncowy(a).data)+', sprawa gotowa do zamknięcia', p:0};
+  if(DZIS > term)
+    return {k:'spozniony', t:'Raport końcowy spóźniony o '+dniMiedzy(term,DZIS)+' dni', p:2, dni:dniMiedzy(term,DZIS)};
+  if(DZIS > a.do)
+    return {k:'oczekiwany', t:'Projekt zakończony, raport końcowy do '+dt(term), p:1};
+  const brak = zalegleOkresy(a);
+  if(brak.length)
+    return {k:'brakOkresowych', t:'Brakuje raportów miesięcznych: '+brak.map(miesiacTxt).join(', '), p:1, brak:brak};
+  return {k:'ok', t:'Realizacja w toku, raporty miesięczne na bieżąco', p:0};
+}
+function pilnoscRaportu(a){ const s = stanRaportu(a); return s? s.p : 0; }
+
+/* ============ WYPŁATY ŚRODKÓW ============ */
+/* przelewy do beneficjenta i ewentualne zwroty niewykorzystanej dotacji */
+function wyplaty(a){ return a.wyplaty || []; }
+function sumaWyplat(a){
+  return wyplaty(a).reduce((s,w)=> s + (w.typ==='zwrot' ? -Number(w.kwota||0) : Number(w.kwota||0)), 0);
+}
+function doWyplaty(a){ return Math.max(0, przyznano(a) - sumaWyplat(a)); }
+/* czy wniosek w ogóle czeka na pieniądze */
+function poPrzyznaniu(a){ return przyznano(a) > 0 && ['zarzad','zakonczony'].includes(a.status); }
+function czekaNaPrzelew(a){ return poPrzyznaniu(a) && doWyplaty(a) > 0; }
+
+function stanWyplaty(a){
+  const pz = przyznano(a);
+  if(!pz) return null;
+  const w = sumaWyplat(a);
+  if(w <= 0)  return {k:'brak',   t:'Środki jeszcze nieprzelane, do wypłaty '+zl(pz), p:1};
+  if(w < pz)  return {k:'czesc',  t:'Wypłacono '+zl(w)+' z '+zl(pz)+', do przelania zostaje '+zl(pz-w), p:1};
+  return {k:'calosc', t:'Wypłacone w całości: '+zl(w)
+    + (wyplaty(a).some(x=>x.typ==='zwrot') ? ', po uwzględnieniu zwrotu' : ''), p:0};
+}
+/* przelewy zapisuje Zarząd, w praktyce skarbnik */
+function mogeWyplacac(a){ return u().rola==='zarzad' && !a.arch && poPrzyznaniu(a); }
+
+/* wnioski poza archiwum, czyli bieżąca praca */
+function czynne(){ return APPS.filter(a=>!a.arch); }
+function wRealizacjiLista(){ return widoczne(false).filter(wRealizacji); }
+
+/* co widzi zalogowany; zArch=true zwraca wyłącznie archiwum */
+function widoczne(zArch){
+  const me = u();
+  let arr;
+  if(me.rola==='zarzad')        arr = APPS;
+  else if(me.rola==='diecezja') arr = APPS.filter(a=>a.diecezja===me.diecezja);
+  else if(me.rola==='pastor')   arr = APPS.filter(a=>a.pastorEmail===me.email);
+  else return [];
+  return arr.filter(a=> zArch ? !!a.arch : !a.arch);
+}
+/* co czeka na moją decyzję */
+function doDecyzji(){
+  const me = u();
+  const arr = czynne();
+  if(me.rola==='pastor')   return arr.filter(a=>a.status==='zlozony' && a.pastorEmail===me.email);
+  if(me.rola==='diecezja') return arr.filter(a=>a.status==='pastor'  && a.diecezja===me.diecezja);
+  if(me.rola==='zarzad')   return arr.filter(a=>a.status==='diecezja'|| a.status==='sprawdz');
+  return [];
+}
+/* sprawy zamknięte, których jeszcze nie przeniesiono do archiwum */
+function doArchiwum(){ return widoczne(false).filter(a=>ZAMKNIETE.includes(a.status)); }
+
+/* ============ RENDER: powłoka ============ */
+function setUser(id){
+  CUR = id;
+  const me = u();
+  if(me.rola==='skladajacy'){
+    const moje = APPS.filter(a=>a.email===me.email);
+    SKL_ID = moje.length? moje[0].id : null;
+    VIEW = 'mojasprawa';
+  } else {
+    VIEW = me.rola==='wyznawca' ? 'formularz' : (me.rola==='zarzad' ? 'pulpit' : 'decyzje');
+  }
+  SEL = null;
+  render();
+}
+
+/* podgląd sprawy oczami składającego, tak jak widzi ją z linku w mailu */
+function podgladSkladajacego(id){
+  POWROT = {user:CUR, view:VIEW, sel:SEL};
+  SKL_ID = id;
+  CUR = 'skladajacy';
+  VIEW = 'mojasprawa';
+  SEL = null;
+  document.getElementById('userSel').value = 'skladajacy';
+  render();
+  window.scrollTo(0,0);
+}
+function wrocZPodgladu(){
+  if(!POWROT){ setUser('zarzad'); return; }
+  CUR = POWROT.user; VIEW = POWROT.view; SEL = POWROT.sel; POWROT = null;
+  document.getElementById('userSel').value = CUR;
+  render();
+}
+
+function render(){ renderNav(); renderView(); }
+
+function renderNav(){
+  const me = u(), nav = document.getElementById('nav'), main = document.getElementById('view');
+  if(me.rola==='wyznawca' || me.rola==='skladajacy'){ nav.classList.add('hidden'); main.classList.add('pub'); }
+  else { nav.classList.remove('hidden'); main.classList.remove('pub'); }
+  if(me.rola==='skladajacy'){ nav.innerHTML = ''; return; }
+
+  const czeka = doDecyzji().length;
+  const rap = wRealizacjiLista().filter(a=>pilnoscRaportu(a)===2).length;
+  let items = [];
+  if(me.rola==='pastor'){
+    items = [['grp','Moja praca'],
+             ['decyzje','&#9993;','Do zatwierdzenia',czeka],
+             ['moje','&#128193;','Wnioski z mojego zboru'],
+             ['raporty','&#128203;','Raporty z realizacji',rap],
+             ['archiwum','&#128230;','Archiwum'],
+             ['formularz','&#10133;','Złóż własny wniosek']];
+  } else if(me.rola==='diecezja'){
+    items = [['grp','Diecezja '+me.diecezja],
+             ['decyzje','&#9993;','Do zatwierdzenia',czeka],
+             ['moje','&#128193;','Wnioski mojej diecezji'],
+             ['raporty','&#128203;','Raporty z realizacji',rap],
+             ['archiwum','&#128230;','Archiwum'],
+             ['formularz','&#10133;','Złóż wniosek diecezji']];
+  } else {
+    items = [['grp','Zarząd Kościoła'],
+             ['pulpit','&#128200;','Pulpit'],
+             ['decyzje','&#9993;','Do zatwierdzenia',czeka],
+             ['moje','&#128193;','Wszystkie wnioski'],
+             ['tablica','&#128203;','Tablica etapów'],
+             ['raporty','&#128221;','Raporty z realizacji',rap],
+             ['zestawienie','&#128176;','Zestawienie kwot'],
+             ['archiwum','&#128230;','Archiwum'],
+             ['grp','Ustawienia'],
+             ['formularz','&#10133;','Złóż wniosek Zarządu']];
+  }
+
+  nav.innerHTML = items.map(it=>{
+    if(it[0]==='grp') return '<div class="grp">'+esc(it[1])+'</div>';
+    const act = VIEW===it[0] ? ' active' : '';
+    const cnt = it[3] ? '<span class="cnt">'+it[3]+'</span>' : '';
+    return '<a class="'+act.trim()+'" onclick="go(\''+it[0]+'\')"><span class="ic">'+it[1]+'</span>'+esc(it[2])+cnt+'</a>';
+  }).join('') + '<div class="who"><b>'+esc(me.n)+'</b><br>'+esc(me.o)+'</div>';
+}
+
+function go(v){ if(v!==VIEW) FILTR=PUSTY_FILTR(); VIEW=v; SEL=null; render(); }
+
+function renderView(){
+  const me = u(), el = document.getElementById('view');
+  if(me.rola==='skladajacy'){ el.innerHTML = widokSkladajacego(); return; }
+  if(SEL){ el.innerHTML = szczegoly(SEL); return; }
+  if(me.rola==='wyznawca'){ el.innerHTML = formularzPubliczny(); return; }
+  if(VIEW==='formularz')  { el.innerHTML = formularzWewnetrzny(); return; }
+  if(VIEW==='decyzje')    { el.innerHTML = listaDecyzji(); return; }
+  if(VIEW==='moje')       { el.innerHTML = listaWnioskow(); return; }
+  if(VIEW==='tablica')    { el.innerHTML = tablica(); return; }
+  if(VIEW==='zestawienie'){ el.innerHTML = zestawienie(); return; }
+  if(VIEW==='archiwum')   { el.innerHTML = listaArchiwum(); return; }
+  if(VIEW==='raporty')    { el.innerHTML = listaRaportow(); return; }
+  el.innerHTML = pulpit();
+}
+
+/* ============ WIDOK: formularz publiczny (wyznawca) ============ */
+function formularzPubliczny(){
+  return `
+  <div class="pubtop">
+    <h1>Wniosek o dofinansowanie projektu</h1>
+    <p>Formularz dla członków zborów. Nie trzeba się logować.
+    Wniosek trafia najpierw do <b>pastora twojego zboru</b>. Bez jego zatwierdzenia nie jest
+    procedowany dalej. Po wysłaniu dostaniesz e-mail z numerem sprawy i będziesz dostawać
+    powiadomienie przy każdej zmianie etapu.</p>
+  </div>
+
+  <div class="note info">
+    <b>Tak widzi to osoba spoza organizacji.</b> Brak paska bocznego, brak logowania, brak dostępu
+    do cudzych wniosków. To po prostu formularz w internecie, rozsyłany linkiem albo kodem QR.
+  </div>
+
+  <div class="card">
+    <h3>Kto składa wniosek</h3>
+    <div class="row">
+      <div class="col"><div class="field"><label class="f">Imię i nazwisko <span class="req">*</span></label>
+        <input type="text" id="f_imie" placeholder="np. Anna Kowalska"></div></div>
+      <div class="col"><div class="field"><label class="f">Twój e-mail <span class="req">*</span></label>
+        <input type="email" id="f_email" placeholder="na ten adres przyjdzie potwierdzenie">
+        <div class="hint">Tu wyślemy numer wniosku i wszystkie powiadomienia.</div></div></div>
+    </div>
+    <div class="row">
+      <div class="col"><div class="field"><label class="f">Telefon</label>
+        <input type="text" id="f_tel"></div></div>
+      <div class="col"><div class="field"><label class="f">Nazwa zboru <span class="req">*</span></label>
+        <input type="text" id="f_zbor" placeholder="np. Warszawa Centrum"></div></div>
+    </div>
+    <div class="field"><label class="f">E-mail pastora twojego zboru <span class="req">*</span></label>
+      <input type="email" id="f_pastor" placeholder="imie.nazwisko@adwent.pl">
+      <div class="hint">Do niego trafi wniosek do zatwierdzenia. Jeśli nie znasz adresu, zapytaj w zborze.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Opis projektu</h3>
+    <div class="row">
+      <div class="col"><div class="field"><label class="f">Tytuł projektu <span class="req">*</span></label>
+        <input type="text" id="f_tytul"></div></div>
+      <div class="col"><div class="field"><label class="f">Rodzaj wniosku <span class="req">*</span></label>
+        <select id="f_rodzaj">${RODZAJE.map(r=>'<option>'+r+'</option>').join('')}</select></div></div>
+    </div>
+    <div class="field"><label class="f">Cel: po co to robimy <span class="req">*</span></label>
+      <textarea id="f_cel"></textarea></div>
+    <div class="field"><label class="f">Plan realizacji: jak to zrobimy <span class="req">*</span></label>
+      <textarea id="f_plan"></textarea></div>
+    <div class="field"><label class="f">Oczekiwane rezultaty: po czym poznamy, że się udało <span class="req">*</span></label>
+      <textarea id="f_rez"></textarea></div>
+    <div class="row">
+      <div class="col"><div class="field"><label class="f">Termin od <span class="req">*</span></label>
+        <input type="date" id="f_od"></div></div>
+      <div class="col"><div class="field"><label class="f">Termin do <span class="req">*</span></label>
+        <input type="date" id="f_do"></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Budżet</h3>
+    <div class="row">
+      <div class="col"><div class="field"><label class="f">Kwota wnioskowana w zł <span class="req">*</span></label>
+        <input type="number" id="f_kwota"></div></div>
+      <div class="col"><div class="field"><label class="f">Wkład własny zboru w zł</label>
+        <input type="number" id="f_wklad">
+        <div class="hint">Udział zboru bardzo pomaga przy ocenie wniosku.</div></div></div>
+    </div>
+    <div class="field"><label class="f">Pozycje kosztowe <span class="req">*</span></label>
+      <textarea id="f_budzet" placeholder="np. Wynajem sali 12 x 350 zł = 4200 zł&#10;Materiały drukowane 2000 zł"></textarea></div>
+
+    <div class="note">
+      <b>Załączniki dodaje pastor.</b> Formularz otwarty dla wszystkich nie przyjmuje plików, bo tak
+      działa Microsoft Forms. Kosztorys, zdjęcia czy skan uchwały zboru dołączy pastor przy
+      zatwierdzaniu. Przekaż mu je zwykłą drogą.
+    </div>
+
+    <div class="field" style="margin-top:14px">
+      <label style="font-size:13px;display:flex;gap:9px;align-items:flex-start">
+        <input type="checkbox" id="f_zgoda" style="width:auto;margin-top:3px">
+        <span>Zapoznałem się z informacją o przetwarzaniu danych osobowych przez Kościół
+        Adwentystów Dnia Siódmego w RP, ul. Foksal 8 w Warszawie, i wyrażam zgodę na przetwarzanie
+        moich danych w celu rozpatrzenia wniosku. <span class="req">*</span></span>
+      </label>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:6px">
+      <button class="btn" onclick="zloz('wyznawca')">Wyślij wniosek</button>
+      <button class="btn ghost" onclick="wypelnij()">Wypełnij przykładem</button>
+    </div>
+  </div>`;
+}
+
+/* ============ WIDOK: formularz wewnętrzny ============ */
+function formularzWewnetrzny(){
+  const me = u();
+  return `
+  <h1>Złóż wniosek</h1>
+  <p class="sub">Widok po zalogowaniu kontem adwent.pl. Różnica wobec formularza publicznego:
+  można dołączać pliki, a część danych podstawia się automatycznie.</p>
+
+  <div class="note ok">
+    Jesteś zalogowany jako <b>${esc(me.n)}</b>. ${me.rola==='pastor'
+      ? 'Twój wniosek pomija etap pastora i idzie od razu do diecezji.'
+      : me.rola==='diecezja'
+        ? 'Wniosek diecezji pomija etapy pastora i diecezji, idzie od razu do Zarządu.'
+        : 'Wniosek Zarządu jest rozpatrywany od razu, bez etapów pośrednich.'}
+  </div>
+
+  <div class="card">
+    <h3>Dane podstawowe</h3>
+    <div class="row">
+      <div class="col"><div class="field"><label class="f">Składający</label>
+        <input type="text" id="f_imie" value="${esc(me.n)}"></div></div>
+      <div class="col"><div class="field"><label class="f">E-mail</label>
+        <input type="email" id="f_email" value="${esc(me.email||'zarzad@adwent.pl')}"></div></div>
+    </div>
+    <div class="row">
+      <div class="col"><div class="field"><label class="f">Zbór lub jednostka</label>
+        <input type="text" id="f_zbor" value="${esc(me.zbor||('Diecezja '+(me.diecezja||'')) )}"></div></div>
+      <div class="col"><div class="field"><label class="f">Diecezja</label>
+        <select id="f_diec">${DIECEZJE.map(d=>'<option'+(d===me.diecezja?' selected':'')+'>'+d+'</option>').join('')}</select></div></div>
+    </div>
+    <input type="hidden" id="f_tel" value="">
+    <input type="hidden" id="f_pastor" value="${esc(me.email||'zarzad@adwent.pl')}">
+  </div>
+
+  <div class="card">
+    <h3>Opis projektu</h3>
+    <div class="row">
+      <div class="col"><div class="field"><label class="f">Tytuł projektu <span class="req">*</span></label>
+        <input type="text" id="f_tytul"></div></div>
+      <div class="col"><div class="field"><label class="f">Rodzaj wniosku <span class="req">*</span></label>
+        <select id="f_rodzaj">${RODZAJE.map(r=>'<option>'+r+'</option>').join('')}</select></div></div>
+    </div>
+    <div class="field"><label class="f">Cel <span class="req">*</span></label><textarea id="f_cel"></textarea></div>
+    <div class="field"><label class="f">Plan realizacji <span class="req">*</span></label><textarea id="f_plan"></textarea></div>
+    <div class="field"><label class="f">Oczekiwane rezultaty <span class="req">*</span></label><textarea id="f_rez"></textarea></div>
+    <div class="row">
+      <div class="col"><div class="field"><label class="f">Termin od <span class="req">*</span></label><input type="date" id="f_od"></div></div>
+      <div class="col"><div class="field"><label class="f">Termin do <span class="req">*</span></label><input type="date" id="f_do"></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Budżet i dokumenty</h3>
+    <div class="row">
+      <div class="col"><div class="field"><label class="f">Kwota wnioskowana w zł <span class="req">*</span></label><input type="number" id="f_kwota"></div></div>
+      <div class="col"><div class="field"><label class="f">Wkład własny w zł</label><input type="number" id="f_wklad"></div></div>
+    </div>
+    <div class="field"><label class="f">Pozycje kosztowe <span class="req">*</span></label><textarea id="f_budzet"></textarea></div>
+    <div class="field"><label class="f">Załączniki</label>
+      <div class="drop" onclick="toast('W makiecie nie dodajemy prawdziwych plików. W systemie to zwykłe przeciągnięcie pliku.')">
+        Przeciągnij pliki albo kliknij, żeby wybrać.<br>
+        <span style="font-size:11.5px">Kosztorys, zdjęcia, skan uchwały zboru, oferty.</span>
+      </div>
+    </div>
+    <input type="hidden" id="f_zgoda" value="1">
+    <div style="display:flex;gap:10px">
+      <button class="btn" onclick="zloz('${me.rola}')">Złóż wniosek</button>
+      <button class="btn ghost" onclick="wypelnij()">Wypełnij przykładem</button>
+    </div>
+  </div>`;
+}
+
+function wypelnij(){
+  const v = {
+    f_imie:'Anna Kowalska', f_email:'anna.kowalska@gmail.com', f_tel:'601 234 567',
+    f_zbor:'Warszawa Centrum', f_pastor:'jan.nowak@adwent.pl',
+    f_tytul:'Wieczory otwarte dla sąsiadów', f_cel:'Otwarcie zboru na najbliższe otoczenie przez cykl spotkań tematycznych.',
+    f_plan:'Sześć spotkań w soboty wieczorem: zdrowie, rodzina, finanse domowe, sens życia. Zaproszenia roznoszone po osiedlu.',
+    f_rez:'Około 50 uczestników spoza kościoła, z tego 10 kontynuujących kontakt.',
+    f_od:'2026-10-03', f_do:'2026-12-12', f_kwota:'5400', f_wklad:'1200',
+    f_budzet:'Zaproszenia i druk 1200 zł. Prelegenci, zwrot kosztów podróży 1800 zł. Poczęstunek 1600 zł. Materiały dla uczestników 800 zł.'
+  };
+  for(const k in v){ const e=document.getElementById(k); if(e) e.value=v[k]; }
+  const z=document.getElementById('f_zgoda'); if(z && z.type==='checkbox') z.checked=true;
+  toast('Formularz wypełniony przykładowymi danymi.');
+}
+
+function zloz(rola){
+  const g = id => { const e=document.getElementById(id); return e?e.value.trim():''; };
+  const wym = [['f_imie','imię i nazwisko'],['f_email','e-mail'],['f_tytul','tytuł projektu'],
+               ['f_cel','cel'],['f_plan','plan realizacji'],['f_rez','oczekiwane rezultaty'],
+               ['f_od','termin rozpoczęcia'],['f_do','termin zakończenia'],
+               ['f_kwota','kwota wnioskowana'],['f_budzet','pozycje kosztowe']];
+  if(rola==='wyznawca'){ wym.push(['f_zbor','nazwa zboru'],['f_pastor','e-mail pastora']); }
+  const brak = wym.filter(w=>!g(w[0])).map(w=>w[1]);
+  if(brak.length){ toast('Uzupełnij: '+brak.join(', ')+'.'); return; }
+  if(g('f_do') < g('f_od')){ toast('Termin zakończenia nie może być wcześniejszy niż rozpoczęcia.'); return; }
+  const zg = document.getElementById('f_zgoda');
+  if(zg && zg.type==='checkbox' && !zg.checked){ toast('Bez zgody na przetwarzanie danych nie możemy przyjąć wniosku.'); return; }
+
+  const pastorEmail = g('f_pastor');
+  const okDomena = /@adwent\.pl$/i.test(pastorEmail);
+  const dSel = document.getElementById('f_diec');
+  const nr = 'ZK-2026-' + String(SEQ++).padStart(3,'0');
+
+  const a = {
+    id:nr, zrodlo: rola==='wyznawca'?'Wyznawca':(rola==='pastor'?'Pastor':(rola==='diecezja'?'Diecezja':'Zarząd')),
+    imie:g('f_imie'), email:g('f_email'), tel:g('f_tel'), zbor:g('f_zbor')||'brak',
+    pastorEmail:pastorEmail, diecezja: dSel? dSel.value : (u().diecezja||'Wschodnia'),
+    tytul:g('f_tytul'), rodzaj:g('f_rodzaj'), cel:g('f_cel'), plan:g('f_plan'), rezultaty:g('f_rez'),
+    od:g('f_od'), do:g('f_do'), kwota:Number(g('f_kwota')||0), wklad:Number(g('f_wklad')||0),
+    budzet:g('f_budzet'), zal:[], zgoda:true, data:DZIS, dataStatusu:DZIS, kor:[],
+    dec:{pastor:null,diecezja:null,zarzad:null}, status:'zlozony'
+  };
+
+  if(rola==='wyznawca'){
+    a.status = okDomena ? 'zlozony' : 'sprawdz';
+  } else if(rola==='pastor'){
+    a.dec.pastor = {d:'Zatwierdzam',kto:u().n,data:DZIS,uw:'Wniosek własny.',kwota:null};
+    a.status='pastor';
+  } else if(rola==='diecezja'){
+    a.dec.pastor  = {d:'Zatwierdzam',kto:'pominięte, wniosek diecezji',data:DZIS,uw:'',kwota:null};
+    a.dec.diecezja= {d:'Zatwierdzam',kto:u().n,data:DZIS,uw:'Wniosek własny diecezji.',kwota:a.kwota};
+    a.status='diecezja';
+  } else {
+    a.dec.pastor  = {d:'Zatwierdzam',kto:'pominięte, wniosek Zarządu',data:DZIS,uw:'',kwota:null};
+    a.dec.diecezja= {d:'Zatwierdzam',kto:'pominięte, wniosek Zarządu',data:DZIS,uw:'',kwota:null};
+    a.status='diecezja';
+  }
+
+  APPS.unshift(a);
+  potwierdzenie(a, okDomena);
+}
+
+function potwierdzenie(a, okDomena){
+  const box = document.getElementById('modalBox');
+  box.innerHTML = `
+    <h2>Wniosek przyjęty</h2>
+    <p style="font-size:15px">Numer sprawy: <b style="font-size:18px;color:var(--blue)">${esc(a.id)}</b></p>
+    ${okDomena===false ? `<div class="note bad"><b>Adres pastora nie należy do domeny adwent.pl.</b>
+      Wniosek nie idzie automatycznie do zatwierdzenia, tylko trafia do Zarządu do ręcznego
+      sprawdzenia. Tak system reaguje na literówkę albo wskazanie niewłaściwej osoby.</div>` : ''}
+    <p style="font-size:13.5px;color:var(--muted);margin-bottom:6px">Tak wygląda mail, który dostaje składający:</p>
+    <div class="mail">
+      <div class="hd">Do: ${esc(a.email)} &nbsp;|&nbsp; Od: wnioski@adwent.pl</div>
+      <div class="sj">Przyjęliśmy twój wniosek ${esc(a.id)}</div>
+      <div class="bd">Dzień dobry,<br><br>
+        przyjęliśmy wniosek „${esc(a.tytul)}" na kwotę ${zl(a.kwota)}.<br>
+        ${okDomena===false
+          ? 'Podany adres pastora wymaga weryfikacji, skontaktuje się z tobą Zarząd Kościoła.'
+          : 'Wniosek został przekazany do zatwierdzenia pastorowi ('+esc(a.pastorEmail)+').'}<br><br>
+        O każdej zmianie etapu poinformujemy cię mailem. W sprawach pilnych podaj numer ${esc(a.id)}.<br><br>
+        Zarząd Kościoła Adwentystów Dnia Siódmego w RP</div>
+    </div>
+    <div style="text-align:right;margin-top:14px">
+      <button class="btn sec" onclick="zamknijModal()">Zamknij</button>
+      <button class="btn" onclick="zamknijModal();CUR='zarzad';VIEW='moje';SEL=null;render()">Zobacz oczami Zarządu</button>
+    </div>`;
+  document.getElementById('modal').classList.remove('hidden');
+}
+
+/* zamknięcie okna kasuje też oczekujące potwierdzenie, żeby nie wykonało się później przez pomyłkę */
+function zamknijModal(){
+  POTW = null;
+  document.getElementById('modal').classList.add('hidden');
+}
+
+/* ============ POTWIERDZENIE NIEODWRACALNYCH KROKÓW ============ */
+let POTW = null;
+function potwierdz(tytul, trescHtml, etykieta, klasa, fn){
+  POTW = fn;
+  document.getElementById('modalBox').innerHTML = `
+    <h2>${esc(tytul)}</h2>
+    ${trescHtml}
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap">
+      <button class="btn ghost" onclick="anulujPotwierdzenie()">Nie, wracam</button>
+      <button class="btn ${klasa||''}" onclick="wykonajPotwierdzenie()">${esc(etykieta)}</button>
+    </div>`;
+  document.getElementById('modal').classList.remove('hidden');
+}
+function anulujPotwierdzenie(){ zamknijModal(); }
+function wykonajPotwierdzenie(){
+  const f = POTW;
+  zamknijModal();
+  if(f) f();
+}
+
+/* ============ WIDOK: pulpit Zarządu ============ */
+function pulpit(){
+  const biez  = czynne();
+  const moje  = doDecyzji().sort((x,y)=>dni(y)-dni(x));
+  const obieg = biez.filter(wObiegu).length;
+  const zalega = biez.filter(a=>pilnosc(a)===2).sort((x,y)=>dni(y)-dni(x));
+  const uwaga  = biez.filter(a=>pilnosc(a)===1).sort((x,y)=>dni(y)-dni(x));
+  const realiz = biez.filter(a=>a.status==='zarzad').length;
+  const konc = APPS.filter(a=>a.status==='zakonczony').length;
+  const problem = biez.filter(a=>['poprawa','odrzucony','sprawdz'].includes(a.status)).length;
+  const doPrzelewu = biez.filter(czekaNaPrzelew);
+  const kwotaDoPrzelewu = doPrzelewu.reduce((s,a)=>s+doWyplaty(a),0);
+
+  return `
+  <h1>Pulpit Zarządu</h1>
+  <p class="sub">Wszystko w jednym miejscu: co czeka na twoją decyzję, na jakim etapie stoją pozostałe
+  sprawy i gdzie obieg się zatrzymał. Kwoty i podsumowania roczne są w Zestawieniu kwot.</p>
+
+  <div class="tiles">
+    <div class="tile acc klik" onclick="go('decyzje')" title="otwórz zakładkę Do zatwierdzenia">
+      <div class="n">${moje.length}</div><div class="l">czeka na decyzję Zarządu</div></div>
+    <div class="tile klik" onclick="pokazGrupe('obieg')" title="pokaż wnioski w obiegu">
+      <div class="n">${obieg}</div><div class="l">w obiegu, wszystkie szczeble</div></div>
+    <div class="tile klik${uwaga.length?' pom':''}" onclick="pokazGrupe('uwaga')" title="pokaż wnioski czekające ${PROG_UWAGA} do ${PROG_ZALEG} dni">
+      <div class="n">${uwaga.length}</div><div class="l">czeka ${PROG_UWAGA} do ${PROG_ZALEG} dni</div></div>
+    <div class="tile klik${zalega.length?' bad':''}" onclick="pokazGrupe('zalegle')" title="pokaż wnioski czekające ponad ${PROG_ZALEG} dni">
+      <div class="n">${zalega.length}</div><div class="l">czeka ponad ${PROG_ZALEG} dni</div></div>
+    <div class="tile klik" onclick="go('raporty')" title="otwórz raporty z realizacji">
+      <div class="n">${realiz}</div><div class="l">zatwierdzone, w realizacji</div></div>
+    <div class="tile klik" onclick="pokazGrupe('zakonczone')" title="pokaż sprawy zakończone, także z archiwum">
+      <div class="n">${konc}</div><div class="l">zakończone i rozliczone</div></div>
+    <div class="tile klik${doPrzelewu.length?' pom':''}" onclick="pokazGrupe('dowyplaty')" title="pokaż wnioski czekające na przelew">
+      <div class="n" style="font-size:22px">${zl(kwotaDoPrzelewu)}</div>
+      <div class="l">czeka na przelew${doPrzelewu.length?', spraw: '+doPrzelewu.length:''}</div></div>
+  </div>
+
+  ${pasekArchiwizacji('margin-top:12px')}
+
+  <div class="card" style="border-color:var(--gold);background:#fffdf5">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px">
+      <h3 style="margin:0;flex:1;color:var(--warn)">Do zatwierdzenia (${moje.length})</h3>
+      ${moje.length? `<button class="btn sm sec" onclick="go('decyzje')">Otwórz pełną zakładkę</button>`:''}
+    </div>
+    ${moje.length
+      ? `<p style="font-size:12.5px;color:var(--muted);margin:0 0 12px">Wnioski czekające na decyzję
+         Zarządu, najdłużej czekające na górze. To samo przychodzi mailem i jako karta w Teams,
+         więc nie trzeba tu wchodzić, żeby zdecydować.</p>
+         ${tabela(moje, true)}`
+      : '<p style="font-size:13px;color:var(--muted);margin:0">Nic nie czeka na decyzję Zarządu.</p>'}
+  </div>
+
+  ${zalega.length? kartaCzekajacych(zalega, 2, problem) : ''}
+  ${uwaga.length?  kartaCzekajacych(uwaga, 1, 0) : ''}
+
+  ${gdzieUtknelo(biez)}`;
+}
+
+/* karta z listą wniosków czekających zbyt długo, wspólna dla obu progów */
+function kartaCzekajacych(arr, poziom, problem){
+  const czerw = poziom===2;
+  const kol = czerw?'var(--red)':'var(--warn)';
+  return `<div class="card" style="border-color:${czerw?'#f5b7b1':'#f5cba7'};background:${czerw?'#fffafa':'#fffcf6'}">
+    <h3 style="color:${kol}">${czerw?'Wnioski, które utknęły':'Wnioski warte przypilnowania'}</h3>
+    <p style="font-size:13px;color:var(--muted);margin:0 0 12px">${czerw
+      ? 'Czekają na jednym etapie ponad '+PROG_ZALEG+' dni. Zarząd nie decyduje za pastora ani za diecezję, ale może zapytać, przypomnieć albo napisać, że popiera projekt.'
+      : 'Czekają od '+PROG_UWAGA+' do '+PROG_ZALEG+' dni. Jeszcze nie zaległość, ale dobry moment na przypomnienie, zanim sprawa naprawdę utknie.'}</p>
+    ${arr.map(a=>`<div style="display:flex;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);flex-wrap:wrap">
+      <div style="flex:1;min-width:220px">
+        <b style="cursor:pointer" onclick="otworz('${a.id}')">${esc(a.tytul)}</b>
+        <div style="font-size:12px;color:var(--muted)">${esc(a.id)} &nbsp;|&nbsp; ${esc(a.zbor)}, ${esc(a.diecezja)} &nbsp;|&nbsp; ${zl(a.kwota)}</div>
+      </div>
+      <div style="font-size:12.5px;min-width:190px">
+        <span class="pill ${ST[a.status].c}">${ST[a.status].l}</span><br>
+        <span style="color:var(--muted)">działanie teraz: ${esc(dzialanie(a).split(' (')[0])}</span>
+      </div>
+      <div style="font-size:15px;font-weight:700;color:${kol};min-width:70px">${dni(a)} dni</div>
+      <button class="btn sm${czerw?'':' sec'}" onclick="napisz('${a.id}','ponaglenie')">Napisz do uczestników</button>
+    </div>`).join('')}
+    ${problem? `<p style="font-size:12.5px;color:var(--muted);margin:12px 0 0">Poza tym ${problem}
+    wniosków ma status do poprawy, odrzucony lub do sprawdzenia.</p>`:''}
+  </div>`;
+}
+
+/* etapy obiegu rozbite na konkretne ogniwa: pastorzy, każda diecezja z osobna, Zarząd */
+function OGNIWA(){
+  return [{k:'pastorzy', n:'u pastorów', pas:a=>a.status==='zlozony', st:'zlozony', filtr:{status:'zlozony',diecezja:''}}]
+    .concat(DIECEZJE.slice().sort().map(d=>({
+      k:'d_'+d, n:'Diecezja '+d, pas:a=>a.status==='pastor' && a.diecezja===d, st:'pastor',
+      filtr:{status:'pastor',diecezja:d}
+    })))
+    .concat([{k:'zarzad', n:'Zarząd Kościoła', pas:a=>a.status==='diecezja'||a.status==='sprawdz',
+              st:'diecezja', filtr:{status:'diecezja',diecezja:''}}]);
+}
+
+function gdzieUtknelo(biez){
+  const w = OGNIWA().map(o=>{
+    const arr = biez.filter(o.pas);
+    const maxd = arr.length? Math.max(...arr.map(dni)) : 0;
+    const zal = arr.filter(a=>pilnosc(a)===2).length;
+    const uw  = arr.filter(a=>pilnosc(a)===1).length;
+    return {o:o, n:arr.length, maxd:maxd, zal:zal, uw:uw};
+  });
+  const max = Math.max(1, ...w.map(x=>x.n));
+
+  return `<div class="card">
+    <h3>Gdzie utknęło</h3>
+    <p style="font-size:12.5px;color:var(--muted);margin:0 0 12px">Ile spraw czeka na każdym ogniwie
+    i jak długo czeka najstarsza z nich. Kliknij wiersz, żeby zobaczyć te wnioski na liście.</p>
+    ${w.map(x=>{
+      const p = x.zal?2:(x.uw?1:0);
+      const kolPas = p===2?'var(--red)':(p===1?'#e67e22':'var(--blue2)');
+      const kolTxt = p===2?'var(--red)':(p===1?'var(--warn)':'var(--muted)');
+      return `<div class="ogn" onclick="pokazEtap('${x.o.filtr.status}','${esc(x.o.filtr.diecezja)}')">
+        <span class="ognn">${esc(x.o.n)}</span>
+        <div class="ognb"><div style="width:${Math.round(x.n/max*100)}%;background:${kolPas}"></div></div>
+        <span class="ognl"><b>${x.n}</b> ${x.n===1?'wniosek':(x.n>=2&&x.n<=4?'wnioski':'wniosków')}</span>
+        <span class="ognd" style="color:${kolTxt};font-weight:${p?'700':'400'}">
+          ${x.n? 'najdłużej '+x.maxd+' dni' : 'brak zaległości'}</span>
+      </div>`;
+    }).join('')}
+    <p style="font-size:12px;color:var(--muted);margin:10px 0 0">Kolor paska: szary do ${PROG_UWAGA} dni,
+    pomarańczowy od ${PROG_UWAGA}, czerwony od ${PROG_ZALEG} dni oczekiwania najstarszej sprawy.</p>
+  </div>`;
+}
+
+function pokazEtap(status, diecezja){
+  FILTR = {status:status, diecezja:diecezja||'', szukaj:'', grupa:'', zarch:false};
+  VIEW = 'moje'; SEL = null; render();
+}
+
+/* grupy używane przez kafelki pulpitu */
+const GRUPY = {
+  obieg:      {l:'wnioski w obiegu, wszystkie szczeble', f:a=>wObiegu(a)},
+  uwaga:      {l:'wnioski czekające '+PROG_UWAGA+' do '+PROG_ZALEG+' dni', f:a=>pilnosc(a)===1},
+  zalegle:    {l:'wnioski czekające ponad '+PROG_ZALEG+' dni', f:a=>pilnosc(a)===2},
+  zakonczone: {l:'sprawy zakończone i rozliczone, razem z archiwum', f:a=>a.status==='zakonczony', zarch:true},
+  dowyplaty:  {l:'wnioski z przyznanymi środkami, które czekają na przelew', f:a=>czekaNaPrzelew(a)}
+};
+
+function pokazGrupe(g){
+  FILTR = {status:'', diecezja:'', szukaj:'', grupa:g, zarch:!!(GRUPY[g] && GRUPY[g].zarch)};
+  VIEW = 'moje'; SEL = null; render();
+}
+
+/* ============ WIDOK: listy ============ */
+function tabela(arr, krotka, arch){
+  if(!arr.length) return '<p class="sub">Brak wniosków w tym widoku.</p>';
+  const zarzadzam = u().rola==='zarzad';
+  return `<table><thead><tr>
+    <th>Numer</th><th>Tytuł</th><th>Składający</th>${krotka?'':'<th>Zbór</th>'}
+    <th>Diecezja</th><th>Kwota</th><th>Status</th>
+    ${arch? '<th>Zarchiwizowano</th>' : '<th>Działanie teraz</th><th>Czeka od</th>'}
+  </tr></thead><tbody>` + arr.map(a=>`
+    <tr class="clk${arch?' arch':''}" onclick="otworz('${a.id}')"${!arch&&pilnosc(a)?' style="background:'+(pilnosc(a)===2?'#fdf3f2':'#fff8ec')+'"':''}>
+      <td><b>${esc(a.id)}</b><div style="font-size:11px;color:var(--muted)">${esc(a.zrodlo)}</div></td>
+      <td>${pilnosc(a)?'<span title="'+(pilnosc(a)===2?'czeka ponad '+PROG_ZALEG+' dni':'czeka ponad '+PROG_UWAGA+' dni')+'" style="color:'+(pilnosc(a)===2?'var(--red)':'#e67e22')+'">&#9873; </span>':''}${esc(a.tytul)}<div style="font-size:11px;color:var(--muted)">${esc(a.rodzaj)}</div></td>
+      <td>${esc(a.imie)}</td>
+      ${krotka?'':'<td>'+esc(a.zbor)+'</td>'}
+      <td>${esc(a.diecezja)}</td>
+      <td>${zl(a.kwota)}${a.dec.zarzad&&a.dec.zarzad.kwota?'<div style="font-size:11px;color:var(--ok);font-weight:700">przyznano '+zl(a.dec.zarzad.kwota)+'</div>':''}${
+        poPrzyznaniu(a)? '<div style="font-size:11px;color:'+(czekaNaPrzelew(a)?'var(--warn)':'var(--muted)')+'">'
+          +(sumaWyplat(a)<=0?'czeka na przelew':(czekaNaPrzelew(a)?'wypłacono '+zl(sumaWyplat(a)):'wypłacone'))+'</div>' : ''}</td>
+      <td><span class="pill ${ST[a.status].c}">${ST[a.status].l}</span></td>
+      ${arch
+        ? `<td style="font-size:12.5px;color:var(--muted)">${dt(a.dataArch)}<div style="font-size:11px">${esc(a.ktoArch||'')}</div>
+             ${zarzadzam?'<button class="btn ghost sm" style="margin-top:5px" onclick="event.stopPropagation();przywroc(\''+a.id+'\')">Przywróć</button>':''}</td>`
+        : `<td style="font-size:12.5px;color:var(--muted)">${esc(dzialanie(a))}</td>
+           <td style="font-size:12.5px">${dniTxt(a)}</td>`}
+    </tr>`).join('') + '</tbody></table>';
+}
+
+function listaDecyzji(){
+  const arr = doDecyzji();
+  const me = u();
+  return `
+  <h1>Do zatwierdzenia</h1>
+  <p class="sub">Wnioski czekające na twoją decyzję. W działającym systemie to samo przychodzi mailem
+  i jako karta w Teams, z przyciskami zatwierdzenia wprost w wiadomości.</p>
+  ${arr.length? '' : '<div class="note ok">Nic nie czeka na twoją decyzję.</div>'}
+  ${arr.length? '<div class="card">'+tabela(arr,false)+'</div>' : ''}
+  ${me.rola==='pastor' ? `<div class="note info"><b>Rola pastora w tym systemie.</b> Jesteś bramą
+  wejściową: żaden wniosek z twojego zboru nie idzie dalej bez twojego zatwierdzenia. Przy
+  zatwierdzaniu możesz też dołączyć dokumenty, których wyznawca nie mógł wysłać formularzem.</div>`:''}`;
+}
+
+function listaWnioskow(){
+  const me = u();
+  let arr = widoczne(false);
+  if(FILTR.zarch)    arr = arr.concat(widoczne(true));
+  if(FILTR.grupa && GRUPY[FILTR.grupa]) arr = arr.filter(GRUPY[FILTR.grupa].f);
+  if(FILTR.status)   arr = arr.filter(a=>a.status===FILTR.status);
+  if(FILTR.diecezja) arr = arr.filter(a=>a.diecezja===FILTR.diecezja);
+  if(FILTR.szukaj){
+    const q = FILTR.szukaj.toLowerCase();
+    arr = arr.filter(a=>(a.tytul+' '+a.imie+' '+a.id+' '+a.zbor).toLowerCase().includes(q));
+  }
+  const tytul = me.rola==='zarzad'?'Wszystkie wnioski':(me.rola==='diecezja'?'Wnioski diecezji '+me.diecezja:'Wnioski z mojego zboru');
+  const g = FILTR.grupa && GRUPY[FILTR.grupa];
+  return `
+  <h1>${esc(tytul)}</h1>
+  <p class="sub">${me.rola==='zarzad'
+      ? 'Zarząd widzi komplet. Diecezja widzi tylko swoje wnioski, pastor tylko swój zbór, wyznawca nie widzi nic poza mailami.'
+      : 'Widzisz wyłącznie wnioski ze swojego obszaru.'} Sprawy przeniesione do archiwum są w osobnym widoku.</p>
+  ${g? `<div class="fbar">
+    <div style="flex:1;min-width:200px">Widok zawężony z pulpitu: <b>${esc(g.l)}</b>, znaleziono ${arr.length}.</div>
+    <button class="btn ghost sm" onclick="FILTR=PUSTY_FILTR();renderView()">Pokaż wszystkie</button>
+    <button class="btn sec sm" onclick="go('pulpit')">Wróć na pulpit</button>
+  </div>`:''}
+  ${pasekArchiwizacji()}
+  <div class="card">
+    <div class="filters">
+      <div class="fx"><label>Szukaj</label><input type="text" value="${esc(FILTR.szukaj)}" oninput="FILTR.szukaj=this.value;renderView()" placeholder="tytuł, nazwisko, numer"></div>
+      <div class="fx"><label>Status</label><select onchange="FILTR.status=this.value;renderView()">
+        <option value="">wszystkie</option>
+        ${Object.keys(ST).map(k=>'<option value="'+k+'"'+(FILTR.status===k?' selected':'')+'>'+ST[k].l+'</option>').join('')}
+      </select></div>
+      ${me.rola==='zarzad'?`<div class="fx"><label>Diecezja</label><select onchange="FILTR.diecezja=this.value;renderView()">
+        <option value="">wszystkie</option>
+        ${DIECEZJE.map(d=>'<option'+(FILTR.diecezja===d?' selected':'')+'>'+d+'</option>').join('')}
+      </select></div>`:''}
+      <button class="btn ghost sm" onclick="FILTR=PUSTY_FILTR();renderView()">Wyczyść</button>
+    </div>
+    ${tabela(arr,false)}
+  </div>`;
+}
+
+/* ============ WIDOK: raporty z realizacji ============ */
+function listaRaportow(){
+  const me = u();
+  const arr = wRealizacjiLista().sort((x,y)=>pilnoscRaportu(y)-pilnoscRaportu(x));
+  const prz = widoczne(false).filter(a=>przedluzenieOczekuje(a));
+  const zal = arr.filter(a=>pilnoscRaportu(a)===2);
+  const uwa = arr.filter(a=>pilnoscRaportu(a)===1);
+  const przyz = arr.reduce((s,a)=>s+przyznano(a),0);
+  const wyd = arr.reduce((s,a)=>s+wydanoWgRaportow(a),0);
+  const doPrzelewu = widoczne(false).filter(czekaNaPrzelew);
+
+  return `
+  <h1>Raporty z realizacji</h1>
+  <p class="sub">Projekty, które dostały pieniądze i trwają. Po przyznaniu środków składający dostaje
+  co miesiąc automatycznego maila z prośbą o kilka zdań o postępie i szacunkową kwotę wydaną w tym
+  miesiącu. Raport końcowy ma wpłynąć do miesiąca od daty zakończenia projektu.</p>
+
+  <div class="tiles">
+    <div class="tile"><div class="n">${arr.length}</div><div class="l">projektów w realizacji</div></div>
+    <div class="tile${uwa.length?' pom':''}"><div class="n">${uwa.length}</div><div class="l">czeka na raport</div></div>
+    <div class="tile${zal.length?' bad':''}"><div class="n">${zal.length}</div><div class="l">raport zaległy</div></div>
+    <div class="tile"><div class="n" style="font-size:22px">${zl(wyd)}</div><div class="l">wydano wg raportów z ${zl(przyz)}</div></div>
+  </div>
+
+  ${doPrzelewu.length? `<div class="card" style="border-color:#f5cba7;background:#fffcf6">
+    <h3 style="color:var(--warn)">Środki czekające na przelew (${doPrzelewu.length})</h3>
+    <p style="font-size:12.5px;color:var(--muted);margin:0 0 12px">Zarząd przyznał pieniądze, ale
+    przelew nie został jeszcze odnotowany. Razem ${zl(doPrzelewu.reduce((s,x)=>s+doWyplaty(x),0))}.
+    Zaznacza to skarbnik po wykonaniu przelewu.</p>
+    <table><thead><tr><th>Projekt</th><th>Przyznano</th><th>Wypłacono</th><th>Do przelania</th><th></th></tr></thead><tbody>
+    ${doPrzelewu.map(x=>`<tr class="clk" onclick="otworz('${x.id}')">
+      <td><b>${esc(x.tytul)}</b><div style="font-size:11px;color:var(--muted)">${esc(x.id)} &nbsp;|&nbsp; ${esc(x.zbor)}, ${esc(x.diecezja)}</div></td>
+      <td>${zl(przyznano(x))}</td>
+      <td>${zl(sumaWyplat(x))}</td>
+      <td style="font-weight:700;color:var(--warn)">${zl(doWyplaty(x))}</td>
+      <td>${me.rola==='zarzad'? `<button class="btn sm" onclick="event.stopPropagation();formularzWyplaty('${x.id}','przelew')">Zaznacz przelew</button>`:''}</td>
+    </tr>`).join('')}
+    </tbody></table>
+  </div>`:''}
+
+  ${prz.length? `<div class="card" style="border-color:var(--gold);background:#fffdf5">
+    <h3 style="color:var(--warn)">Wnioski o przedłużenie projektu (${prz.length})</h3>
+    <p style="font-size:12.5px;color:var(--muted);margin:0 0 12px">Składający prosi o przesunięcie
+    terminu zakończenia. Zatwierdzenie przesuwa też termin raportu końcowego.</p>
+    ${prz.map(a=>{
+      const p = przedluzenieOczekuje(a);
+      return `<div style="border-bottom:1px solid var(--line);padding:11px 0">
+        <b class="lnk" onclick="otworz('${a.id}')">${esc(a.tytul)}</b>
+        <div style="font-size:12px;color:var(--muted);margin:3px 0 6px">${esc(a.id)} &nbsp;|&nbsp;
+          ${esc(a.zbor)}, ${esc(a.diecezja)} &nbsp;|&nbsp; złożony ${dt(p.data)} przez ${esc(p.kto)}</div>
+        <div style="font-size:13px;margin-bottom:7px">Termin zakończenia: <b>${dt(p.staryDo)}</b> &#8594;
+          <b style="color:var(--warn)">${dt(p.nowyDo)}</b>, czyli o ${dniMiedzy(p.staryDo,p.nowyDo)} dni dłużej.
+          Raport końcowy przesunie się na ${dt(dodajMiesiac(p.nowyDo,RAPORT_PO))}.</div>
+        <div style="font-size:13px;background:#f7f9fb;border-radius:6px;padding:8px 10px">${esc(p.powod)}</div>
+        ${me.rola==='zarzad'? `<div style="margin-top:9px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn sm ok" onclick="decyzjaPrzedluzenia('${a.id}','Zatwierdzam')">Zgoda na przedłużenie</button>
+          <button class="btn sm red" onclick="decyzjaPrzedluzenia('${a.id}','Odrzucam')">Odmowa</button>
+        </div>`:''}
+      </div>`;
+    }).join('')}
+  </div>`:''}
+
+  <div class="card">
+    <h3>Projekty w realizacji</h3>
+    ${arr.length? `<table><thead><tr>
+      <th>Projekt</th><th>Przyznano</th><th>Wypłacono</th><th>Wydano wg raportów</th>
+      <th>Projekt trwa do</th><th>Raport końcowy do</th><th>Raporty</th><th>Stan</th>
+    </tr></thead><tbody>
+    ${arr.map(a=>{
+      const s = stanRaportu(a) || {t:'',p:0};
+      const kol = s.p===2?'var(--red)':(s.p===1?'#e67e22':'var(--ok)');
+      const nal = okresyNalezne(a).length;
+      const zlo = (a.raporty||[]).filter(r=>r.typ==='okresowy').length;
+      const w = wydanoWgRaportow(a), pz = przyznano(a);
+      return `<tr class="clk" onclick="otworz('${a.id}')"${s.p?' style="background:'+(s.p===2?'#fdf3f2':'#fff8ec')+'"':''}>
+        <td><b>${esc(a.tytul)}</b><div style="font-size:11px;color:var(--muted)">${esc(a.id)} &nbsp;|&nbsp; ${esc(a.zbor)}, ${esc(a.diecezja)}</div></td>
+        <td>${zl(pz)}</td>
+        <td>${zl(sumaWyplat(a))}${czekaNaPrzelew(a)?'<div style="font-size:11px;color:var(--warn);font-weight:700">brakuje '+zl(doWyplaty(a))+'</div>':''}</td>
+        <td>${zl(w)}${pz?'<div style="font-size:11px;color:var(--muted)">'+Math.round(w/pz*100)+'% przyznanej kwoty</div>':''}</td>
+        <td style="font-size:12.5px">${dt(a.do)}${przedluzenieOczekuje(a)?'<div style="font-size:11px;color:var(--warn)">wniosek o przedłużenie</div>':''}</td>
+        <td style="font-size:12.5px">${dt(terminRaportu(a))}</td>
+        <td style="font-size:12.5px">${zlo} z ${nal}${raportKoncowy(a)?'<div style="font-size:11px;color:var(--ok);font-weight:700">końcowy złożony</div>':''}</td>
+        <td style="font-size:12.5px;color:${kol};font-weight:${s.p?'700':'400'}">${esc(s.t)}</td>
+      </tr>`;
+    }).join('')}
+    </tbody></table>`
+    : '<p class="sub">Żaden projekt nie jest w trakcie realizacji.</p>'}
+  </div>
+
+  <div class="note info">Wszystkie prośby o raport wychodzą automatycznie, bez niczyjego udziału.
+  W Microsoft 365 robi to Power Automate: raz w miesiącu przechodzi po projektach ze statusem
+  Zatwierdzony i wysyła maila z linkiem do krótkiego formularza. Odpowiedź ląduje w historii sprawy.</div>`;
+}
+
+/* ============ WIDOK: archiwum ============ */
+function listaArchiwum(){
+  const me = u();
+  let arr = widoczne(true);
+  if(FILTR.szukaj){
+    const q = FILTR.szukaj.toLowerCase();
+    arr = arr.filter(a=>(a.tytul+' '+a.imie+' '+a.id+' '+a.zbor).toLowerCase().includes(q));
+  }
+  if(FILTR.status) arr = arr.filter(a=>a.status===FILTR.status);
+
+  return `
+  <h1>Archiwum</h1>
+  <p class="sub">Sprawy zamknięte: odrzucone i zakończone. Nie liczą się do obiegu ani do zaległości,
+  ale zostają w systemie razem z całą historią decyzji i korespondencją. Nic nie jest usuwane.</p>
+
+  ${pasekArchiwizacji()}
+
+  <div class="card">
+    <div class="filters">
+      <div class="fx"><label>Szukaj</label><input type="text" value="${esc(FILTR.szukaj)}" oninput="FILTR.szukaj=this.value;renderView()" placeholder="tytuł, nazwisko, numer"></div>
+      <div class="fx"><label>Status</label><select onchange="FILTR.status=this.value;renderView()">
+        <option value="">wszystkie zamknięte</option>
+        ${ZAMKNIETE.map(k=>'<option value="'+k+'"'+(FILTR.status===k?' selected':'')+'>'+ST[k].l+'</option>').join('')}
+      </select></div>
+      <button class="btn ghost sm" onclick="FILTR=PUSTY_FILTR();renderView()">Wyczyść</button>
+    </div>
+    ${tabela(arr,false,true)}
+  </div>
+
+  <div class="note info">Archiwizacja to tylko oznaczenie sprawy jako zamkniętej. W Microsoft 365
+  jest to zwykła kolumna na liście SharePoint i osobny widok, bez kopiowania danych gdziekolwiek
+  indziej. Wniosek zawsze można przywrócić.</div>`;
+}
+
+function tablica(){
+  const kol = ['zlozony','pastor','diecezja','zarzad','zakonczony','poprawa'];
+  const biez = czynne();
+  return `
+  <h1>Tablica etapów</h1>
+  <p class="sub">Od razu widać, gdzie sprawa stoi i u kogo. Kolumna nie jest podpisana nazwą
+  statusu, tylko tym, kto ma teraz działać. Wnioski przeniesione do archiwum tu nie występują.</p>
+  <div class="kanban">
+    ${kol.map(s=>{
+      const arr = biez.filter(a=>a.status===s);
+      const kto = {zlozony:'Czeka na pastora', pastor:'Czeka na diecezję', diecezja:'Czeka na Zarząd',
+                   zarzad:'W realizacji', zakonczony:'Zakończone', poprawa:'U składającego'}[s];
+      return `<div class="kcol"><h4>${kto} (${arr.length})</h4>
+        ${arr.map(a=>`<div class="kcard${pilnosc(a)===2?' late':(pilnosc(a)===1?' soon':'')}" onclick="otworz('${a.id}')">
+          <b>${esc(a.tytul)}</b>
+          <div class="m">${esc(a.id)} &nbsp;|&nbsp; ${esc(a.zbor)}</div>
+          <div class="m">${esc(a.diecezja)} &nbsp;|&nbsp; <b>${zl(a.kwota)}</b></div>
+          <div class="m" style="margin-top:4px">${dniTxt(a)}${pilnosc(a)?' <span style="color:'+(pilnosc(a)===2?'var(--red)':'#e67e22')+'">&#9873;</span>':''}</div>
+        </div>`).join('') || '<div style="font-size:12px;color:#9aa7b4;padding:6px">pusto</div>'}
+      </div>`;
+    }).join('')}
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h3>Odrzucone i do sprawdzenia</h3>
+    ${tabela(biez.filter(a=>['odrzucony','sprawdz'].includes(a.status)),false)}
+  </div>`;
+}
+
+/* ============ WIDOK: zestawienie kwot ============ */
+function rok(a){ return String(a.data||'').slice(0,4); }
+function wszystkieLata(){ return [...new Set(APPS.map(rok))].filter(Boolean).sort().reverse(); }
+const ROK_BIEZ = DZIS.slice(0,4);
+let LATA = new Set([ROK_BIEZ]);
+
+function przelaczRok(r){
+  if(LATA.has(r)) LATA.delete(r); else LATA.add(r);
+  if(!LATA.size) LATA.add(r);          /* nie pozwalamy odznaczyć wszystkiego */
+  renderView();
+}
+function ustawLata(tryb){
+  if(tryb==='biez') LATA = new Set([ROK_BIEZ]);
+  else LATA = new Set(wszystkieLata());
+  renderView();
+}
+function wybraneLata(){ return APPS.filter(a=>LATA.has(rok(a))); }
+
+function zestawienie(){
+  const arr = wybraneLata();
+  const lata = wszystkieLata();
+  const opis = [...LATA].sort().join(', ');
+
+  const sumaW = arr.reduce((s,a)=>s+(a.kwota||0),0);
+  const sumaP = arr.reduce((s,a)=>s+((a.dec.zarzad&&a.dec.zarzad.kwota)||0),0);
+  const sumaWy = arr.reduce((s,a)=>s+sumaWyplat(a),0);
+  const zatwN = arr.filter(a=>a.dec.zarzad && a.dec.zarzad.d==='Zatwierdzam').length;
+  const pokrycie = sumaW? Math.round(sumaP/sumaW*100) : 0;
+
+  const wiersz = (nazwa, lista, wytluszcz) => {
+    const w = lista.reduce((s,a)=>s+(a.kwota||0),0);
+    const p = lista.reduce((s,a)=>s+((a.dec.zarzad&&a.dec.zarzad.kwota)||0),0);
+    const wy = lista.reduce((s,a)=>s+sumaWyplat(a),0);
+    const o = lista.filter(a=>!a.arch && wObiegu(a)).length;
+    const z = lista.filter(a=>a.status==='zakonczony').length;
+    const st = wytluszcz? ' style="background:#f7f9fb;font-weight:700"' : '';
+    return `<tr${st}><td>${wytluszcz?'':'<b>'}${esc(nazwa)}${wytluszcz?'':'</b>'}</td>
+      <td>${lista.length}</td><td>${zl(w)}</td>
+      <td${p?' style="color:var(--ok);font-weight:700"':''}>${zl(p)}</td>
+      <td>${zl(wy)}${p&&wy<p?'<div style="font-size:11px;color:var(--warn)">brakuje '+zl(p-wy)+'</div>':''}</td>
+      <td>${o}</td><td>${z}</td></tr>`;
+  };
+
+  return `
+  <h1>Zestawienie kwot</h1>
+  <p class="sub">Podsumowanie według diecezji i rodzaju wniosku, liczone po roku złożenia wniosku.
+  Obejmuje także sprawy przeniesione do archiwum. W systemie to zwykły widok listy z grupowaniem,
+  nic dodatkowego nie trzeba budować.</p>
+
+  <div class="card">
+    <div class="filters" style="margin-bottom:0">
+      <div class="fx" style="min-width:auto"><label>Lata</label>
+        <div class="lata">
+          ${lata.map(r=>`<button class="chip${LATA.has(r)?' on':''}" onclick="przelaczRok('${r}')">${r}${r===ROK_BIEZ?' (bieżący)':''}</button>`).join('')}
+        </div>
+      </div>
+      <button class="btn ghost sm" onclick="ustawLata('biez')">Tylko rok bieżący</button>
+      <button class="btn ghost sm" onclick="ustawLata('all')">Wszystkie lata</button>
+    </div>
+    <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0">Wybrane lata: <b>${esc(opis)}</b>.
+    Kliknij rok, żeby go dołączyć albo odjąć. Można porównywać kilka lat naraz.</p>
+  </div>
+
+  <div class="tiles">
+    <div class="tile"><div class="n" style="font-size:24px">${zl(sumaW)}</div>
+      <div class="l">suma złożonych wniosków (${arr.length})</div></div>
+    <div class="tile" style="border-color:#a9dfbf;background:#f6fdf9">
+      <div class="n" style="font-size:24px;color:var(--ok)">${zl(sumaP)}</div>
+      <div class="l">suma przyznana przez Zarząd (${zatwN})</div></div>
+    <div class="tile"><div class="n" style="font-size:24px">${zl(sumaWy)}</div>
+      <div class="l">faktycznie wypłacone przelewami</div></div>
+    <div class="tile"><div class="n">${pokrycie}%</div>
+      <div class="l">udział przyznanych kwot we wnioskowanych</div></div>
+    <div class="tile"><div class="n" style="font-size:24px">${zl(sumaW-sumaP)}</div>
+      <div class="l">różnica: nieprzyznane lub jeszcze nierozpatrzone</div></div>
+  </div>
+  ${sumaP>sumaWy? `<div class="fbar" style="background:#fffcf6;border-color:#f5cba7;color:#7a5c00">
+    <div style="flex:1;min-width:220px">Z przyznanych kwot nie wyszło jeszcze
+    <b>${zl(sumaP-sumaWy)}</b>. Dotyczy to spraw, w których przelew nie został odnotowany.</div>
+    <button class="btn sec sm" onclick="pokazGrupe('dowyplaty')">Pokaż te wnioski</button>
+  </div>`:''}
+
+  <div class="card">
+    <h3>Według diecezji</h3>
+    <table><thead><tr><th>Diecezja</th><th>Wniosków</th><th>Wnioskowano</th><th>Przyznano</th><th>Wypłacono</th><th>W obiegu</th><th>Zakończone</th></tr></thead><tbody>
+    ${DIECEZJE.slice().sort().map(d=>wiersz(d, arr.filter(a=>a.diecezja===d), false)).join('')}
+    ${wiersz('Razem', arr, true)}
+    </tbody></table>
+  </div>
+
+  <div class="card">
+    <h3>Według rodzaju wniosku</h3>
+    <table><thead><tr><th>Rodzaj</th><th>Wniosków</th><th>Wnioskowano</th><th>Przyznano</th></tr></thead><tbody>
+    ${RODZAJE.map(r=>{
+      const l = arr.filter(a=>a.rodzaj===r);
+      if(!l.length) return '';
+      const w = l.reduce((s,a)=>s+(a.kwota||0),0);
+      const p = l.reduce((s,a)=>s+((a.dec.zarzad&&a.dec.zarzad.kwota)||0),0);
+      return `<tr><td>${esc(r)}</td><td>${l.length}</td><td>${zl(w)}</td>
+        <td${p?' style="color:var(--ok);font-weight:700"':''}>${zl(p)}</td></tr>`;
+    }).join('')}
+    <tr style="background:#f7f9fb;font-weight:700"><td>Razem</td><td>${arr.length}</td>
+      <td>${zl(sumaW)}</td><td style="color:var(--ok)">${zl(sumaP)}</td></tr>
+    </tbody></table>
+  </div>
+
+  ${LATA.size>1? `<div class="card">
+    <h3>Porównanie lat</h3>
+    <table><thead><tr><th>Rok</th><th>Wniosków</th><th>Wnioskowano</th><th>Przyznano</th><th>Udział</th></tr></thead><tbody>
+    ${[...LATA].sort().reverse().map(r=>{
+      const l = APPS.filter(a=>rok(a)===r);
+      const w = l.reduce((s,a)=>s+(a.kwota||0),0);
+      const p = l.reduce((s,a)=>s+((a.dec.zarzad&&a.dec.zarzad.kwota)||0),0);
+      return `<tr><td><b>${esc(r)}</b></td><td>${l.length}</td><td>${zl(w)}</td>
+        <td${p?' style="color:var(--ok);font-weight:700"':''}>${zl(p)}</td>
+        <td>${w?Math.round(p/w*100):0}%</td></tr>`;
+    }).join('')}
+    </tbody></table>
+  </div>`:''}`;
+}
+
+/* ============ WIDOK: szczegóły wniosku ============ */
+function otworz(id){ SEL = id; renderView(); window.scrollTo(0,0); }
+
+function szczegoly(id){
+  const a = APPS.find(x=>x.id===id);
+  if(!a) return '<p>Nie znaleziono wniosku.</p>';
+  const me = u();
+  const k = ST[a.status].krok;
+  const zly = a.status==='odrzucony' || a.status==='poprawa';
+
+  const moge = !a.arch && (
+    (me.rola==='pastor'   && a.status==='zlozony'  && a.pastorEmail===me.email) ||
+    (me.rola==='diecezja' && a.status==='pastor'   && a.diecezja===me.diecezja) ||
+    (me.rola==='zarzad'   && (a.status==='diecezja'|| a.status==='sprawdz')));
+
+  const poziom = me.rola==='pastor'?'pastor':(me.rola==='diecezja'?'diecezja':'zarzad');
+
+  return `
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap">
+    <button class="btn ghost sm" onclick="SEL=null;renderView()">&#8592; Wróć</button>
+    <span class="pill ${ST[a.status].c}">${ST[a.status].l}</span>
+    ${a.arch?'<span class="tag">&#128230; w archiwum</span>':''}
+    <span class="tag">${esc(a.id)}</span>
+    <span class="tag g">złożony przez: ${esc(a.zrodlo)}</span>
+    ${(a.log||[]).some(x=>x.typ==='korekta')? '<span class="tag" style="background:#e8f6f0;color:var(--accent)">&#9998; poprawiany '+(a.log.filter(x=>x.typ==='korekta').length)+' raz(y)</span>':''}
+    <div style="flex:1"></div>
+    ${mogeKorygowac(a)? `<button class="btn sec sm" onclick="korekta('${a.id}')">&#9998; Popraw wniosek</button>`:''}
+    ${me.rola!=='wyznawca'? `<button class="btn sec sm" onclick="napisz('${a.id}','')">&#9993; Napisz do uczestników</button>
+      <button class="btn ghost sm" onclick="podgladSkladajacego('${a.id}')" title="tak widzi tę sprawę składający">&#128065; Oczami składającego</button>`:''}
+  </div>
+  <h1>${esc(a.tytul)}</h1>
+  <p class="sub">Działanie teraz: <b>${esc(dzialanie(a))}</b> &nbsp;|&nbsp; złożono ${dt(a.data)}
+    &nbsp;|&nbsp; na tym etapie ${dniTxt(a)}</p>
+
+  ${pilnosc(a) && me.rola==='zarzad' ? `<div class="note ${pilnosc(a)===2?'bad':''}">
+    <b>${pilnosc(a)===2?'Ten wniosek utknął.':'Ten wniosek czeka już długo.'}</b>
+    Stoi na jednym etapie ${dni(a)} dni. Zarząd nie decyduje za pastora
+    ani za diecezję, ale może napisać do uczestników sprawy: przypomnieć, zapytać o powód zwłoki
+    albo zadeklarować poparcie.
+    <div style="margin-top:9px"><button class="btn sm" onclick="napisz('${a.id}','ponaglenie')">Poproś o przyspieszenie</button>
+    <button class="btn sm sec" onclick="napisz('${a.id}','poparcie')">Napisz, że popieramy projekt</button></div>
+  </div>`:''}
+
+  <div class="stepper">
+    <div class="st ${k>=1?'done':''} ${k===1?'cur':''}">1. Złożony</div>
+    <div class="st ${k>=2?'done':''} ${k===2?'cur':''}">2. Pastor zboru</div>
+    <div class="st ${k>=3?'done':''} ${k===3?'cur':''}">3. Diecezja</div>
+    <div class="st ${k>=4?'done':''} ${k===4&&a.status!=='zarzad'?'cur':''}">4. Zarząd Kościoła</div>
+    <div class="st ${k>=5?'done':''} ${a.status==='zarzad'?'cur':''}">5. Realizacja i raporty</div>
+    <div class="st ${k>=6?'done':''} ${k===6?'cur':''}">6. Zakończony</div>
+    ${zly?'<div class="st bad">'+ST[a.status].l+'</div>':''}
+  </div>
+
+  ${panelZamkniecia(a)}
+  ${kartaWyplat(a)}
+  ${kartaRaportow(a)}
+
+  ${a.status==='sprawdz'?`<div class="note bad"><b>Adres pastora do weryfikacji.</b> Podany adres
+  <b>${esc(a.pastorEmail)}</b> nie należy do domeny adwent.pl, więc wniosek nie poszedł
+  automatycznie dalej. Sprawdź i wskaż właściwą osobę.</div>`:''}
+
+  ${moge? panelDecyzji(a, poziom) : ''}
+
+  <div class="card">
+    <h3>Kto składa</h3>
+    <div class="kv">
+      <div class="k">Imię i nazwisko</div><div>${esc(a.imie)}</div>
+      <div class="k">E-mail</div><div>${esc(a.email)}</div>
+      <div class="k">Telefon</div><div>${esc(a.tel||'brak')}</div>
+      <div class="k">Zbór</div><div>${esc(a.zbor)}</div>
+      <div class="k">Pastor zboru</div><div>${esc(a.pastorEmail)}</div>
+      <div class="k">Diecezja</div><div>${esc(a.diecezja)}</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Opis projektu</h3>
+    <div class="kv">
+      <div class="k">Rodzaj wniosku</div><div>${esc(a.rodzaj)}</div>
+      <div class="k">Termin realizacji</div><div>${dt(a.od)} do ${dt(a.do)}</div>
+      <div class="k">Cel</div><div>${esc(a.cel)}</div>
+      <div class="k">Plan realizacji</div><div>${esc(a.plan)}</div>
+      <div class="k">Oczekiwane rezultaty</div><div>${esc(a.rezultaty)}</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Budżet</h3>
+    <div class="kv">
+      <div class="k">Kwota wnioskowana</div><div><b>${zl(a.kwota)}</b></div>
+      <div class="k">Wkład własny zboru</div><div>${zl(a.wklad)}</div>
+      <div class="k">Wartość projektu</div><div>${zl(a.kwota + (a.wklad||0))}</div>
+      <div class="k">Pozycje kosztowe</div><div style="white-space:pre-line">${esc(a.budzet)}</div>
+    </div>
+    <div style="margin-top:14px">
+      <h3 style="margin-bottom:6px">Załączniki</h3>
+      ${a.zal.length? a.zal.map(z=>'<span class="att">&#128206; '+esc(z)+'</span>').join('')
+        : '<p style="font-size:13px;color:var(--muted);margin:0">Brak. Wyznawca nie może dołączać plików formularzem publicznym, dokumenty dokłada pastor przy zatwierdzaniu.</p>'}
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Historia decyzji</h3>
+    ${blokDecyzji('Pastor zboru', a.dec.pastor, a.status==='zlozony')}
+    ${blokDecyzji('Diecezja '+a.diecezja, a.dec.diecezja, a.status==='pastor')}
+    ${blokDecyzji('Zarząd Kościoła', a.dec.zarzad, a.status==='diecezja')}
+    ${a.dec.zamkniecie? blokDecyzji('Zamknięcie sprawy', a.dec.zamkniecie, false)
+      : (a.status==='zarzad'? `<div class="dec wait"><div class="h">Zamknięcie sprawy</div>
+        <div class="m">projekt w realizacji, czeka na rozliczenie</div></div>` : '')}
+    ${a.arch? `<div class="dec"><div class="h">Archiwum</div>
+      <div class="m">przeniesiono ${dt(a.dataArch)} &nbsp;|&nbsp; ${esc(a.ktoArch||'')}</div></div>`:''}
+  </div>
+
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+      <h3 style="margin:0;flex:1">Historia sprawy</h3>
+      ${mogeKorygowac(a)? `<button class="btn sm sec" onclick="korekta('${a.id}')">&#9998; Popraw wniosek</button>`:''}
+      ${me.rola!=='wyznawca'? `<button class="btn sm" onclick="napisz('${a.id}','')">&#9993; Napisz do uczestników</button>`:''}
+    </div>
+    <p style="font-size:12.5px;color:var(--muted);margin:0 0 12px">Jedna oś czasu: automatyczne
+    powiadomienia, wiadomości pisane ręcznie oraz każda poprawka wniosku ze starą i nową wartością.
+    Nic z tego nie da się skasować. Maile wysłane poza systemem, prosto z Outlooka, tu nie trafią.</p>
+    ${korespondencja(a)}
+  </div>`;
+}
+
+function blokDecyzji(nazwa, d, czeka){
+  if(!d) return `<div class="dec wait"><div class="h">${esc(nazwa)}</div>
+    <div class="m">${czeka?'czeka na decyzję':'jeszcze nie na tym etapie'}</div></div>`;
+  const zla = ['Do poprawy','Odrzucam'].includes(d.d);
+  return `<div class="dec ${zla?'bad':'ok'}">
+    <div class="h">${esc(nazwa)}: ${esc(d.d)}</div>
+    <div class="m">${esc(d.kto)} &nbsp;|&nbsp; ${dt(d.data)}${d.kwota?' &nbsp;|&nbsp; kwota: <b>'+zl(d.kwota)+'</b>':''}</div>
+    ${d.uw?'<div class="u">'+esc(d.uw)+'</div>':''}
+  </div>`;
+}
+
+/* pełny rejestr: automaty wyliczone z historii sprawy plus wiadomości pisane ręcznie.
+   dlaEmail zawęża widok do tego, co składający naprawdę dostał albo sam wysłał */
+function korespondencja(a, dlaEmail){
+  let m = [{d:a.data, do:[a.email], od:'system', sj:'Przyjęliśmy twój wniosek '+a.id,
+              bd:'Potwierdzenie złożenia wniosku, numer sprawy i informacja o dalszych krokach.'}];
+  if(a.status!=='sprawdz')
+    m.push({d:a.data, do:[a.pastorEmail], od:'system', sj:'Wniosek '+a.id+' czeka na twoje zatwierdzenie',
+            bd:'Prośba o decyzję, z linkiem do dołączenia dokumentów.'});
+  else
+    m.push({d:a.data, do:['zarzad@adwent.pl'], od:'system', sj:'Wniosek '+a.id+' wymaga weryfikacji adresu pastora',
+            bd:'Podany adres nie należy do domeny adwent.pl, wniosek wstrzymany do sprawdzenia.'});
+  if(a.dec.pastor && a.dec.pastor.data)
+    m.push({d:a.dec.pastor.data, do:[a.email], od:'system', sj:'Wniosek '+a.id+': decyzja pastora',
+            bd:'Pastor podjął decyzję: '+a.dec.pastor.d+'.'+(a.dec.pastor.uw?'\n\nUwagi: '+a.dec.pastor.uw:'')});
+  if(a.dec.diecezja && a.dec.diecezja.data)
+    m.push({d:a.dec.diecezja.data, do:[a.email], od:'system', sj:'Wniosek '+a.id+': decyzja diecezji',
+            bd:'Diecezja podjęła decyzję: '+a.dec.diecezja.d+'.'+(a.dec.diecezja.uw?'\n\nUwagi: '+a.dec.diecezja.uw:'')});
+  if(a.dec.zarzad && a.dec.zarzad.data)
+    m.push({d:a.dec.zarzad.data, do:[a.email], od:'system', sj:'Wniosek '+a.id+': decyzja Zarządu Kościoła',
+            bd:'Decyzja końcowa: '+a.dec.zarzad.d+(a.dec.zarzad.kwota?', przyznano '+zl(a.dec.zarzad.kwota):'')+'.'
+               +(a.dec.zarzad.uw?'\n\nUwagi: '+a.dec.zarzad.uw:'')});
+
+  if(a.dec.zamkniecie && a.dec.zamkniecie.data)
+    m.push({d:a.dec.zamkniecie.data, do:[a.email], od:'system', sj:'Wniosek '+a.id+': sprawa zakończona',
+            bd:'Projekt rozliczony, sprawa zamknięta. Dziękujemy za realizację.'
+               +(a.dec.zamkniecie.uw?'\n\nUwagi: '+a.dec.zamkniecie.uw:'')});
+
+  /* automatyczne prośby o raport miesięczny, po jednej za każdy miniony okres */
+  if(a.dec.zarzad && a.dec.zarzad.d==='Zatwierdzam' && a.do){
+    okresyNalezne(a).forEach(o=>{
+      m.push({d:terminOkresu(o).slice(0,8)+'01', do:[a.email], od:'system',
+              sj:'Wniosek '+a.id+': prośba o raport za '+miesiacTxt(o),
+              bd:'Automatyczna prośba o kilka zdań o postępie projektu i szacunkową kwotę wydaną w tym miesiącu. '
+                 +'Formularz pod linkiem, odpowiedź trafia prosto do historii sprawy.'});
+    });
+    const term = terminRaportu(a);
+    if(DZIS >= a.do)
+      m.push({d:a.do, do:[a.email], od:'system', sj:'Wniosek '+a.id+': czas na raport końcowy',
+              bd:'Projekt dobiegł końca. Raport końcowy prosimy złożyć do '+dt(term)
+                 +'. Jeśli realizacja się przeciąga, złóż wniosek o przedłużenie terminu.'});
+    if(DZIS > term && !raportKoncowy(a))
+      m.push({d:term, do:[a.email, a.pastorEmail], od:'system',
+              sj:'Wniosek '+a.id+': raport końcowy po terminie',
+              bd:'Termin złożenia raportu końcowego minął '+dt(term)+'. Kopia do pastora zboru.'});
+  }
+
+  /* przelewy i zwroty */
+  wyplaty(a).forEach(x=>{
+    m.push({d:x.data, do:[a.email, a.pastorEmail], od:'system',
+            sj: x.typ==='zwrot'
+              ? 'Wniosek '+a.id+': odnotowany zwrot '+zl(x.kwota)
+              : 'Wniosek '+a.id+': przelew wykonany, '+zl(x.kwota),
+            bd: (x.typ==='zwrot'
+              ? 'Zarząd odnotował zwrot niewykorzystanych środków.'
+              : 'Pieniądze wyszły z konta Kościoła. Tytuł przelewu: '+(x.tytul||a.id)+'.')
+              + (x.uw? '\n\n'+x.uw : '')
+              + '\n\nRozliczenie: wypłacono '+zl(sumaWyplat(a))+' z przyznanych '+zl(przyznano(a))+'.',
+            przelew:true, typ:x.typ});
+  });
+
+  /* złożone raporty */
+  (a.raporty||[]).forEach(r=>{
+    m.push({d:r.data, od:r.kto, sj:(r.typ==='koncowy'?'Raport końcowy':'Raport za '+miesiacTxt(r.okres))
+            +', wydano '+zl(r.wydano), bd:r.tresc, raport:true, typ:r.typ});
+  });
+
+  /* wnioski o przedłużenie i decyzje w ich sprawie */
+  (a.przedluzenia||[]).forEach(p=>{
+    m.push({d:p.data, od:p.kto, sj:'Wniosek o przedłużenie projektu do '+dt(p.nowyDo),
+            bd:p.powod, zdarz:true});
+    if(p.decyzja)
+      m.push({d:p.decyzja.data, od:p.decyzja.kto,
+              sj:'Przedłużenie projektu: '+(p.status==='zatwierdzony'?'zgoda, nowy termin '+dt(p.nowyDo):'odmowa'),
+              zdarz:true});
+  });
+
+  (a.kor||[]).forEach(k=>m.push({d:k.data, do:k.do, od:k.od, sj:k.temat, bd:k.tresc, reczna:true}));
+
+  /* poprawki i zdarzenia z rejestru zmian, w tej samej osi czasu */
+  (a.log||[]).forEach(k=>{
+    if(k.typ==='korekta')
+      m.push({d:k.data, od:k.kto, rola:k.rola, sj:'Korekta wniosku, zmienionych pól: '+k.zm.length,
+              powod:k.powod, zm:k.zm, zmiana:true});
+    else
+      m.push({d:k.data, od:k.kto, rola:k.rola, sj:k.opis, zdarz:true, wewn:!k.jawne});
+  });
+
+  if(dlaEmail) m = m.filter(x=>{
+    if(x.wewn) return false;                                   /* notatki wewnętrzne Zarządu */
+    if(x.raport || x.zmiana) return true;                      /* jego raporty i poprawki wniosku */
+    if(x.zdarz) return true;                                   /* przedłużenia, które sam składał */
+    return (x.do||[]).indexOf(dlaEmail) >= 0;                  /* maile, które faktycznie dostał */
+  });
+
+  m.sort((x,y)=> x.d===y.d ? 0 : (x.d<y.d?-1:1));
+
+  return m.map(x=>{
+    if(x.zmiana) return `<div class="msg zmiana">
+      <div class="hd">
+        <span class="zn z">korekta wniosku</span>
+        <span>${dt(x.d)}</span>
+        <span>${esc(x.od)}${x.rola?', '+esc(x.rola):''}</span>
+      </div>
+      <div class="sj">${esc(x.sj)}</div>
+      <div class="bd">Powód: ${esc(x.powod)}</div>
+      <table class="zmt"><tbody>
+        ${x.zm.map(z=>`<tr><td class="p">${esc(z.pole)}</td>
+          <td class="s">${esc(z.przed)}</td><td class="a">&#8594;</td>
+          <td class="n">${esc(z.po)}</td></tr>`).join('')}
+      </tbody></table>
+    </div>`;
+
+    if(x.przelew) return `<div class="msg przelew">
+      <div class="hd">
+        <span class="zn p">${x.typ==='zwrot'?'zwrot środków':'przelew'}</span>
+        <span>${dt(x.d)}</span>
+        <span>do: ${x.do.map(esc).join(', ')}</span>
+      </div>
+      <div class="sj">${esc(x.sj)}</div>
+      <div class="bd">${esc(x.bd)}</div>
+    </div>`;
+
+    if(x.raport) return `<div class="msg rapmsg${x.typ==='koncowy'?' fin':''}">
+      <div class="hd">
+        <span class="zn k">${x.typ==='koncowy'?'raport końcowy':'raport miesięczny'}</span>
+        <span>${dt(x.d)}</span>
+        <span>od: ${esc(x.od)}</span>
+      </div>
+      <div class="sj">${esc(x.sj)}</div>
+      <div class="bd">${esc(x.bd)}</div>
+    </div>`;
+
+    if(x.zdarz) return `<div class="msg zdarz">
+      <div class="hd">
+        <span class="zn">zdarzenie</span>
+        <span>${dt(x.d)}</span>
+        <span>${esc(x.od)}${x.rola?', '+esc(x.rola):''}</span>
+      </div>
+      <div class="sj" style="font-weight:400">${esc(x.sj)}</div>
+      ${x.bd?'<div class="bd">'+esc(x.bd)+'</div>':''}
+    </div>`;
+
+    return `<div class="msg${x.reczna?' reczna':''}">
+      <div class="hd">
+        <span class="zn${x.reczna?' r':''}">${x.reczna?'wiadomość ręczna':'automat'}</span>
+        <span>${dt(x.d)}</span>
+        ${x.reczna?'<span>od: '+esc(x.od)+'</span>':''}
+        <span>do: ${x.do.map(esc).join(', ')}</span>
+      </div>
+      <div class="sj">${esc(x.sj)}</div>
+      <div class="bd">${esc(x.bd)}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ============ WIADOMOŚĆ DO UCZESTNIKÓW SPRAWY ============ */
+const SZABLONY = {
+  ponaglenie: {
+    t: 'prośba o przyspieszenie',
+    tresc: a=>`Dzień dobry,\n\nwniosek ${a.id} „${a.tytul}" ze zboru ${a.zbor} czeka na decyzję już ${dni(a)} dni.\n\nJako Zarząd Kościoła uważamy ten projekt za wartościowy i chcielibyśmy go wesprzeć. Prosimy o rozpatrzenie sprawy w najbliższym możliwym terminie. Jeśli coś blokuje decyzję albo brakuje dokumentów, dajcie znać, pomożemy to rozwiązać.\n\nZ pozdrowieniami\nZarząd Kościoła Adwentystów Dnia Siódmego w RP`
+  },
+  poparcie: {
+    t: 'Zarząd popiera ten projekt',
+    tresc: a=>`Dzień dobry,\n\nzapoznaliśmy się z wnioskiem ${a.id} „${a.tytul}". Projekt bardzo nam się podoba i chcemy zadeklarować wsparcie Zarządu.\n\nProsimy potraktować sprawę priorytetowo. Jesteśmy otwarci na rozmowę o zakresie i budżecie, jeśli to pomoże w realizacji.\n\nZ pozdrowieniami\nZarząd Kościoła Adwentystów Dnia Siódmego w RP`
+  },
+  pytanie: {
+    t: 'prośba o wyjaśnienie',
+    tresc: a=>`Dzień dobry,\n\nw związku z wnioskiem ${a.id} „${a.tytul}" prosimy o wyjaśnienie następującej kwestii:\n\n[wpisz pytanie]\n\nZ pozdrowieniami\nZarząd Kościoła Adwentystów Dnia Siódmego w RP`
+  },
+  raport: {
+    t: 'przypomnienie o raporcie',
+    tresc: a=>{
+      const zaleg = zalegleOkresy(a);
+      const term = terminRaportu(a);
+      const spoznienie = DZIS > term ? '\n\nRaport końcowy miał wpłynąć do '+dt(term)+', czyli '+dniMiedzy(term,DZIS)+' dni temu.' : '';
+      return `Dzień dobry,\n\nw sprawie projektu ${a.id} „${a.tytul}", na który Zarząd przyznał ${zl(przyznano(a))}.\n\n`
+        + (zaleg.length? 'Brakuje nam raportów za: '+zaleg.map(miesiacTxt).join(', ')+'.' : 'Prosimy o bieżący raport z realizacji.')
+        + spoznienie
+        + `\n\nRaport to kilka zdań własnymi słowami i szacunkowa kwota wydana w danym okresie. Nie trzeba faktur ani tabelek. Formularz jest pod linkiem z automatycznego maila, można też odpisać na tę wiadomość.\n\nJeśli projekt się opóźnia, złóż w systemie wniosek o przedłużenie terminu. To normalna sprawa i lepsze niż milczenie.\n\nZ pozdrowieniami\nZarząd Kościoła Adwentystów Dnia Siódmego w RP`;
+    }
+  },
+  wlasna: { t: 'wiadomość własna', tresc: a=>'' }
+};
+
+function napisz(id, szablon){
+  const a = APPS.find(x=>x.id===id);
+  const sz = szablon || 'wlasna';
+  const box = document.getElementById('modalBox');
+
+  const odbiorcy = [
+    {k:'skl', n:'Składający: '+a.imie, m:a.email, dom:false},
+    {k:'pas', n:'Pastor zboru '+a.zbor,  m:a.pastorEmail, dom:true},
+    {k:'die', n:'Diecezja '+a.diecezja,  m:'diecezja.'+a.diecezja.toLowerCase()+'@adwent.pl', dom:true},
+    {k:'zar', n:'Zarząd Kościoła',       m:'zarzad@adwent.pl', dom:false}
+  ];
+
+  box.innerHTML = `
+    <h2>Napisz do uczestników sprawy</h2>
+    <p style="font-size:13.5px;color:var(--muted);margin-top:-6px">
+      ${esc(a.id)} &nbsp;|&nbsp; ${esc(a.tytul)} &nbsp;|&nbsp; czeka ${dni(a)} dni na etapie: ${ST[a.status].l}</p>
+
+    <div class="field"><label class="f">Do kogo</label>
+      <div class="odb">
+        ${odbiorcy.map(o=>`<label><input type="checkbox" id="o_${o.k}" ${o.dom?'checked':''}>
+          <span><span class="who">${esc(o.n)}</span><br><span class="mail">${esc(o.m)}</span></span></label>`).join('')}
+      </div>
+      <div class="hint">Domyślnie zaznaczeni są ci, którzy mogą ruszyć sprawę dalej.</div>
+    </div>
+
+    <div class="field"><label class="f">Rodzaj wiadomości</label>
+      <select id="m_szab" onchange="wstawSzablon('${id}')">
+        ${Object.keys(SZABLONY).map(k=>'<option value="'+k+'"'+(k===sz?' selected':'')+'>'+SZABLONY[k].t+'</option>').join('')}
+      </select></div>
+
+    <div class="field"><label class="f">Temat</label>
+      <input type="text" id="m_temat" value="[${esc(a.id)}] ${esc(a.tytul)}"></div>
+
+    <div class="field"><label class="f">Treść</label>
+      <textarea id="m_tresc" style="min-height:190px">${esc(SZABLONY[sz].tresc(a))}</textarea></div>
+
+    <div class="note info" style="font-size:12px">Wiadomość wyjdzie z adresu <b>wnioski@adwent.pl</b>
+    z odpowiedzią kierowaną na twój adres, a jej kopia zapisze się w historii sprawy. Każdy, kto
+    otworzy ten wniosek, zobaczy, że i kiedy została wysłana.</div>
+
+    <div style="text-align:right;margin-top:6px">
+      <button class="btn ghost" onclick="zamknijModal()">Anuluj</button>
+      <button class="btn" onclick="wyslij('${id}')">Wyślij</button>
+    </div>`;
+  document.getElementById('modal').classList.remove('hidden');
+}
+
+function wstawSzablon(id){
+  const a = APPS.find(x=>x.id===id);
+  const k = document.getElementById('m_szab').value;
+  document.getElementById('m_tresc').value = SZABLONY[k].tresc(a);
+}
+
+function wyslij(id){
+  const a = APPS.find(x=>x.id===id);
+  const wybrani = [];
+  if(document.getElementById('o_skl').checked) wybrani.push(a.email);
+  if(document.getElementById('o_pas').checked) wybrani.push(a.pastorEmail);
+  if(document.getElementById('o_die').checked) wybrani.push('diecezja.'+a.diecezja.toLowerCase()+'@adwent.pl');
+  if(document.getElementById('o_zar').checked) wybrani.push('zarzad@adwent.pl');
+
+  const temat = document.getElementById('m_temat').value.trim();
+  const tresc = document.getElementById('m_tresc').value.trim();
+
+  if(!wybrani.length){ toast('Zaznacz przynajmniej jednego odbiorcę.'); return; }
+  if(!temat || !tresc){ toast('Temat i treść nie mogą być puste.'); return; }
+
+  a.kor = a.kor || [];
+  a.kor.push({data:DZIS, od:u().n, do:wybrani, temat:temat, tresc:tresc});
+
+  zamknijModal();
+  toast('Wiadomość wysłana do '+wybrani.length+' odbiorców i zapisana w historii sprawy '+id+'.');
+  SEL = id; renderView();
+}
+
+/* ============ OKIENKA RAPORTOWE ============ */
+/* pierwszy dzień miesiąca następującego po okresie: od tego dnia okienko jest otwarte */
+function otwarcieOkresu(okres){
+  const [r,m] = okres.split('-').map(Number);
+  return new Date(Date.UTC(r, m, 1)).toISOString().slice(0,10);
+}
+/* wszystkie miesiące projektu, także te jeszcze przyszłe */
+function okresyProjektu(a){
+  const start = startRealizacji(a);
+  if(!start || !a.do) return [];
+  return miesiace(start.slice(0,7), a.do.slice(0,7));
+}
+function stanOkresu(a, okres){
+  const r = (a.raporty||[]).find(x=>x.okres===okres);
+  if(r) return {k:'zlozony', r:r};
+  if(DZIS < otwarcieOkresu(okres)) return {k:'przyszly', otwiera:otwarcieOkresu(okres)};
+  if(DZIS > terminOkresu(okres))   return {k:'zalegly', termin:terminOkresu(okres)};
+  return {k:'otwarty', termin:terminOkresu(okres)};
+}
+function stanKoncowego(a){
+  const r = raportKoncowy(a);
+  if(r) return {k:'zlozony', r:r};
+  if(!a.do) return {k:'przyszly', otwiera:''};
+  if(DZIS < a.do) return {k:'przyszly', otwiera:a.do};
+  if(DZIS > terminRaportu(a)) return {k:'zalegly', termin:terminRaportu(a)};
+  return {k:'otwarty', termin:terminRaportu(a)};
+}
+
+/* siatka okienek: po jednym na każdy miesiąc projektu plus raport końcowy */
+function siatkaOkresow(a, klikalna){
+  const okr = okresyProjektu(a);
+  if(!okr.length && !a.do) return '';
+  const karta = (tytul, podtytul, st, akcja) => {
+    const kl = st.k==='zlozony'?'ok':(st.k==='zalegly'?'late':(st.k==='otwarty'?'open':'soon'));
+    const klik = klikalna && (st.k==='otwarty' || st.k==='zalegly') ? ' klik' : '';
+    return `<div class="okno ${kl}${klik}"${klik&&akcja?' onclick="'+akcja+'"':''}>
+      <div class="ot">${esc(tytul)}</div>
+      <div class="op">${podtytul}</div>
+      ${st.k==='zlozony'? `<div class="ozl">&#10003; złożony ${dt(st.r.data)}</div>
+        <div class="okw">${zl(st.r.wydano)}</div>
+        <div class="otr">${esc(st.r.tresc.slice(0,110))}${st.r.tresc.length>110?'…':''}</div>
+        <button class="btn ghost sm" onclick="event.stopPropagation();podgladRaportu('${a.id}','${st.r.okres||'koncowy'}')">Zobacz całość</button>`
+      : st.k==='przyszly'? `<div class="ocz">otworzy się ${dt(st.otwiera)}</div>`
+      : `<div class="${st.k==='zalegly'?'ozal':'ocz'}">${st.k==='zalegly'
+            ? 'termin minął '+dt(st.termin)
+            : 'na wypełnienie do '+dt(st.termin)}</div>
+         ${klikalna? `<button class="btn sm${st.k==='zalegly'?'':' sec'}">Wypełnij raport</button>`
+                   : '<div class="ocz">czeka na składającego</div>'}`}
+    </div>`;
+  };
+
+  return `<div class="okna">
+    ${okr.map(o=>karta('Raport za '+miesiacTxt(o), 'okres miesięczny', stanOkresu(a,o),
+        "formularzRaportu('"+a.id+"','"+o+"')")).join('')}
+    ${a.do? karta('Raport końcowy', 'podsumowanie całego projektu', stanKoncowego(a),
+        "formularzRaportu('"+a.id+"','koncowy')") : ''}
+  </div>`;
+}
+
+function podgladRaportu(id, okres){
+  const a = APPS.find(x=>x.id===id);
+  const r = okres==='koncowy' ? raportKoncowy(a) : (a.raporty||[]).find(x=>x.okres===okres);
+  if(!r) return;
+  const box = document.getElementById('modalBox');
+  box.innerHTML = `
+    <h2>${r.typ==='koncowy'?'Raport końcowy':'Raport za '+miesiacTxt(r.okres)}</h2>
+    <p style="font-size:13.5px;color:var(--muted);margin-top:-6px">${esc(a.id)} &nbsp;|&nbsp; ${esc(a.tytul)}</p>
+    <div class="kv" style="margin-bottom:12px">
+      <div class="k">Złożony</div><div>${dt(r.data)} przez ${esc(r.kto)}</div>
+      <div class="k">Kwota wydana w okresie</div><div><b>${zl(r.wydano)}</b></div>
+      <div class="k">Razem rozliczono</div><div>${zl(wydanoWgRaportow(a))} z przyznanych ${zl(przyznano(a))}</div>
+    </div>
+    <div class="rap"><div class="bd">${esc(r.tresc)}</div></div>
+    <div style="text-align:right;margin-top:10px">
+      <button class="btn" onclick="zamknijModal()">Zamknij</button>
+    </div>`;
+  document.getElementById('modal').classList.remove('hidden');
+}
+
+/* ============ WIDOK: sprawa oczami składającego ============ */
+function widokSkladajacego(){
+  const me = u();
+  const moje = SKL_ID ? APPS.filter(a=>a.id===SKL_ID) : APPS.filter(a=>a.email===me.email);
+  const a = moje[0];
+
+  const gora = `
+  <div class="pubtop">
+    <h1>Twoja sprawa w Zarządzie Kościoła</h1>
+    <p>Tak wygląda strona, którą składający otwiera z linku w mailu. Bez logowania, bez hasła,
+    bez dostępu do cudzych wniosków. Link jest indywidualny dla tej jednej sprawy.</p>
+  </div>
+  ${POWROT? `<div class="fbar"><div style="flex:1;min-width:200px">Oglądasz podgląd oczami składającego.</div>
+    <button class="btn sec sm" onclick="wrocZPodgladu()">&#8592; Wróć do swojego widoku</button></div>`:''}`;
+
+  if(!a) return gora + '<div class="card"><p class="sub">Nie znaleziono sprawy przypisanej do tego adresu.</p></div>';
+
+  const s = stanRaportu(a);
+  const w = wydanoWgRaportow(a), pz = przyznano(a);
+  const oczek = przedluzenieOczekuje(a);
+  const k = ST[a.status].krok;
+  const zaleg = wRealizacji(a) ? zalegleOkresy(a) : [];
+
+  return gora + `
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px">
+    <span class="pill ${ST[a.status].c}">${ST[a.status].l}</span>
+    <span class="tag">${esc(a.id)}</span>
+    <span class="tag g">złożony ${dt(a.data)}</span>
+  </div>
+  <h1>${esc(a.tytul)}</h1>
+  <p class="sub">${esc(a.zbor)}, Diecezja ${esc(a.diecezja)} &nbsp;|&nbsp; ${esc(a.imie)}</p>
+
+  <div class="stepper">
+    <div class="st ${k>=1?'done':''} ${k===1?'cur':''}">1. Złożony</div>
+    <div class="st ${k>=2?'done':''} ${k===2?'cur':''}">2. Pastor zboru</div>
+    <div class="st ${k>=3?'done':''} ${k===3?'cur':''}">3. Diecezja</div>
+    <div class="st ${k>=4?'done':''} ${k===4&&a.status!=='zarzad'?'cur':''}">4. Zarząd Kościoła</div>
+    <div class="st ${k>=5?'done':''} ${a.status==='zarzad'?'cur':''}">5. Realizacja i raporty</div>
+    <div class="st ${k>=6?'done':''} ${k===6?'cur':''}">6. Zakończony</div>
+    ${(a.status==='odrzucony'||a.status==='poprawa')?'<div class="st bad">'+ST[a.status].l+'</div>':''}
+  </div>
+
+  ${poPrzyznaniu(a) ? (()=>{ const sw = stanWyplaty(a); const lw = wyplaty(a); return `
+  <div class="card"${sw.p?' style="border-color:#f5cba7;background:#fffcf6"':' style="border-color:#a9dfbf;background:#f8fdfa"'}>
+    <h3>Pieniądze</h3>
+    <p style="font-size:13.5px;font-weight:700;color:${sw.p?'var(--warn)':'var(--ok)'};margin:0 0 10px">${esc(sw.t)}</p>
+    ${lw.length? `<table><thead><tr><th>Data</th><th>Rodzaj</th><th>Kwota</th><th>Tytuł</th></tr></thead><tbody>
+      ${lw.slice().sort((x,y)=> x.data<y.data?-1:1).map(x=>`<tr>
+        <td style="white-space:nowrap">${dt(x.data)}</td>
+        <td><span class="pill ${x.typ==='zwrot'?'sR':'s4'}">${x.typ==='zwrot'?'zwrot':'przelew'}</span></td>
+        <td style="font-weight:700;white-space:nowrap">${x.typ==='zwrot'?'−':'+'} ${zl(x.kwota)}</td>
+        <td style="font-size:12.5px">${esc(x.tytul||'')}</td>
+      </tr>`).join('')}</tbody></table>`
+    : `<p style="font-size:13px;color:#3a4756;margin:0">Zarząd przyznał ${zl(przyznano(a))}, ale przelew
+       nie został jeszcze odnotowany. Gdy pieniądze wyjdą, dostaniesz maila i zobaczysz to tutaj.</p>`}
+  </div>`; })() : ''}
+
+  ${wRealizacji(a) ? `
+  <div class="card"${s&&s.p?` style="border-color:${s.p===2?'#f5b7b1':'#f5cba7'};background:${s.p===2?'#fffafa':'#fffcf6'}"`:''}>
+    <h3>Twoje raporty z realizacji</h3>
+    <p style="font-size:13px;color:#3a4756;margin:0 0 4px;line-height:1.6">Co miesiąc dostajesz maila
+    z przypomnieniem. Wchodzisz w okienko danego miesiąca i wpisujesz dwie rzeczy: <b>kilka zdań o tym,
+    co się wydarzyło</b> i <b>szacunkową kwotę wydaną w tym miesiącu</b>. Nie trzeba faktur ani tabelek,
+    wystarczy własnymi słowami.</p>
+    ${zaleg.length? `<p style="font-size:13px;color:var(--warn);font-weight:700;margin:8px 0 0">
+      Czekamy na raport za: ${zaleg.map(miesiacTxt).join(', ')}.</p>`:''}
+    ${s && s.k==='spozniony'? `<p style="font-size:13px;color:var(--red);font-weight:700;margin:8px 0 0">
+      Raport końcowy miał wpłynąć do ${dt(terminRaportu(a))}, minęło ${s.dni} dni.
+      Jeśli projekt się przeciąga, poproś niżej o przedłużenie terminu.</p>`:''}
+    ${siatkaOkresow(a, true)}
+    <div class="kv" style="margin-top:14px">
+      <div class="k">Przyznane środki</div><div><b>${zl(pz)}</b></div>
+      <div class="k">Rozliczone w raportach</div><div>${zl(w)}${pz?' <span style="color:var(--muted);font-size:12.5px">'+Math.round(w/pz*100)+'%, zostało '+zl(pz-w)+'</span>':''}</div>
+      <div class="k">Projekt trwa do</div><div><b>${dt(a.do)}</b></div>
+      <div class="k">Raport końcowy do</div><div><b>${dt(terminRaportu(a))}</b> <span style="color:var(--muted);font-size:12.5px">miesiąc po zakończeniu</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Potrzebujesz więcej czasu?</h3>
+    ${oczek
+      ? `<div class="note"><b>Twój wniosek o przedłużenie czeka na decyzję Zarządu.</b>
+         Złożony ${dt(oczek.data)}: termin ${dt(oczek.staryDo)} &#8594; <b>${dt(oczek.nowyDo)}</b>.
+         <div style="margin-top:7px;background:#fff;border-radius:6px;padding:8px 10px">${esc(oczek.powod)}</div></div>`
+      : `<p style="font-size:13px;color:#3a4756;margin:0 0 10px;line-height:1.6">Jeśli projekt się
+         opóźnia, nie czekaj z milczeniem. Poproś o przesunięcie terminu zakończenia, a razem z nim
+         przesunie się termin raportu końcowego. To normalna sprawa, decyduje Zarząd.</p>
+         <button class="btn sec" onclick="formularzPrzedluzenia('${a.id}')">Poproś o przedłużenie terminu</button>`}
+    ${(a.przedluzenia||[]).filter(p=>p.status!=='zlozony').map(p=>`<div class="dec ${p.status==='zatwierdzony'?'ok':'bad'}" style="margin-top:12px">
+      <div class="h">Przedłużenie: ${p.status==='zatwierdzony'?'zgoda Zarządu':'odmowa'}</div>
+      <div class="m">${dt(p.decyzja&&p.decyzja.data)} &nbsp;|&nbsp; ${dt(p.staryDo)} &#8594; ${dt(p.nowyDo)}</div>
+      ${p.decyzja&&p.decyzja.uw?'<div class="u">'+esc(p.decyzja.uw)+'</div>':''}
+    </div>`).join('')}
+  </div>` : ''}
+
+  ${a.status==='zakonczony'? `<div class="card">
+    <h3>Sprawa zakończona</h3>
+    <p style="font-size:13px;color:#3a4756;margin:0 0 12px">Projekt rozliczony i zamknięty.
+    Rozliczono ${zl(w)} z przyznanych ${zl(pz)}. Dziękujemy za realizację.</p>
+    ${siatkaOkresow(a, false)}
+  </div>`:''}
+
+  <div class="card">
+    <h3>Twój wniosek</h3>
+    <div class="kv">
+      <div class="k">Kwota wnioskowana</div><div>${zl(a.kwota)}</div>
+      ${pz? '<div class="k">Kwota przyznana</div><div><b style="color:var(--ok)">'+zl(pz)+'</b></div>':''}
+      <div class="k">Wkład własny zboru</div><div>${zl(a.wklad)}</div>
+      <div class="k">Termin realizacji</div><div>${dt(a.od)} do ${dt(a.do)}</div>
+      <div class="k">Cel</div><div>${esc(a.cel)}</div>
+      <div class="k">Plan realizacji</div><div>${esc(a.plan)}</div>
+      <div class="k">Oczekiwane rezultaty</div><div>${esc(a.rezultaty)}</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Kto już rozpatrzył twoją sprawę</h3>
+    ${blokDecyzji('Pastor zboru', a.dec.pastor, a.status==='zlozony')}
+    ${blokDecyzji('Diecezja '+a.diecezja, a.dec.diecezja, a.status==='pastor')}
+    ${blokDecyzji('Zarząd Kościoła', a.dec.zarzad, a.status==='diecezja')}
+    ${a.dec.zamkniecie? blokDecyzji('Zamknięcie sprawy', a.dec.zamkniecie, false):''}
+  </div>
+
+  <div class="card">
+    <h3>Historia twojej sprawy</h3>
+    <p style="font-size:12.5px;color:var(--muted);margin:0 0 12px">Wszystko, co do ciebie wyszło
+    i co od ciebie wpłynęło. Wewnętrzne notatki Zarządu nie są tu widoczne.</p>
+    ${korespondencja(a, a.email)}
+  </div>`;
+}
+
+/* ============ KARTA WYPŁAT ============ */
+function kartaWyplat(a){
+  if(!poPrzyznaniu(a)) return '';
+  const me = u();
+  const s = stanWyplaty(a);
+  const lista = wyplaty(a).slice().sort((x,y)=> x.data<y.data?-1:1);
+  const pz = przyznano(a), w = sumaWyplat(a), zost = doWyplaty(a);
+  const moge = mogeWyplacac(a);
+  const kol = s.p ? 'var(--warn)' : 'var(--ok)';
+
+  return `
+  <div class="card"${s.p?' style="border-color:#f5cba7;background:#fffcf6"':''}>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px">
+      <h3 style="margin:0;flex:1">Wypłata środków</h3>
+      ${moge? `<button class="btn sm${s.p?'':' sec'}" onclick="formularzWyplaty('${a.id}','przelew')">&#128176; Zaznacz przelew</button>
+        ${w>0? `<button class="btn sm ghost" onclick="formularzWyplaty('${a.id}','zwrot')">Zapisz zwrot</button>`:''}`:''}
+    </div>
+
+    <p style="font-size:13.5px;color:${kol};font-weight:${s.p?'700':'400'};margin:0 0 12px">${esc(s.t)}</p>
+
+    <div class="paski">
+      <div class="pasek">
+        <div class="pl">Przyznane przez Zarząd</div>
+        <div class="pw"><div class="pb" style="width:100%;background:var(--blue2)"></div></div>
+        <div class="pk">${zl(pz)}</div>
+      </div>
+      <div class="pasek">
+        <div class="pl">Faktycznie wypłacone</div>
+        <div class="pw"><div class="pb" style="width:${pz?Math.min(100,Math.round(w/pz*100)):0}%;background:${w>=pz?'var(--ok)':'var(--warn)'}"></div></div>
+        <div class="pk">${zl(w)}</div>
+      </div>
+      <div class="pasek">
+        <div class="pl">Wydane wg raportów</div>
+        <div class="pw"><div class="pb" style="width:${pz?Math.min(100,Math.round(wydanoWgRaportow(a)/pz*100)):0}%;background:var(--accent)"></div></div>
+        <div class="pk">${zl(wydanoWgRaportow(a))}</div>
+      </div>
+    </div>
+    ${zost>0? `<p style="font-size:12.5px;color:var(--warn);font-weight:700;margin:10px 0 0">
+      Do przelania zostaje ${zl(zost)}.</p>`:''}
+
+    ${lista.length? `<h3 style="margin:16px 0 8px">Operacje (${lista.length})</h3>
+    <table><thead><tr><th>Data</th><th>Rodzaj</th><th>Kwota</th><th>Tytuł</th><th>Zapisał</th></tr></thead><tbody>
+    ${lista.map(x=>`<tr>
+      <td style="white-space:nowrap">${dt(x.data)}</td>
+      <td><span class="pill ${x.typ==='zwrot'?'sR':'s4'}">${x.typ==='zwrot'?'zwrot':'przelew'}</span></td>
+      <td style="font-weight:700;white-space:nowrap;color:${x.typ==='zwrot'?'var(--muted)':'var(--ok)'}">${x.typ==='zwrot'?'−':'+'} ${zl(x.kwota)}</td>
+      <td style="font-size:12.5px">${esc(x.tytul||'')}${x.uw?'<div style="font-size:11.5px;color:var(--muted)">'+esc(x.uw)+'</div>':''}</td>
+      <td style="font-size:12px;color:var(--muted)">${esc(x.kto)}</td>
+    </tr>`).join('')}
+    </tbody></table>`
+    : `<p style="font-size:13px;color:var(--muted);margin:14px 0 0">Żaden przelew nie został jeszcze
+       odnotowany. ${moge?'Gdy pieniądze wyjdą z konta, zaznacz to tutaj, żeby zbór i pastor wiedzieli, że środki są w drodze.'
+       :'Zaznacza to skarbnik po wykonaniu przelewu.'}</p>`}
+  </div>`;
+}
+
+function formularzWyplaty(id, typ){
+  const a = APPS.find(x=>x.id===id);
+  const zwrot = typ==='zwrot';
+  const zost = doWyplaty(a);
+  const box = document.getElementById('modalBox');
+  box.innerHTML = `
+    <h2>${zwrot?'Zwrot niewykorzystanych środków':'Przelew wykonany'}</h2>
+    <p style="font-size:13.5px;color:var(--muted);margin-top:-6px">${esc(a.id)} &nbsp;|&nbsp; ${esc(a.tytul)}
+      &nbsp;|&nbsp; ${esc(a.zbor)}</p>
+
+    <div class="note info" style="font-size:12.5px">${zwrot
+      ? 'Odnotuj pieniądze, które wróciły na konto Kościoła, na przykład niewykorzystaną część dotacji po rozliczeniu projektu.'
+      : 'Zaznaczasz, że pieniądze faktycznie wyszły z konta. Wpis trafia do historii sprawy, a składający i pastor dostają maila z potwierdzeniem.'}</div>
+
+    <div class="kv" style="margin-bottom:12px">
+      <div class="k">Przyznane</div><div><b>${zl(przyznano(a))}</b></div>
+      <div class="k">Dotąd wypłacone</div><div>${zl(sumaWyplat(a))}</div>
+      <div class="k">${zwrot?'Możliwy zwrot do':'Pozostaje do przelania'}</div><div><b>${zl(zwrot?sumaWyplat(a):zost)}</b></div>
+    </div>
+
+    <div class="row">
+      <div class="col"><div class="field"><label class="f">Data operacji <span class="req">*</span></label>
+        <input type="date" id="w_data" value="${DZIS}"></div></div>
+      <div class="col"><div class="field"><label class="f">Kwota w zł <span class="req">*</span></label>
+        <input type="number" id="w_kwota" value="${zwrot?'':zost||''}">
+        <div class="hint">${zwrot?'Nie więcej niż dotąd wypłacono.':'Można przelać transzami, wtedy wpisz kwotę tej transzy.'}</div></div></div>
+    </div>
+
+    <div class="field"><label class="f">Tytuł operacji</label>
+      <input type="text" id="w_tytul" value="${esc(zwrot?'Zwrot niewykorzystanej dotacji':a.id+' dofinansowanie')}">
+      <div class="hint">To, co widnieje na wyciągu bankowym.</div></div>
+
+    <div class="field"><label class="f">Uwagi</label>
+      <textarea id="w_uw" placeholder="${zwrot?'np. Zbór oddał różnicę po rozliczeniu projektu.':'np. Pierwsza transza, druga po raporcie za czerwiec.'}"></textarea></div>
+
+    <div style="text-align:right;margin-top:6px">
+      <button class="btn ghost" onclick="zamknijModal()">Anuluj</button>
+      <button class="btn${zwrot?'':' ok'}" onclick="zapiszWyplate('${id}','${zwrot?'zwrot':'przelew'}')">${zwrot?'Zapisz zwrot':'Zaznacz jako wypłacone'}</button>
+    </div>`;
+  document.getElementById('modal').classList.remove('hidden');
+}
+
+function zapiszWyplate(id, typ){
+  const a = APPS.find(x=>x.id===id);
+  const data = document.getElementById('w_data').value;
+  const kwota = Number(document.getElementById('w_kwota').value||0);
+  const tytul = (document.getElementById('w_tytul').value||'').trim();
+  const uw = (document.getElementById('w_uw').value||'').trim();
+  const zwrot = typ==='zwrot';
+
+  if(!data){ toast('Podaj datę operacji.'); return; }
+  if(data > DZIS){ toast('Data operacji nie może być z przyszłości.'); return; }
+  if(kwota <= 0){ toast('Kwota musi być większa od zera.'); return; }
+  if(!zwrot && kwota > doWyplaty(a)){
+    toast('Ta kwota przekracza to, co zostało do wypłaty ('+zl(doWyplaty(a))+'). Popraw kwotę albo zapisz kilka transz.');
+    return;
+  }
+  if(zwrot && kwota > sumaWyplat(a)){
+    toast('Nie da się zwrócić więcej, niż zostało wypłacone ('+zl(sumaWyplat(a))+').');
+    return;
+  }
+
+  a.wyplaty = a.wyplaty || [];
+  a.wyplaty.push({data:data, typ:zwrot?'zwrot':'przelew', kwota:kwota, kto:u().n, tytul:tytul, uw:uw});
+
+  zamknijModal();
+  const zost = doWyplaty(a);
+  toast(id+': zapisano '+(zwrot?'zwrot ':'przelew ')+zl(kwota)+'. '
+    + (zwrot? '' : (zost>0? 'Do wypłaty zostaje '+zl(zost)+'.' : 'Środki wypłacone w całości.'))
+    + ' Mail do składającego i pastora wysłany.');
+  SEL = id; render();
+}
+
+/* ============ KARTA RAPORTÓW W SZCZEGÓŁACH ============ */
+function kartaRaportow(a){
+  if(!wRealizacji(a) && a.status!=='zakonczony') return '';
+  const me = u();
+  const s = stanRaportu(a);
+  const rap = (a.raporty||[]).slice().sort((x,y)=> x.data<y.data?-1:1);
+  const w = wydanoWgRaportow(a), pz = przyznano(a);
+  const zaleg = wRealizacji(a) ? zalegleOkresy(a) : [];
+  const oczek = przedluzenieOczekuje(a);
+  const moge = me.rola!=='wyznawca' && !a.arch;
+  const kol = s && s.p===2 ? 'var(--red)' : (s && s.p===1 ? 'var(--warn)' : 'var(--ok)');
+
+  return `
+  <div class="card"${s&&s.p?` style="border-color:${s.p===2?'#f5b7b1':'#f5cba7'};background:${s.p===2?'#fffafa':'#fffcf6'}"`:''}>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px">
+      <h3 style="margin:0;flex:1">Realizacja i raporty</h3>
+      ${moge && wRealizacji(a)? `<button class="btn sm" onclick="formularzRaportu('${a.id}')">&#9998; Wpisz raport</button>
+        <button class="btn sm sec" onclick="napisz('${a.id}','raport')">&#9993; Poproś o raport</button>
+        ${oczek?'':`<button class="btn sm sec" onclick="formularzPrzedluzenia('${a.id}')">Wniosek o przedłużenie</button>`}`:''}
+    </div>
+
+    ${s? `<p style="font-size:13.5px;color:${kol};font-weight:${s.p?'700':'400'};margin:0 0 12px">${esc(s.t)}</p>`:''}
+
+    ${siatkaOkresow(a, moge && wRealizacji(a))}
+
+    <div class="kv" style="margin-bottom:14px">
+      <div class="k">Środki przyznane</div><div><b>${zl(pz)}</b></div>
+      <div class="k">Wydano wg raportów</div><div>${zl(w)}${pz?' &nbsp;<span style="color:var(--muted);font-size:12.5px">'+Math.round(w/pz*100)+'% przyznanej kwoty, zostało '+zl(pz-w)+'</span>':''}</div>
+      <div class="k">Projekt trwa</div><div>${dt(a.od)} do <b>${dt(a.do)}</b></div>
+      <div class="k">Raport końcowy do</div><div><b>${dt(terminRaportu(a))}</b>
+        <span style="color:var(--muted);font-size:12.5px">miesiąc od zakończenia projektu</span></div>
+      ${wRealizacji(a)? `<div class="k">Raporty miesięczne</div><div>${(a.raporty||[]).filter(r=>r.typ==='okresowy').length}
+        złożonych z ${okresyNalezne(a).length} oczekiwanych
+        ${zaleg.length? '<span style="color:var(--warn);font-weight:700">, brakuje za: '+zaleg.map(miesiacTxt).join(', ')+'</span>':''}</div>`:''}
+    </div>
+
+    ${oczek? `<div class="note">
+      <b>Wniosek o przedłużenie czeka na decyzję.</b> Złożony ${dt(oczek.data)} przez ${esc(oczek.kto)}.
+      Termin zakończenia ${dt(oczek.staryDo)} &#8594; <b>${dt(oczek.nowyDo)}</b>, raport końcowy przesunąłby się
+      na ${dt(dodajMiesiac(oczek.nowyDo,RAPORT_PO))}.
+      <div style="margin-top:7px;background:#fff;border-radius:6px;padding:8px 10px">${esc(oczek.powod)}</div>
+      ${me.rola==='zarzad'? `<div style="margin-top:9px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn sm ok" onclick="decyzjaPrzedluzenia('${a.id}','Zatwierdzam')">Zgoda na przedłużenie</button>
+        <button class="btn sm red" onclick="decyzjaPrzedluzenia('${a.id}','Odrzucam')">Odmowa</button></div>`:''}
+    </div>`:''}
+
+    ${(a.przedluzenia||[]).filter(p=>p.status!=='zlozony').map(p=>`<div class="dec ${p.status==='zatwierdzony'?'ok':'bad'}">
+      <div class="h">Przedłużenie projektu: ${p.status==='zatwierdzony'?'zgoda':'odmowa'}</div>
+      <div class="m">${esc(p.decyzja&&p.decyzja.kto||'')} &nbsp;|&nbsp; ${dt(p.decyzja&&p.decyzja.data)}
+        &nbsp;|&nbsp; ${dt(p.staryDo)} &#8594; ${dt(p.nowyDo)}</div>
+      <div class="u">${esc(p.powod)}${p.decyzja&&p.decyzja.uw?'\n\nDecyzja: '+esc(p.decyzja.uw):''}</div>
+    </div>`).join('')}
+
+    ${rap.length? `<h3 style="margin:18px 0 8px">Treść złożonych raportów (${rap.length})</h3>
+    ${rap.map(r=>`<div class="rap${r.typ==='koncowy'?' fin':''}">
+      <div class="hd">
+        <span class="zn${r.typ==='koncowy'?' k':''}">${r.typ==='koncowy'?'raport końcowy':'raport miesięczny'}</span>
+        <span>${r.typ==='koncowy'?'całość projektu':esc(miesiacTxt(r.okres))}</span>
+        <span>wpłynął ${dt(r.data)}</span>
+        <span>${esc(r.kto)}</span>
+        <span class="kw">wydano ${zl(r.wydano)}</span>
+      </div>
+      <div class="bd">${esc(r.tresc)}</div>
+    </div>`).join('')}`
+    : '<p style="font-size:13px;color:var(--muted);margin:14px 0 0">Jeszcze nic nie wpłynęło. Prośby wychodzą automatycznie co miesiąc.</p>'}
+  </div>`;
+}
+
+function formularzRaportu(id, wymuszony){
+  const a = APPS.find(x=>x.id===id);
+  const zaleg = zalegleOkresy(a);
+  const wolne = okresyNalezne(a).filter(o=>!maRaport(a,o));
+  const domyslny = zaleg[0] || (wolne[0] || '');
+  const koncowy = wymuszony==='koncowy';
+  const naglowek = wymuszony
+    ? (koncowy? 'Raport końcowy' : 'Raport za '+miesiacTxt(wymuszony))
+    : 'Raport z realizacji';
+  const box = document.getElementById('modalBox');
+  box.innerHTML = `
+    <h2>${esc(naglowek)}</h2>
+    <p style="font-size:13.5px;color:var(--muted);margin-top:-6px">${esc(a.id)} &nbsp;|&nbsp; ${esc(a.tytul)}</p>
+
+    <div class="note info" style="font-size:12.5px">${koncowy
+      ? 'Podsumowanie całego projektu: co się udało, ilu ludzi wzięło udział, co poszło inaczej niż w planie. Plus kwota wydana w ostatnim okresie.'
+      : 'Dwie rzeczy: kilka zdań o tym, co się wydarzyło w tym miesiącu, i szacunkowa kwota wydana w tym czasie. Nie prosimy o faktury ani tabelki, wystarczy własnymi słowami.'}</div>
+
+    ${wymuszony
+      ? `<div class="field"><label class="f">Okres</label>
+          <select id="r_okres"><option value="${esc(wymuszony)}" selected>${koncowy
+            ? 'raport końcowy, podsumowanie całego projektu'
+            : 'raport miesięczny za '+miesiacTxt(wymuszony)}</option></select></div>`
+      : `<div class="field"><label class="f">Za jaki okres <span class="req">*</span></label>
+          <select id="r_okres">
+            ${wolne.map(o=>'<option value="'+o+'">raport miesięczny za '+miesiacTxt(o)+'</option>').join('')}
+            <option value="koncowy"${!wolne.length?' selected':''}>raport końcowy, podsumowanie całego projektu</option>
+          </select>
+          ${domyslny? '<div class="hint">Najstarszy brakujący okres to '+miesiacTxt(domyslny)+'.</div>':''}
+        </div>`}
+
+    <div class="field"><label class="f">Co się wydarzyło <span class="req">*</span></label>
+      <textarea id="r_tresc" style="min-height:130px" placeholder="${koncowy
+        ? 'np. Świetlica działała cztery miesiące, chodziło 15 dzieci, odbyły się dwa spotkania z rodzicami.'
+        : 'np. Frekwencja wzrosła do 14 dzieci, doszła pomoc w matematyce, jedna wolontariuszka chorowała.'}"></textarea>
+      <div class="hint">Kilka zdań wystarczy. To nie jest sprawozdanie urzędowe.</div></div>
+
+    <div class="field"><label class="f">Kwota wydana w tym okresie w zł <span class="req">*</span></label>
+      <input type="number" id="r_wydano" placeholder="szacunkowo, z pamięci albo z rachunków">
+      <div class="hint">Do tej pory rozliczono ${zl(wydanoWgRaportow(a))} z przyznanych ${zl(przyznano(a))}.</div></div>
+
+    <div class="field"><label class="f">Kto składa raport</label>
+      <input type="text" id="r_kto" value="${esc(a.imie)}"></div>
+
+    <div style="text-align:right;margin-top:6px">
+      <button class="btn ghost" onclick="zamknijModal()">Anuluj</button>
+      <button class="btn" onclick="zapiszRaport('${id}')">Wyślij raport</button>
+    </div>`;
+  document.getElementById('modal').classList.remove('hidden');
+}
+
+function zapiszRaport(id){
+  const a = APPS.find(x=>x.id===id);
+  const okres = document.getElementById('r_okres').value;
+  const tresc = (document.getElementById('r_tresc').value||'').trim();
+  const wyd = document.getElementById('r_wydano').value;
+  const kto = (document.getElementById('r_kto').value||'').trim() || a.imie;
+
+  if(tresc.length < 20){ toast('Napisz kilka zdań o tym, co się wydarzyło. Jedno słowo to za mało.'); return; }
+  if(wyd==='' || Number(wyd) < 0){ toast('Podaj kwotę wydaną w tym okresie, choćby szacunkową. Zero też jest odpowiedzią.'); return; }
+
+  const koncowy = okres==='koncowy';
+  if(koncowy && raportKoncowy(a)){ toast('Raport końcowy już wpłynął, można złożyć tylko raporty miesięczne.'); return; }
+  if(!koncowy && maRaport(a, okres)){ toast('Raport za '+miesiacTxt(okres)+' już wpłynął.'); return; }
+
+  a.raporty = a.raporty || [];
+  a.raporty.push({data:DZIS, okres:koncowy?'':okres, typ:koncowy?'koncowy':'okresowy',
+                  kto:kto, wydano:Number(wyd), tresc:tresc});
+
+  zamknijModal();
+  toast(id+': raport '+(koncowy?'końcowy':'za '+miesiacTxt(okres))+' przyjęty i zapisany w historii sprawy.'
+        +(koncowy?' Sprawę można teraz zamknąć.':''));
+  SEL = id; renderView();
+}
+
+function formularzPrzedluzenia(id){
+  const a = APPS.find(x=>x.id===id);
+  const box = document.getElementById('modalBox');
+  box.innerHTML = `
+    <h2>Wniosek o przedłużenie projektu</h2>
+    <p style="font-size:13.5px;color:var(--muted);margin-top:-6px">${esc(a.id)} &nbsp;|&nbsp; ${esc(a.tytul)}</p>
+
+    <div class="note info" style="font-size:12.5px">Składający może poprosić o przesunięcie terminu
+    zamiast tłumaczyć się ze spóźnionego raportu. Zgoda przesuwa datę zakończenia projektu i razem
+    z nią termin raportu końcowego. Decyduje Zarząd.</div>
+
+    <div class="kv" style="margin-bottom:12px">
+      <div class="k">Obecny termin zakończenia</div><div><b>${dt(a.do)}</b></div>
+      <div class="k">Obecny termin raportu</div><div>${dt(terminRaportu(a))}</div>
+    </div>
+
+    <div class="field"><label class="f">Nowy termin zakończenia <span class="req">*</span></label>
+      <input type="date" id="p_nowy" value="${esc(dodajMiesiac(a.do,3))}"></div>
+
+    <div class="field"><label class="f">Dlaczego potrzebne jest więcej czasu <span class="req">*</span></label>
+      <textarea id="p_powod" style="min-height:110px" placeholder="np. Wakacje obniżyły frekwencję, dwa spotkania przełożyliśmy na wrzesień."></textarea></div>
+
+    <div class="field"><label class="f">Kto składa</label>
+      <input type="text" id="p_kto" value="${esc(['wyznawca','skladajacy'].includes(u().rola)?a.imie:u().n)}"></div>
+
+    <div style="text-align:right;margin-top:6px">
+      <button class="btn ghost" onclick="zamknijModal()">Anuluj</button>
+      <button class="btn" onclick="zapiszPrzedluzenie('${id}')">Złóż wniosek</button>
+    </div>`;
+  document.getElementById('modal').classList.remove('hidden');
+}
+
+function zapiszPrzedluzenie(id){
+  const a = APPS.find(x=>x.id===id);
+  const nowy = document.getElementById('p_nowy').value;
+  const powod = (document.getElementById('p_powod').value||'').trim();
+  const kto = (document.getElementById('p_kto').value||'').trim() || a.imie;
+
+  if(!nowy){ toast('Podaj nowy termin zakończenia projektu.'); return; }
+  if(nowy <= a.do){ toast('Nowy termin musi być późniejszy niż obecny, czyli po '+dt(a.do)+'.'); return; }
+  if(powod.length < 15){ toast('Napisz krótko, dlaczego potrzeba więcej czasu. Zarząd musi wiedzieć, co się dzieje.'); return; }
+  if(przedluzenieOczekuje(a)){ toast('Jeden wniosek o przedłużenie już czeka na decyzję.'); return; }
+
+  a.przedluzenia = a.przedluzenia || [];
+  a.przedluzenia.push({data:DZIS, kto:kto, staryDo:a.do, nowyDo:nowy, powod:powod, status:'zlozony', decyzja:null});
+
+  zamknijModal();
+  toast(id+': wniosek o przedłużenie do '+dt(nowy)+' złożony. Czeka na decyzję Zarządu.');
+  SEL = id; renderView();
+}
+
+function decyzjaPrzedluzenia(id, d){
+  const a = APPS.find(x=>x.id===id);
+  const p = przedluzenieOczekuje(a);
+  if(!p){ toast('Nie ma wniosku o przedłużenie czekającego na decyzję.'); return; }
+
+  p.status = d==='Zatwierdzam' ? 'zatwierdzony' : 'odrzucony';
+  p.decyzja = {kto:u().n, data:DZIS, uw: d==='Zatwierdzam'
+    ? 'Zgoda na przesunięcie terminu. Budżet i zakres bez zmian.'
+    : 'Bez zgody na przesunięcie. Prosimy o rozliczenie projektu w pierwotnym terminie.'};
+
+  if(d==='Zatwierdzam'){
+    a.do = p.nowyDo;
+    zdarzenie(a, 'Zgoda na przedłużenie projektu: termin zakończenia '+dt(p.staryDo)+' → '+dt(p.nowyDo)
+                 +', raport końcowy do '+dt(dodajMiesiac(p.nowyDo, RAPORT_PO))+'.');
+    toast(id+': termin przesunięty na '+dt(p.nowyDo)+'. Raport końcowy do '+dt(terminRaportu(a))+'.');
+  } else {
+    zdarzenie(a, 'Odmowa przedłużenia projektu. Termin zakończenia bez zmian: '+dt(a.do)+'.');
+    toast(id+': odmowa przedłużenia. Termin bez zmian.');
+  }
+  renderView();
+}
+
+/* ============ KOREKTA WNIOSKU ============ */
+const POLA_KOREKTY = [
+  {k:'tytul',      l:'Tytuł projektu',       t:'text', req:true},
+  {k:'rodzaj',     l:'Rodzaj wniosku',       t:'sel', o:()=>RODZAJE},
+  {k:'zbor',       l:'Zbór lub jednostka',   t:'text', req:true},
+  {k:'pastorEmail',l:'E-mail pastora',       t:'text', req:true},
+  {k:'diecezja',   l:'Diecezja',             t:'sel', o:()=>DIECEZJE},
+  {k:'cel',        l:'Cel',                  t:'area', req:true},
+  {k:'plan',       l:'Plan realizacji',      t:'area', req:true},
+  {k:'rezultaty',  l:'Oczekiwane rezultaty', t:'area', req:true},
+  {k:'od',         l:'Termin od',            t:'date'},
+  {k:'do',         l:'Termin do',            t:'date'},
+  {k:'kwota',      l:'Kwota wnioskowana',    t:'num', req:true},
+  {k:'wklad',      l:'Wkład własny',         t:'num'},
+  {k:'budzet',     l:'Pozycje kosztowe',     t:'area', req:true}
+];
+
+/* korygować może ten, kto ma wniosek na swoim etapie; Zarząd na każdym */
+function mogeKorygowac(a){
+  const me = u();
+  if(a.arch || ZAMKNIETE.includes(a.status)) return false;
+  if(me.rola==='zarzad')   return true;
+  if(me.rola==='pastor')   return a.pastorEmail===me.email && ['zlozony','poprawa'].includes(a.status);
+  if(me.rola==='diecezja') return a.diecezja===me.diecezja && a.status==='pastor';
+  return false;
+}
+
+function rolaOpis(){
+  const me = u();
+  return me.rola==='pastor'?'pastor zboru':(me.rola==='diecezja'?'diecezja':(me.rola==='zarzad'?'Zarząd Kościoła':'składający'));
+}
+
+/* wartość pola w postaci czytelnej dla historii */
+function wartoscTxt(p, v){
+  if(v===''||v==null) return 'brak';
+  if(p.t==='num')  return zl(v);
+  if(p.t==='date') return dt(v);
+  return String(v);
+}
+
+function korekta(id){
+  const a = APPS.find(x=>x.id===id);
+  const box = document.getElementById('modalBox');
+  box.innerHTML = `
+    <h2>Popraw wniosek</h2>
+    <p style="font-size:13.5px;color:var(--muted);margin-top:-6px">
+      ${esc(a.id)} &nbsp;|&nbsp; ${esc(a.tytul)} &nbsp;|&nbsp; poprawiasz jako ${esc(rolaOpis())}</p>
+
+    <div class="note info" style="font-size:12.5px">Popraw to, co wymaga drobnej zmiany, zamiast
+    odsyłać cały wniosek do składającego. Zapisze się kto, kiedy i co zmienił, razem ze starą
+    wartością. Składający dostanie maila z wykazem poprawek.</div>
+
+    ${POLA_KOREKTY.map(p=>{
+      const v = a[p.k]==null?'':a[p.k];
+      if(p.t==='area') return `<div class="field"><label class="f">${esc(p.l)}</label>
+        <textarea id="k_${p.k}">${esc(v)}</textarea></div>`;
+      if(p.t==='sel')  return `<div class="field"><label class="f">${esc(p.l)}</label>
+        <select id="k_${p.k}">${p.o().map(x=>'<option'+(x===v?' selected':'')+'>'+esc(x)+'</option>').join('')}</select></div>`;
+      const typ = p.t==='num'?'number':(p.t==='date'?'date':'text');
+      return `<div class="field"><label class="f">${esc(p.l)}</label>
+        <input type="${typ}" id="k_${p.k}" value="${esc(v)}"></div>`;
+    }).join('')}
+
+    <div class="field"><label class="f">Powód korekty <span class="req">*</span></label>
+      <textarea id="k_powod" placeholder="np. Poprawiona kwota po rozmowie ze składającym, w budżecie była pomyłka w sumowaniu."></textarea>
+      <div class="hint">Trafi do historii sprawy i do maila. Bez tego nie da się zapisać.</div></div>
+
+    <div style="text-align:right;margin-top:6px">
+      <button class="btn ghost" onclick="zamknijModal()">Anuluj</button>
+      <button class="btn" onclick="zapiszKorekte('${id}')">Zapisz poprawki</button>
+    </div>`;
+  document.getElementById('modal').classList.remove('hidden');
+}
+
+function zapiszKorekte(id){
+  const a = APPS.find(x=>x.id===id);
+  const powod = (document.getElementById('k_powod').value||'').trim();
+  if(!powod){ toast('Podaj powód korekty. Bez tego zmiana nie zapisze się w historii.'); return; }
+
+  const g = k => { const e = document.getElementById('k_'+k); return e? (e.value||'').trim() : ''; };
+  const brak = POLA_KOREKTY.filter(p=>p.req && !g(p.k)).map(p=>p.l);
+  if(brak.length){ toast('Korekta nie może opróżnić pól obowiązkowych: '+brak.join(', ')+'.'); return; }
+  if(Number(g('kwota')) <= 0){ toast('Kwota wnioskowana musi być większa od zera.'); return; }
+  const od = g('od'), doo = g('do');
+  if(od && doo && od > doo){ toast('Termin zakończenia nie może być wcześniejszy niż termin rozpoczęcia.'); return; }
+
+  const zm = [];
+  POLA_KOREKTY.forEach(p=>{
+    const el = document.getElementById('k_'+p.k);
+    if(!el) return;
+    let v = (el.value||'').trim();
+    if(p.t==='num') v = Number(v||0);
+    const stare = a[p.k]==null?'':a[p.k];
+    if(String(stare) !== String(v)){
+      zm.push({pole:p.l, przed:wartoscTxt(p, stare), po:wartoscTxt(p, v)});
+      a[p.k] = v;
+    }
+  });
+
+  if(!zm.length){ toast('Nic się nie zmieniło, więc nie ma czego zapisywać.'); return; }
+
+  a.log = a.log || [];
+  a.log.push({data:DZIS, kto:u().n, rola:rolaOpis(), typ:'korekta', powod:powod, zm:zm});
+
+  zamknijModal();
+  toast(id+': zapisano '+zm.length+' '+(zm.length===1?'poprawkę':(zm.length<5?'poprawki':'poprawek'))
+        +'. Wpis trafił do historii sprawy, mail do składającego wysłany.');
+  SEL = id; renderView();
+}
+
+/* zdarzenia inne niż korekta, np. archiwizacja czy przekazanie.
+   jawne=true oznacza, że zdarzenie widzi też składający w swoim widoku sprawy */
+function zdarzenie(a, opis, jawne){
+  a.log = a.log || [];
+  a.log.push({data:DZIS, kto:u().n, rola:rolaOpis(), typ:'zdarzenie', opis:opis, jawne:!!jawne});
+}
+
+/* ============ ZAKOŃCZENIE I ARCHIWUM ============ */
+function panelZamkniecia(a){
+  const me = u();
+  const otw = mogeOtworzyc(a);
+  if(me.rola!=='zarzad' && !otw) return '';
+
+  const przyciskOtwarcia = otw
+    ? `<button class="btn sm ok" onclick="otworzPonownie('${a.id}')">&#8634; Otwórz sprawę ponownie</button>`
+    : '';
+
+  if(a.arch) return `
+  <div class="card" style="background:#f7f9fb">
+    <h3>Sprawa w archiwum</h3>
+    <p style="font-size:13px;color:var(--muted);margin:0 0 10px">Przeniesiona ${dt(a.dataArch)}
+    przez ${esc(a.ktoArch||'')}. Nie pojawia się na bieżących listach ani w tablicy etapów,
+    ale nic nie zostało usunięte. Kwoty nadal wchodzą do zestawienia rocznego.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      ${me.rola==='zarzad'? `<button class="btn sec sm" onclick="przywroc('${a.id}')">Przywróć z archiwum</button>`:''}
+      ${przyciskOtwarcia}
+    </div>
+    ${otw? '<p style="font-size:12px;color:var(--muted);margin:9px 0 0">Otwarcie sprawy wyjmie ją z archiwum przy okazji.</p>':''}
+  </div>`;
+
+  if(a.status==='zarzad'){
+    const rk = raportKoncowy(a);
+    return `
+  <div class="card" style="border-color:#a9dfbf;background:#f6fdf9">
+    <h3 style="color:var(--ok)">Zamknięcie sprawy</h3>
+    <p style="font-size:13px;color:var(--muted);margin:0 0 10px">Wniosek jest zatwierdzony, projekt
+    trwa. Gdy realizacja się skończy i raport końcowy zostanie przyjęty, oznacz sprawę jako zakończoną.
+    Wniosek zniknie z listy projektów w realizacji, a składający dostanie maila.</p>
+    ${rk? `<div class="note ok" style="margin-bottom:12px">Raport końcowy wpłynął ${dt(rk.data)}.
+      Rozliczono ${zl(wydanoWgRaportow(a))} z przyznanych ${zl(przyznano(a))}.</div>`
+        : `<div class="note" style="margin-bottom:12px"><b>Raport końcowy jeszcze nie wpłynął.</b>
+      Sprawę można zamknąć mimo to, ale wtedy zostanie bez rozliczenia. Rozważ najpierw przypomnienie
+      albo zgodę na przedłużenie terminu.</div>`}
+    <div class="field"><label class="f">Uwagi do rozliczenia</label>
+      <textarea id="z_uw" placeholder="np. Rozliczenie przyjęte, frekwencja zgodna z założeniami, zwrócono 300 zł."></textarea></div>
+    <button class="btn ok" onclick="zakoncz('${a.id}')">Oznacz jako zakończony</button>
+  </div>`;
+  }
+
+  if(ZAMKNIETE.includes(a.status)){
+    const zak = a.status==='zakonczony';
+    return `
+  <div class="card" style="background:#f7f9fb">
+    <h3>Sprawa zamknięta</h3>
+    <p style="font-size:13px;color:var(--muted);margin:0 0 10px">Status <b>${ST[a.status].l}</b>.
+    Nic tu już nie musi się wydarzyć. Możesz przenieść wniosek do archiwum, żeby nie zaśmiecał
+    bieżących list.</p>
+    ${otw? `<div class="note info" style="font-size:12.5px">
+      ${zak? 'Jeśli sprawa została zamknięta przedwcześnie albo przez pomyłkę, otwórz ją ponownie. Wróci do realizacji i raportowania.'
+           : 'Jeśli wniosek został odrzucony przez pomyłkę albo sytuacja się zmieniła, otwórz sprawę ponownie. Wróci na etap, z którego został odrzucony, i znów będzie czekał na decyzję.'}
+    </div>`:''}
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      ${me.rola==='zarzad'? `<button class="btn sm" onclick="archiwizuj('${a.id}')">Przenieś do archiwum</button>`:''}
+      ${przyciskOtwarcia}
+    </div>
+  </div>`;
+  }
+
+  return '';
+}
+
+function zakoncz(id){
+  const a = APPS.find(x=>x.id===id);
+  const uwEl = document.getElementById('z_uw');
+  const uw = uwEl ? uwEl.value.trim() : '';
+
+  const rk = raportKoncowy(a);
+  const wTrakcie = a.do && DZIS < a.do;
+  const brakMies = wRealizacji(a) ? zalegleOkresy(a) : [];
+  const w = wydanoWgRaportow(a), pz = przyznano(a);
+  const ryzyko = !rk || wTrakcie || brakMies.length;
+
+  const fakty = [];
+  if(wTrakcie) fakty.push('<b>Projekt jeszcze trwa</b>, według wniosku kończy się '+dt(a.do)
+    +', czyli za '+dniMiedzy(DZIS,a.do)+' dni.');
+  if(!rk) fakty.push('<b>Raport końcowy nie wpłynął.</b> Sprawa zostanie zamknięta bez rozliczenia całości.');
+  else fakty.push('Raport końcowy wpłynął '+dt(rk.data)+'.');
+  if(brakMies.length) fakty.push('Brakuje raportów miesięcznych za: <b>'+brakMies.map(miesiacTxt).join(', ')+'</b>.');
+  if(pz) fakty.push('Rozliczono <b>'+zl(w)+'</b> z przyznanych '+zl(pz)
+    +(w<pz? ', nierozliczone zostaje '+zl(pz-w)+'.' : '.'));
+
+  potwierdz('Zamknąć sprawę '+a.id+'?', `
+    <p style="font-size:14px;line-height:1.6;margin-top:-4px">Projekt <b>${esc(a.tytul)}</b>,
+    ${esc(a.zbor)}, ${esc(a.diecezja)}.</p>
+
+    ${ryzyko? `<div class="note bad"><b>Uwaga, to zamknięcie w trakcie.</b>
+      <ul style="margin:8px 0 0;padding-left:18px;line-height:1.7">
+        ${fakty.map(f=>'<li>'+f+'</li>').join('')}
+      </ul></div>`
+    : `<div class="note ok"><ul style="margin:0;padding-left:18px;line-height:1.7">
+        ${fakty.map(f=>'<li>'+f+'</li>').join('')}
+      </ul></div>`}
+
+    <p style="font-size:13.5px;line-height:1.6">Po zamknięciu wniosek zniknie z listy projektów
+    w realizacji, przestaną wychodzić prośby o raporty, a składający dostanie maila o zakończeniu sprawy.</p>
+
+    ${uw? `<div style="font-size:13px;background:#f7f9fb;border-radius:7px;padding:9px 11px;margin-bottom:10px">
+      <b>Twoje uwagi do rozliczenia:</b><br>${esc(uw)}</div>`
+    : `<div class="note" style="font-size:12.5px">Nie wpisałeś uwag do rozliczenia. Nie jest to wymagane,
+      ale warto zostawić ślad, dlaczego sprawa została zamknięta właśnie teraz.</div>`}
+
+    <p style="font-size:12.5px;color:var(--muted);margin:0">Nic nie jest nieodwracalne. Sprawę zamkniętą
+    przez pomyłkę albo taką, która jednak ruszy dalej, otworzysz ponownie jednym kliknięciem.</p>`,
+    ryzyko? 'Tak, zamknij mimo to' : 'Tak, zamknij sprawę', ryzyko?'warn':'ok',
+    ()=>wykonajZakonczenie(id, uw));
+}
+
+function wykonajZakonczenie(id, uw){
+  const a = APPS.find(x=>x.id===id);
+  a.przedZamknieciem = {status:a.status, dataStatusu:a.dataStatusu, poziom:null};
+  a.dec.zamkniecie = {d:'Zakończony', kto:u().n, data:DZIS, uw:uw||'', kwota:null};
+  a.status = 'zakonczony';
+  a.dataStatusu = DZIS;
+  toast(id+': sprawa zakończona. Mail do składającego wysłany. Wniosek można teraz przenieść do archiwum.');
+  renderView();
+}
+
+/* ============ OTWARCIE ZAMKNIĘTEJ SPRAWY ============ */
+function poziomOdrzucenia(a){
+  if(a.dec.zarzad   && a.dec.zarzad.d==='Odrzucam')   return 'zarzad';
+  if(a.dec.diecezja && a.dec.diecezja.d==='Odrzucam') return 'diecezja';
+  if(a.dec.pastor   && a.dec.pastor.d==='Odrzucam')   return 'pastor';
+  return null;
+}
+/* na jaki etap wraca wniosek po cofnięciu odrzucenia */
+function statusPoCofnieciu(a){
+  const p = a.przedZamknieciem;
+  if(p && p.status) return p.status;
+  const poz = poziomOdrzucenia(a);
+  return poz==='zarzad' ? 'diecezja' : (poz==='diecezja' ? 'pastor' : 'zlozony');
+}
+/* kto może otworzyć zamkniętą sprawę: Zarząd zawsze, pozostali gdy cofają własne odrzucenie */
+function mogeOtworzyc(a){
+  const me = u();
+  if(!ZAMKNIETE.includes(a.status)) return false;
+  if(me.rola==='zarzad') return true;
+  if(a.status!=='odrzucony') return false;
+  const poz = poziomOdrzucenia(a);
+  if(me.rola==='pastor')   return poz==='pastor'   && a.pastorEmail===me.email;
+  if(me.rola==='diecezja') return poz==='diecezja' && a.diecezja===me.diecezja;
+  return false;
+}
+
+function otworzPonownie(id){
+  const a = APPS.find(x=>x.id===id);
+  const wrocDo = a.status==='zakonczony' ? 'zarzad' : statusPoCofnieciu(a);
+  const z = a.status==='zakonczony' ? a.dec.zamkniecie : null;
+  const poz = a.status==='odrzucony' ? poziomOdrzucenia(a) : null;
+  const d = poz ? a.dec[poz] : null;
+
+  potwierdz('Otworzyć sprawę '+a.id+' ponownie?', `
+    <p style="font-size:14px;line-height:1.6;margin-top:-4px">Projekt <b>${esc(a.tytul)}</b>,
+    ${esc(a.zbor)}, ${esc(a.diecezja)}.</p>
+
+    <div class="note info">
+      ${z? `Cofniesz zamknięcie z ${dt(z.data)} (${esc(z.kto)}). Sprawa wróci do stanu
+        <b>${ST.zarzad.l}</b>, czyli do realizacji i raportowania. Prośby o raporty zaczną wychodzić
+        na nowo, a termin raportu końcowego pozostaje ${dt(terminRaportu(a))}.`
+      : `Cofniesz odrzucenie${d? ' z '+dt(d.data)+' ('+esc(d.kto)+')':''}. Wniosek wróci na etap
+        <b>${ST[wrocDo].l}</b> i znów będzie czekał na decyzję.
+        ${d&&d.uw? '<div style="margin-top:8px;background:#fff;border-radius:6px;padding:8px 10px">Cofana decyzja: '+esc(d.uw)+'</div>':''}`}
+    </div>
+
+    ${a.arch? `<div class="note">Sprawa jest w archiwum. Zostanie z niego wyjęta i wróci na bieżące listy.</div>`:''}
+
+    <div class="field"><label class="f">Dlaczego otwieramy sprawę ponownie <span class="req">*</span></label>
+      <textarea id="o_powod" placeholder="np. Zamknięte przez pomyłkę, projekt jednak trwa. Albo: zbór znalazł brakujący wkład własny, wracamy do rozpatrzenia."></textarea>
+      <div class="hint">Trafi do historii sprawy razem z informacją, co dokładnie zostało cofnięte.</div></div>
+
+    <p style="font-size:12.5px;color:var(--muted);margin:0">Poprzednia decyzja nie znika bez śladu.
+    Zostaje zapisana w historii sprawy razem z twoim wyjaśnieniem.</p>`,
+    'Tak, otwórz ponownie', 'ok',
+    ()=>wykonajOtwarcie(id));
+}
+
+function wykonajOtwarcie(id){
+  const a = APPS.find(x=>x.id===id);
+  const el = document.getElementById('o_powod');
+  const powod = el ? (el.value||'').trim() : '';
+  const byl = a.status;
+
+  if(a.arch){ a.arch = false; a.dataArch = null; a.ktoArch = null; }
+
+  if(byl==='zakonczony'){
+    const z = a.dec.zamkniecie;
+    a.dec.zamkniecie = null;
+    a.status = 'zarzad';
+    zdarzenie(a, 'Sprawa otwarta ponownie, wraca do realizacji. Cofnięto zamknięcie z '
+      + dt(z&&z.data) + (z&&z.kto? ' ('+z.kto+')':'') + '.'
+      + (z&&z.uw? ' Cofnięte uwagi: '+z.uw : '')
+      + (powod? ' Powód otwarcia: '+powod : ''), true);
+  } else {
+    const poz = poziomOdrzucenia(a);
+    const d = poz ? a.dec[poz] : null;
+    a.status = statusPoCofnieciu(a);
+    if(poz) a.dec[poz] = null;
+    zdarzenie(a, 'Sprawa otwarta ponownie, wraca na etap: ' + ST[a.status].l + '. Cofnięto odrzucenie'
+      + (d? ' z '+dt(d.data)+' ('+d.kto+')':'') + '.'
+      + (d&&d.uw? ' Cofnięte uzasadnienie: '+d.uw : '')
+      + (powod? ' Powód otwarcia: '+powod : ''), true);
+  }
+
+  a.dataStatusu = DZIS;
+  a.przedZamknieciem = null;
+  toast(id+': sprawa otwarta ponownie, status '+ST[a.status].l+'. Wpis trafił do historii, mail do składającego wysłany.');
+  render();
+}
+
+function archiwizuj(id){
+  const a = APPS.find(x=>x.id===id);
+  if(!ZAMKNIETE.includes(a.status)){ toast('Do archiwum trafiają tylko wnioski odrzucone i zakończone.'); return; }
+  a.arch = true; a.dataArch = DZIS; a.ktoArch = u().n;
+  zdarzenie(a, 'Sprawa przeniesiona do archiwum.');
+  toast('Wniosek '+id+' przeniesiony do archiwum.');
+  render();
+}
+
+/* odmiana liczebnika: 1 sprawa, 2 sprawy, 5 spraw */
+function odm(n, f){
+  const d = n%10, s = n%100;
+  if(n===1) return f[0];
+  if(d>=2 && d<=4 && !(s>=12 && s<=14)) return f[1];
+  return f[2];
+}
+
+/* pasek widoczny wszędzie tam, gdzie są sprawy gotowe do archiwizacji */
+function pasekArchiwizacji(styl){
+  const arr = doArchiwum();
+  if(!arr.length || u().rola!=='zarzad') return '';
+  return `<div class="archbar" style="${styl||''}">
+    <div style="flex:1;min-width:260px">
+      <b>${arr.length}</b> ${odm(arr.length,['sprawa zamknięta czeka','sprawy zamknięte czekają','spraw zamkniętych czeka'])}
+      na przeniesienie do archiwum:
+      <div class="archlista">
+        ${arr.map(a=>`<span class="archi" onclick="otworz('${a.id}')" title="otwórz wniosek">
+          <span class="pill ${ST[a.status].c}">${ST[a.status].l}</span>
+          ${esc(a.tytul)} <span class="nr">${esc(a.id)}</span></span>`).join('')}
+      </div>
+    </div>
+    <button class="btn sm sec" onclick="go('archiwum')">Otwórz archiwum</button>
+    <button class="btn sm" onclick="potwierdzArchiwizacje()">Przenieś do archiwum</button>
+  </div>`;
+}
+
+let ARCH_KAND = [];
+
+function potwierdzArchiwizacje(){
+  const arr = doArchiwum();
+  if(!arr.length){ toast('Nie ma spraw zamkniętych do przeniesienia.'); return; }
+  ARCH_KAND = arr.map(a=>a.id);
+  const box = document.getElementById('modalBox');
+  box.innerHTML = `
+    <h2>Co przenosimy do archiwum</h2>
+    <p style="font-size:13.5px;color:var(--muted);margin-top:-6px">Odznacz sprawy, które mają zostać
+    na bieżących listach. Kliknięcie tytułu otwiera wniosek.</p>
+
+    <div class="archsel">
+      ${arr.map((a,i)=>`<label class="archrow">
+        <input type="checkbox" id="ar_${i}" checked>
+        <span style="flex:1">
+          <b class="lnk" onclick="zamknijModal();otworz('${a.id}')">${esc(a.tytul)}</b>
+          <span class="m">${esc(a.id)} &nbsp;|&nbsp; ${esc(a.zbor)}, ${esc(a.diecezja)} &nbsp;|&nbsp; ${zl(a.kwota)}</span>
+          <span class="m">zamknięta ${dt(a.dataStatusu)}${a.dec.zarzad&&a.dec.zarzad.uw?', '+esc(a.dec.zarzad.uw.slice(0,80)):''}</span>
+        </span>
+        <span class="pill ${ST[a.status].c}">${ST[a.status].l}</span>
+      </label>`).join('')}
+    </div>
+
+    <div class="note info" style="font-size:12.5px;margin-top:12px">Archiwizacja niczego nie usuwa.
+    Sprawa znika z bieżących list i z tablicy etapów, ale zostaje w widoku Archiwum z pełną historią,
+    a jej kwoty nadal liczą się w zestawieniu rocznym. Każdą można przywrócić.</div>
+
+    <div style="text-align:right;margin-top:6px">
+      <button class="btn ghost" onclick="zamknijModal()">Anuluj</button>
+      <button class="btn" onclick="wykonajArchiwizacje()">Przenieś zaznaczone</button>
+    </div>`;
+  document.getElementById('modal').classList.remove('hidden');
+}
+
+function wykonajArchiwizacje(){
+  const wyb = ARCH_KAND.filter((id,i)=>{
+    const e = document.getElementById('ar_'+i);
+    return e && e.checked;
+  });
+  if(!wyb.length){ toast('Nie zaznaczono żadnej sprawy, nic nie przeniesiono.'); return; }
+  wyb.forEach(id=>{
+    const a = APPS.find(x=>x.id===id);
+    a.arch = true; a.dataArch = DZIS; a.ktoArch = u().n;
+    zdarzenie(a, 'Sprawa przeniesiona do archiwum.');
+  });
+  zamknijModal();
+  toast('Przeniesiono do archiwum: '+wyb.length+' '+odm(wyb.length,['sprawę','sprawy','spraw'])+'.');
+  render();
+}
+
+function przywroc(id){
+  const a = APPS.find(x=>x.id===id);
+  a.arch = false; a.dataArch = null; a.ktoArch = null;
+  zdarzenie(a, 'Sprawa przywrócona z archiwum na bieżące listy.');
+  toast('Wniosek '+id+' przywrócony z archiwum na bieżące listy.');
+  render();
+}
+
+/* ============ DECYZJA ============ */
+function panelDecyzji(a, poziom){
+  const etykieta = poziom==='pastor'?'Twoja decyzja jako pastora zboru'
+                  :poziom==='diecezja'?'Twoja decyzja jako diecezji':'Decyzja Zarządu Kościoła';
+  return `
+  <div class="card" style="border-color:var(--gold);background:#fffdf5">
+    <h3 style="color:var(--warn)">${etykieta}</h3>
+    ${poziom==='pastor'?`<div class="note info" style="margin-bottom:12px">
+      Zatwierdzając bierzesz odpowiedzialność za ten wniosek jako pastor zboru. Możesz też dołączyć
+      dokumenty, których składający nie mógł wysłać formularzem.</div>`:''}
+    <div class="row">
+      <div class="col"><div class="field"><label class="f">Uwagi dla składającego</label>
+        <textarea id="d_uw" placeholder="${poziom==='pastor'?'np. Znam tę osobę, prowadzi grupę domową, popieram.':'np. Projekt spójny ze strategią, opiniujemy pozytywnie.'}"></textarea></div></div>
+      ${poziom!=='pastor'?`<div class="col" style="max-width:240px"><div class="field">
+        <label class="f">${poziom==='diecezja'?'Kwota opiniowana':'Kwota przyznana'} w zł</label>
+        <input type="number" id="d_kw" value="${a.kwota}">
+        <div class="hint">Można obniżyć wobec wnioskowanej.</div></div></div>`:''}
+    </div>
+    ${poziom==='pastor'?`<div class="field"><label class="f">Dołącz dokumenty</label>
+      <div class="drop" onclick="dodajZalacznik('${a.id}')">Kliknij, żeby dołączyć kosztorys lub uchwałę zboru.</div></div>`:''}
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn ok"   onclick="decyduj('${a.id}','${poziom}','Zatwierdzam')">Zatwierdzam</button>
+      <button class="btn sec"  onclick="korekta('${a.id}')">&#9998; Popraw wniosek</button>
+      <button class="btn warn" onclick="decyduj('${a.id}','${poziom}','Do poprawy')">Odeślij do poprawy</button>
+      <button class="btn red"  onclick="decyduj('${a.id}','${poziom}','Odrzucam')">Odrzucam</button>
+      ${poziom==='pastor'?`<button class="btn sec" onclick="przekaz('${a.id}')">To nie mój zbór, przekaż dalej</button>`:''}
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin:10px 0 0">Drobiazg do zmiany, literówka w kwocie
+    albo źle wpisany termin? Popraw wniosek sam i zatwierdź. Odsyłanie do poprawy zatrzymuje całą
+    sprawę i cofa ją do składającego, więc zostaw je na braki merytoryczne.</p>
+  </div>`;
+}
+
+function dodajZalacznik(id){
+  const a = APPS.find(x=>x.id===id);
+  const nazwa = 'dokument-'+(a.zal.length+1)+'.pdf';
+  a.zal.push(nazwa);
+  zdarzenie(a, 'Dołączono załącznik: '+nazwa+'.');
+  toast('Dokument dołączony do wniosku '+id+'.');
+  renderView();
+}
+
+function decyduj(id, poziom, d){
+  const a = APPS.find(x=>x.id===id);
+  const uwEl = document.getElementById('d_uw');
+  const kwEl = document.getElementById('d_kw');
+  const uw = uwEl?uwEl.value.trim():'';
+  const kw = kwEl?Number(kwEl.value||0):null;
+
+  if(d!=='Zatwierdzam' && !uw){ toast('Przy odesłaniu do poprawy i przy odrzuceniu uwagi są obowiązkowe. Składający musi wiedzieć dlaczego.'); return; }
+
+  /* odrzucenie zamyka sprawę, więc pytamy o potwierdzenie */
+  if(d==='Odrzucam'){
+    potwierdz('Odrzucić wniosek '+a.id+'?', `
+      <p style="font-size:14px;line-height:1.6;margin-top:-4px">Projekt <b>${esc(a.tytul)}</b>,
+      ${esc(a.zbor)}, ${esc(a.diecezja)}, wnioskowane ${zl(a.kwota)}.</p>
+
+      <div class="note bad"><b>To zamyka sprawę.</b> Wniosek zniknie z obiegu, składający dostanie
+      maila z twoim uzasadnieniem, a projekt nie dostanie pieniędzy.</div>
+
+      <div style="font-size:13px;background:#f7f9fb;border-radius:7px;padding:9px 11px;margin-bottom:12px">
+        <b>Twoje uzasadnienie, które przeczyta składający:</b><br>${esc(uw)}</div>
+
+      <p style="font-size:13px;line-height:1.6;color:#3a4756">Jeśli wniosek wymaga tylko uzupełnienia,
+      lepszym wyjściem jest <b>odesłanie do poprawy</b>, a przy drobiazgu poprawienie go samemu.
+      Odrzucenie zostaw na sprawy, których nie da się uratować.</p>
+
+      <p style="font-size:12.5px;color:var(--muted);margin:0">Pomyłkę da się cofnąć: odrzucony wniosek
+      można otworzyć ponownie, wraca wtedy na ten sam etap.</p>`,
+      'Tak, odrzuć wniosek', 'red',
+      ()=>zapiszDecyzje(id, poziom, d, uw, kw));
+    return;
+  }
+
+  zapiszDecyzje(id, poziom, d, uw, kw);
+}
+
+function zapiszDecyzje(id, poziom, d, uw, kw){
+  const a = APPS.find(x=>x.id===id);
+  if(d==='Odrzucam') a.przedZamknieciem = {status:a.status, dataStatusu:a.dataStatusu, poziom:poziom};
+
+  a.dec[poziom] = {d:d, kto:u().n, data:DZIS, uw:uw, kwota:kw};
+  a.dataStatusu = DZIS;
+
+  if(d==='Zatwierdzam'){
+    a.status = poziom==='pastor'?'pastor':(poziom==='diecezja'?'diecezja':'zarzad');
+  } else if(d==='Do poprawy'){
+    a.status = 'poprawa';
+  } else {
+    a.status = 'odrzucony';
+  }
+
+  const komu = {Zatwierdzam:'Wniosek idzie dalej.', 'Do poprawy':'Wniosek wraca do składającego.', Odrzucam:'Sprawa zamknięta.'}[d];
+  toast(id+': '+d+'. '+komu+' Mail do składającego wysłany.');
+  renderView();
+}
+
+function przekaz(id){
+  const a = APPS.find(x=>x.id===id);
+  const box = document.getElementById('modalBox');
+  box.innerHTML = `
+    <h2>Przekaż wniosek właściwemu pastorowi</h2>
+    <p style="font-size:13.5px;color:var(--muted)">Składający podał adres <b>${esc(a.pastorEmail)}</b>.
+    Jeśli to nie twój zbór, wskaż właściwą osobę. Wniosek pójdzie do niej, a Zarząd zobaczy tę zmianę w historii.</p>
+    <div class="field"><label class="f">E-mail właściwego pastora</label>
+      <input type="email" id="p_mail" placeholder="imie.nazwisko@adwent.pl"></div>
+    <div style="text-align:right">
+      <button class="btn ghost" onclick="zamknijModal()">Anuluj</button>
+      <button class="btn" onclick="zrobPrzekaz('${id}')">Przekaż</button>
+    </div>`;
+  document.getElementById('modal').classList.remove('hidden');
+}
+
+function zrobPrzekaz(id){
+  const a = APPS.find(x=>x.id===id);
+  const v = document.getElementById('p_mail').value.trim();
+  if(!/@adwent\.pl$/i.test(v)){ toast('Adres musi należeć do domeny adwent.pl.'); return; }
+  const stary = a.pastorEmail;
+  a.pastorEmail = v;
+  zdarzenie(a, 'Wniosek przekazany innemu pastorowi: '+stary+' → '+v+'.');
+  zamknijModal();
+  toast('Wniosek '+id+' przekazany do '+v+'.');
+  SEL=null; render();
+}
+
+/* ============ NARZĘDZIA ============ */
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._h);
+  t._h = setTimeout(()=>t.classList.remove('show'), 4200);
+}
+
+/* ============ START ============ */
+document.getElementById('userSel').innerHTML =
+  USERS.map(x=>'<option value="'+x.id+'"'+(x.id===CUR?' selected':'')+'>'+x.n+'</option>').join('');
+render();
+</script>
+</body>
+</html>
